@@ -1,4 +1,4 @@
-# IVth-year-major
+# IVth year major
 This project is not just our college project. This project dedicated for future will be our emotion.
 
 Anticipated to be grand, full of positive emotions to contribute in the name of computer science, in the name of our country, to make the world; a better place to live in is expected in this project. 
