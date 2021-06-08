@@ -9,6 +9,7 @@ currently studying fourth year at [National College of Engineering](https://nce.
 We currently have 2 formal documents for the project:
 * proposal
 * proposal defense slides
+
 Due to organizational policies, we cannot share it here, but feel free to ask us for access!
 
 ## Our starting emotions for the project (March 5, 2021)
