@@ -1,4 +1,17 @@
-# IVth year major
+# Job Mining using Web Mining and Recommending Users
+Welcome to our fourth year project repo! We are a group of four enthusiastic friends:
+* Aashish Tamrakar
+* Asim Aryal
+* Niroj Bajracharya
+* Sudip Gyawali
+currently studying fourth year at [National College of Engineering](https://nce.edu.np).
+
+We currently have 2 formal documents for the project:
+* proposal
+* proposal defense slides
+Due to organizational policies, we cannot share it here, but feel free to ask us for access!
+
+## Our starting emotions for the project (March 5, 2021)
 This project is not just our college project. This project dedicated for future will be our emotion.
 
 Anticipated to be grand, full of positive emotions to contribute in the name of computer science, in the name of our country, to make the world; a better place to live in is expected in this project. 
