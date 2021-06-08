@@ -1,4 +1,4 @@
-# Job Mining using Web Mining and Recommending Users
+# Job Mining in Nepali Section using Web Mining and Recommending Users
 Welcome to our fourth year project repo! We are a group of four enthusiastic friends:
 * Aashish Tamrakar
 * Asim Aryal
