@@ -1,0 +1,39 @@
+Notes: For conflicts in style guide, we are going to use the style that we prefer.
+---------------------------------------------------------------------------------------------------------------------------
+
+HTML/CSS Coding Style Guide (Google)
+https://google.g
+
+---------------------------------------------------------------------------------------------------------------------------
+
+github.io/styleguide/htmlcssguide.html
+Exception: We won't follow the omitting tag guideline.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+HTML Style Guide (Ryan Sechrest)
+https://gist.github.com/ryansechrest/8693303
+---------------------------------------------------------------------------------------------------------------------------
+
+JavaScript (Airbnb)
+https://github.com/airbnb/javascript
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Python Style Guide (Harry Roberts)
+https://www.python.org/dev/peps/pep-0008/
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Github Commit Style Guides
+Summary Commit Guidelines provided by
+https://www.freecodecamp.org/news/writing-good-commit-messages-a-practical-guide/
+
+Detailed Explanations provided by
+https://chris.beams.io/posts/git-commit/
+
+Emoji based Commits
+https://opensource.com/article/19/2/emoji-log-git-commit-messages
+https://github.com/ahmadawais/Emoji-Log/
+
+------------------------------------------------------------------------------------------------------

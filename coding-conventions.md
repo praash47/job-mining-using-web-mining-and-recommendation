@@ -110,3 +110,7 @@ We will add lang attributes to HTML element as `<html lang="en-US"></html>`.
 We will add required `<meta>` data as:
 * 
 so that our web application is deployable and searchable if we deploy it later on.
+
+tum jo aaye zindagi me baat bangaya
+
+iska majhaam bekaraar he baat bangaya.
