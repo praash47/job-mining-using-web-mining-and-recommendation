@@ -11,7 +11,7 @@ We currently have 2 formal documents for the project:
 * proposal
 * proposal defense slides
 
-Due to organizational policies, we cannot share it here, but feel free to ask us for access!
+Due to organizational policies, we cannot share it here, but feel free to ask us for access at our teams email: eeecc621.nce.edu.np@apac.teams.ms!
 
 ## Our starting emotions for the project (March 5, 2021)
 This project is not just our college project. This project dedicated for future will be our emotion.
