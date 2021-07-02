@@ -2,17 +2,19 @@ Notes: For conflicts in style guide, we are going to use the style that we prefe
 ---------------------------------------------------------------------------------------------------------------------------
 
 HTML/CSS Coding Style Guide (Google)
-https://google.g
-
----------------------------------------------------------------------------------------------------------------------------
-
-github.io/styleguide/htmlcssguide.html
+https://google.github.io/styleguide/htmlcssguide.html
 Exception: We won't follow the omitting tag guideline.
 
 ---------------------------------------------------------------------------------------------------------------------------
 
 HTML Style Guide (Ryan Sechrest)
 https://gist.github.com/ryansechrest/8693303
+
+---------------------------------------------------------------------------------------------------------------------------
+
+CSS Style Guide (Harry Roberts)
+https://cssguidelin.es/
+
 ---------------------------------------------------------------------------------------------------------------------------
 
 JavaScript (Airbnb)
