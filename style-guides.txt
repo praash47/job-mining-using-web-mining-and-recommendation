@@ -10,21 +10,46 @@ Exception: We won't follow the omitting tag guideline.
 HTML Style Guide (Ryan Sechrest)
 https://gist.github.com/ryansechrest/8693303
 
+Documenting HTML:
+We just specify sections in relevant places like
+<!-- Profile -->
+<!-- Header -->
+
+We add closing tags as such to tags that donot have descriptive names like div, span,
+section, article etc.
+For eg: <div class="job-description">
+We keep after the closing tag of this with </div>  <!-- ./job-description -->
+*****
+<div class="job-description">
+blah blah blah
+  <div class="job-desc-part">
+  more blah
+  </div>  <!-- ./job-desc-part -->
+</div>  <!-- ./job-description -->
+*****
+Notice the two spaces after closing tag.
+
+for id: <!-- #/job-description -->
 ---------------------------------------------------------------------------------------------------------------------------
 
 CSS Style Guide (Harry Roberts)
 https://cssguidelin.es/
 
+Documentation guidelines inside the link
 ---------------------------------------------------------------------------------------------------------------------------
 
 JavaScript (Airbnb)
 https://github.com/airbnb/javascript
 
+Documentation Guidelines
+https://jsdoc.app/
 ---------------------------------------------------------------------------------------------------------------------------
 
 Python Style Guide (Harry Roberts)
 https://www.python.org/dev/peps/pep-0008/
 
+Documenting (We follow Numpy/Scipy Docstrings)
+https://realpython.com/documenting-python-code/
 ---------------------------------------------------------------------------------------------------------------------------
 
 Github Commit Style Guides
