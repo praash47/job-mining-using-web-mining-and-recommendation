@@ -1,0 +1,297 @@
+@import url(d:\desktop\html-css-templates\css\fonts.css);
+/*------------------------------------*\
+  Icons
+\*------------------------------------*/
+.circular-icon {
+  width: 20px;
+  height: 20px;
+  padding: 10px;
+}
+
+.circular-icon img {
+  display: inline-block;
+  width: inherit;
+  height: inherit;
+}
+
+.inline-icon {
+  width: 10px;
+}
+
+/*------------------------------------*\
+  Tooltip
+\*------------------------------------*/
+/*------------------------------------*\
+  Header
+\*------------------------------------*/
+header {
+  justify-content: space-between;
+  padding: 10px;
+  box-shadow: 0 2px 50px 1px rgba(43, 38, 38, 0.4);
+  z-index: 1;
+  /*
+	* Left Navigation, titled as 'main-nav'
+	*/
+  /*
+	* Logo
+	*/
+  /*
+	* Right Navigation, titled as 'right-nav'
+	*/
+  position: fixed;
+  width: 100vw;
+  transition: .25s;
+}
+
+header .header__main-nav {
+  font-size: 2em;
+  margin: 10px;
+}
+
+header .header__main-nav ul li {
+  display: inline-block;
+  margin: 10px 20px;
+  cursor: url(../assets/icons/cursor-link.png), auto;
+}
+
+header .logo img {
+  width: 200px;
+}
+
+header .header__right-nav {
+  display: flex;
+  margin: 10px 25px;
+  width: 300px;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  /* 
+		* Search Section 
+		* search is the container, relative position
+		* icons & input, absolute position
+		*/
+  /* 
+		* Profile Section 
+		* profile is the container, relative position
+		* user authentication menu, absolute position
+		*/
+}
+
+header .header__right-nav .right-nav__search > .circular-icon {
+  display: none;
+}
+
+header .header__right-nav .right-nav__search--normal {
+  width: 0px;
+  height: 50px;
+  background: #FFFFFF;
+  position: relative;
+  border-radius: 25px;
+  transition: .75s;
+}
+
+header .header__right-nav .right-nav__search--normal .circular-icon {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  cursor: pointer;
+}
+
+header .header__right-nav .right-nav__search--normal .circular-icon img {
+  transition: .75s;
+  transform: rotate(0deg);
+}
+
+header .header__right-nav .right-nav__search--normal .circular-icon img.active {
+  transform: rotate(360deg);
+}
+
+header .header__right-nav .right-nav__search--normal .search-input input {
+  position: absolute;
+  left: 15px;
+  top: 3px;
+  display: none;
+  /* 
+				* positioning input at the left side of the
+				* search input container.
+				*/
+  width: calc(100% - 67px);
+  height: calc(100% - 5px);
+  outline: none;
+  border: none;
+}
+
+header .header__right-nav .right-nav__search--normal .search-input input::placeholder {
+  font-family: 'changa-regular', 'sans-serif';
+  color: #BEBEBE;
+}
+
+header .header__right-nav .right-nav__search--normal .search-input input.active {
+  display: block;
+}
+
+header .header__right-nav .right-nav__profile {
+  position: relative;
+}
+
+header .header__right-nav .right-nav__profile .circular-icon {
+  margin: 5px 10px;
+  cursor: pointer;
+}
+
+header .header__right-nav .right-nav__profile .user-authentication {
+  position: absolute;
+  background: #FFFFFF;
+  box-shadow: 0 2px 50px 1px rgba(43, 38, 38, 0.4);
+  z-index: 0;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: .5s;
+  font-size: 1.5em;
+  width: 90px;
+  box-sizing: border-box;
+  left: -20px;
+}
+
+header .header__right-nav .right-nav__profile .user-authentication:before {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: #FFFFFF;
+  transform: rotate(45deg) translateX(-50%);
+  z-index: -1;
+  top: 3px;
+}
+
+header .header__right-nav .right-nav__profile .user-authentication.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+header .header__right-nav .right-nav__profile .user-authentication:before {
+  left: 50%;
+}
+
+header .header__right-nav .right-nav__profile .user-authentication ul li {
+  padding: 2px 15px;
+}
+
+header .header__right-nav .right-nav__profile .user-authentication ul li:nth-child(1) {
+  border-bottom: 1px solid #BEBEBE;
+}
+
+header.shrink {
+  padding: 2px;
+}
+
+/*------------------------------------*\
+  Responsive Header
+\*------------------------------------*/
+@media (max-width: 875px) {
+  header .header__main-nav {
+    position: absolute;
+    top: calc(100vh - 72px);
+    background: #C8C8C8;
+    width: 100%;
+    margin: -10px;
+  }
+  header .header__main-nav ul {
+    display: flex;
+    justify-content: space-between;
+  }
+  header .header__main-nav ul li {
+    cursor: url(../assets/icons/cursor-link.png), auto;
+  }
+  header .header__main-nav ul li:nth-child(1):before {
+    content: '';
+    background-image: url("../assets/icons/home.png");
+    background-size: 30px;
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+  }
+  header .header__main-nav ul li:nth-child(2):before {
+    content: '';
+    background-image: url("../assets/icons/jobs.png");
+    background-size: 30px;
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+  }
+  header .header__main-nav ul li:nth-child(3):before {
+    content: '';
+    background-image: url("../assets/icons/contact.png");
+    background-size: 30px;
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+  }
+  header .header__main-nav ul li:nth-child(1):after,
+  header .header__main-nav ul li:nth-child(2):after {
+    content: '';
+    top: 20px;
+    width: 2px;
+    height: 40px;
+    background: #35353D;
+    border-radius: 10px;
+    position: absolute;
+    margin-left: 12vw;
+  }
+  header .logo img {
+    width: 120px;
+  }
+  header .header__right-nav {
+    width: 150px;
+    margin: 4px 10px;
+  }
+  header .header__right-nav .right-nav__search {
+    position: relative;
+  }
+  header .header__right-nav .right-nav__search > .circular-icon {
+    display: block;
+    position: absolute;
+    right: 10px;
+    top: 2px;
+  }
+  header .header__right-nav .right-nav__search--tooltip-box {
+    position: absolute;
+    background: #FFFFFF;
+    box-shadow: 0 2px 50px 1px rgba(43, 38, 38, 0.4);
+    z-index: 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: .5s;
+    width: 305px;
+    box-sizing: border-box;
+    top: 50px;
+    left: -260px;
+  }
+  header .header__right-nav .right-nav__search--tooltip-box:before {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: #FFFFFF;
+    transform: rotate(45deg) translateX(-50%);
+    z-index: -1;
+    top: 3px;
+  }
+  header .header__right-nav .right-nav__search--tooltip-box.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  header .header__right-nav .right-nav__search--tooltip-box:before {
+    right: 65px;
+  }
+  header .header__right-nav .right-nav__search--tooltip-box .right-nav__search--normal .search-input input {
+    border: 1px solid #BEBEBE;
+    border-radius: 10px;
+  }
+  header .header__right-nav .right-nav__profile .circular-icon {
+    margin: 2px 4px;
+  }
+}
+/*# sourceMappingURL=header.css.map */
