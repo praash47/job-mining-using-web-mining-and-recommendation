@@ -191,6 +191,7 @@ header {
 @media (max-width: 875px) {
 	header {
 		.header__main-nav {
+			// moving the main nav to the bottom of the screen
 			position: absolute;
 			top: calc(100vh - 72px);
 			background: $nav-color;
@@ -203,6 +204,7 @@ header {
 					cursor: $cursor-pointer, auto;
 				}
 
+				// rending home, jobs and contact icons
 				$icons: (1:'home', 2:'jobs', 3:'contact');
 				@each $index, $icon in $icons {
 					$icon-path: '../assets/icons/.png';
@@ -217,7 +219,9 @@ header {
 						height: 30px;
 						margin-left: 5px;
 					}
-				}
+				} // @each
+
+				// slight black border after icons.
 				li:nth-child(1):after,
 				li:nth-child(2):after {
 					content: '';
@@ -229,7 +233,7 @@ header {
 					position: absolute;
 					margin-left: 12vw;
 				}
-			}
+			}  // ul
 		}  // .header___main-nav
 		
 		.logo img {
@@ -242,12 +246,14 @@ header {
 			.right-nav__search {
 				position: relative;
 			}
+			// adjusting icon position on mobile screen
 			.right-nav__search > .circular-icon {
 				display: block;
 				position: absolute;
 				right: 10px;
 				top: 2px;
 			}
+			// placing search inside tooltip box.
 			.right-nav__search--tooltip-box {
 				@include tooltip;
 				width: 305px;
@@ -257,15 +263,15 @@ header {
 				&:before {
 					right: 65px;
 				}
+				// inner search input field
 				.right-nav__search--normal .search-input input {
 					border: 1px solid $placeholder-color;
 					border-radius: 10px;
 				}
-			}
+			}  // .right-nav__search--tooltip-box
 			.right-nav__profile .circular-icon {
 				margin: 2px 4px;
 			}
-		}
-
+		}  // .header__right-nav
 	}  // header
 }  // @media
