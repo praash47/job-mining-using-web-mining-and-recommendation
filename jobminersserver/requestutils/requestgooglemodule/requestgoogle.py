@@ -17,10 +17,6 @@ from googleapiclient.discovery import build
 from configparser import ConfigParser
 import time
 
-# Google API settings
-CONFIG = 'job-miners-server/requestutils/requestgooglemodule/googleapis.ini'
-
-
 class RequestGoogle:
     """
     Class used to request google for 100 urls from api. Manages the api
@@ -45,6 +41,8 @@ class RequestGoogle:
         self._100urls = []
 
         # Parser
+        # Google API settings
+        CONFIG = 'jobminersserver/requestutils/requestgooglemodule/googleapis.ini'
         self.parser = ConfigParser()
         self.parser.read(CONFIG)
         
@@ -65,6 +63,7 @@ class RequestGoogle:
         """
         # TODO: handle logic such that 100 urls are got using different apis.
         self._100urls = self.get_from_api()
+        print("Got from google.")
 
         return self._100urls
 
