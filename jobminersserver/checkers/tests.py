@@ -1,3 +1,6 @@
-from django.test import TestCase
+from .misccheckers import is_interested_website
 
-# Create your tests here.
+class MiscCheckers:
+    def test_is_interested_website(self):
+        assert is_interested_website('https://play.google.com') == \
+            False

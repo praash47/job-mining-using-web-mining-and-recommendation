@@ -7,7 +7,4 @@ rg = RequestGoogle()
 urls = rg.get_100_urls()
 
 checker = CheckJobWebsite(urls)
-job_and_jobs_nepal = checker.check()
-job_or_jobs_nepal = checker.check(job_or_jobs_nepal=True)
-print(job_and_jobs_nepal)
-print(job_or_jobs_nepal)
+job_urls = checker.check_urls()

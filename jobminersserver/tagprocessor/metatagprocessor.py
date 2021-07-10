@@ -1,25 +1,110 @@
+"""
+This file processes the meta tag in HTML.
+
+It can get keywords, description, og:description and
+og:title from the html.
+"""
 from tagprocessor import TagProcessor
 
 class MetaTagProcessor(TagProcessor):
+    """
+    Subclass of TagProcessor.
+    Processes meta tag and gets different details from metatag.
+
+    Methods
+    -------
+    get_keywords()
+        Gets keywords from the html <meta name="keywords">
+    get_description()
+        Gets description from the html <meta name="description">
+    get_og_title()
+        Gets title from the html <meta property="og:title">
+    get_og_description()
+        Gets description from the html <meta property="og:description">
+    """
     def __init__(self, html):
+        """
+        Parameters
+        ----------
+        html: str
+            raw html to process meta tag from.
+        """
         TagProcessor.__init__(self, html, tag='meta')
 
     def get_keywords(self):
-        keywords = self.get_property('keywords', name=True)
+        """
+        Gets keywords from the html <meta name="keywords">
+
+        Returns
+        -------
+            list
+                list of keywords
+        """
+        return self.get_property('keywords', name=True)
     
     def get_description(self):
+        """
+        Gets description from the html <meta name="description">
+
+        Returns
+        -------
+            list
+                list of description words
+        """
         return self.get_property('description', name=True)
 
     def get_og_title(self):
+        """
+        Gets title from the html <meta property="og:title">
+
+        Returns
+        -------
+            list
+                list of og:titles
+        """
         return self.get_property('title', og=True)
 
     def get_og_description(self):
+        """
+        Gets description from the html <meta property="og:description">
+
+        Returns
+        -------
+            list
+                list of og:descriptions
+        """
         return self.get_property('description', og=True)
 
     def get_property(self, property_name, name=False, og=False):
+        """
+        Inner method. Gets a value of property. Property is either
+        a name or a real "property" attribute. It is a hybrid function
+        that can get from name and property attribute. Also, inside
+        property attribute it can get 'og' values depending upon options
+        set in the parameters.
+
+        Parameters
+        ----------
+        property_name: str
+            the property to get value from. For eg: name, description etc.
+        name: boolean, optional
+            gets value from property if False, from name if true (default name=False)
+            Eg:
+            Usage
+            -----
+            if name == True: <meta name="description"> property_name = 'description'
+            else: <meta property="title">
+        og: boolean, optional
+            if set, gets from the 'og' property. Only works if name=False.
+            Eg:
+            Usage
+            -----
+            if og=True: <meta property="og:title">
+            else: <meta property="title">    
+        """
         property_content = str()
         if name: property_content = self.get_content_from_name(property_name)
-        else: 
+        else:  # for property
             if og: property_content = self.get_content_from_property(property_name, og) 
             else: property_content = self.get_content_from_property(property_name)
         # turn into a list
@@ -27,6 +112,8 @@ class MetaTagProcessor(TagProcessor):
         # strip . and ' ', turn into lowercase
         property_content = [content.strip().strip('.').strip('/').strip('|').strip('-')\
             .strip(',').lower() for content in property_content]
+        # remove empty strings
+        property_content = [content for content in property_content if content]
 
         return property_content
 

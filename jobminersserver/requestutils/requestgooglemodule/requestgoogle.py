@@ -179,6 +179,15 @@ class GoogleAPI:
             return None
 
     def is_available(self):
+        """
+        Checks if an api is available.
+
+        Returns
+        -------
+        Boolean
+            True if an API usage limit for the day hasn't exceeded.
+            False else.
+        """
         ONE_DAY = 86400000
         API_DAY_LIMIT = 100
         elapsed_time = time.time() - self.last_used_time

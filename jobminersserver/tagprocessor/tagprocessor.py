@@ -2,8 +2,14 @@
 Tag Processor:
 --------------
 This file is used to process related to tag.
+
+Processing includes
+* extraction of contents from
+    * attributes
+    * innerContent
 """
 from bs4 import BeautifulSoup
+
 
 class TagProcessor:
     """
@@ -57,7 +63,9 @@ class TagProcessor:
             if title: 
                 title = title.string.split(' ')
                 title = [word.strip(',').strip('|').strip('.').lower() for word in title]
-                
+                # remove empty strings
+                title = [word for word in title if word]
+
                 return title
 
     def get_content_from_name(self, name_to_get_from):
