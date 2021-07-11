@@ -1,11 +1,68 @@
+@import url(d:\job-mining-using-web-mining-and-recommendation\css\fonts.css);
 /*------------------------------------*\
   Main
 \*------------------------------------*/
 main {
+  font-family: 'changa-regular';
   position: relative;
   top: 100px;
   padding: 50px;
   min-height: calc(100vh - 140px);
   box-sizing: border-box;
+}
+
+
+.heading img{
+  
+  height:50px;
+  width:50px;
+  display:inline-block;
+}
+
+.heading h2{
+  display:inline;
+  position: relative;
+  top: -9px;
+}
+
+.heading p{
+  position:relative;
+  top:-26px;
+}
+
+.apply-button button{
+  display: inline;
+  position:relative;
+  top: -109px;
+  left: 265px;
+  background-color: rgb(200, 200, 200);
+  font-size: 20px;
+  padding: 0px 38px;
+  border-radius: 10px;
+  font-family: 'changa-regular';
+}
+
+.basic-details ul{
+  height:100px;
+  width:200px;
+  /* text-align: justify; */
+}
+
+.skills ul{
+  
+  list-style: square inside;
+}
+
+.employer-description  {
+  
+  display:inline-block;
+  position: relative;
+  top: -218px;
+  left: 800px;
+  text-align: justify;
+}
+
+.qualifications{
+
 }
 /*# sourceMappingURL=main.css.map */
