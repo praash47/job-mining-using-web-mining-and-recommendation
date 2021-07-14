@@ -15,7 +15,7 @@ import json
 # Need while using main for debugging.
 import sys
 sys.path.insert(1, 'D:/job-mining-using-web-mining-and-recommendation/jobminersserver/')
-from requestutils.request import request
+from requestutils.request import Request
 from checkers.misccheckers import is_interested_website
 
 sys.path.insert(
@@ -44,7 +44,12 @@ class CheckJobWebsite:
             Strings here are individual urls.
         """
         print("Getting job websites...")
-        self.urls_to_check = urls
+        self.urls_to_check = []
+        print(urls)
+        for url in urls:
+            req = Request(url)
+            if req.check_homepage(): self.urls_to_check.append(url)
+        print(self.urls_to_check)
         
         CONFIG = 'jobminersserver/checkers/checkjobwebsite.ini'
         self.parser = ConfigParser()

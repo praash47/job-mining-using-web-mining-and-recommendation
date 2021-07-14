@@ -5,68 +5,66 @@ from requests import *
 from bs4 import BeautifulSoup
 from urllib import parse
 
-class request:
-	'''
+class Request:
+	"""
 	A class to request html of webpage from urls
 	and convert to text 
 
 	Methods
-	--------
+	-------
 	request_html(url)
 		returns html in string from the url passed 
 
 	check_homepage(url)
 		returns true if url passed is homepage and has no subdomain
-	'''
+	"""
 	def __init__(self, url):
-		'''
+		"""
 		Parameters
 		---------
 		url : str
-				url of the webpages
-		'''
+			url of the webpages
+		"""
 		self.url = url
 
 	def check_homepage(self):
-		'''
-		return true if url is the homepage of the site
-		return false otherwise
+		"""
+		Returns true if url is the homepage of the site
+		returns false otherwise
 
-		Paramters
-		---------
+		Parameters
+		----------
 		home_page: str
-		home_page: home page of the url
+			home page of the url
 
 		format: https://merojob.com
-		'''
+		"""
 		home_page = parse.urlsplit(self.url).scheme + '://' + parse.urlsplit(self.url).netloc
-		if(self.url == home_page):
-			return True
-		else:
-			return False
+		if(self.url == home_page): return True
+		return False
 
 	def get_homepage(self):
-		'''
-		returns homepage from the extracted url
+		"""
+		Returns homepage from the extracted url
 
-		eg:-https://unjobs.org from   https://unjobs.org/duty_stations/nepal
+		eg:- https://unjobs.org from https://unjobs.org/duty_stations/nepal
 
 		Paramters
 		---------
 		home_page: str
-		homepage of the url in the format https://unjobs.org
-		'''
+			homepage of the url in the format https://unjobs.org
+		"""
 		home_page = parse.urlsplit(self.url).scheme + '://' + parse.urlsplit(self.url).netloc
 		print(home_page)
 		return (home_page)
 
 
 	def request_html(self):
-		'''
-		returns html from the url of the webpages.
+		"""
+		Returns html from the url of the webpages.
 
 		If webpage is not accessible print error message 
-		'''
+		"""
 		
 		try:
 			html = get(self.url).text
@@ -78,7 +76,7 @@ class request:
 if __name__ == "__main__":
 	url = "https://globaljobnepal.com.np"
 
-	R1 = request(url)
+	R1 = Request(url)
 	print(R1.check_homepage())
 	R1.get_homepage()
 
