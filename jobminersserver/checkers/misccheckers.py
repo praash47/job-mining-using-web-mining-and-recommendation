@@ -29,7 +29,8 @@ def is_interested_website(home_page_url):
         False, if present in non_interested section of
         interested_websites section of misccheckers.ini.
     """
-    CONFIG = 'misccheckers.ini'
+    config = {}
+    CONFIG = 'jobminersserver/checkers/misccheckers.ini'
     config = ConfigParser()
     config.read(CONFIG)
     non_interested = config.get('interested_websites', 'non_interested').split(', ')

@@ -1,14 +1,27 @@
 """
 This file consists of class that is required to check whether a
 website is a job website or not.
+
+Classes
+-------
+CheckJobWebsite(urls=None)
+    checks if a website is job website or not.
 """
 from configparser import ConfigParser
+from urllib import parse
 import requests
 import json
 
 # Need while using main for debugging.
 import sys
-sys.path.insert(1, 'D:/job-mining-using-web-mining-and-recommendation/jobminersserver/tagprocessor')
+sys.path.insert(1, 'D:/job-mining-using-web-mining-and-recommendation/jobminersserver/')
+from requestutils.request import request
+from checkers.misccheckers import is_interested_website
+
+sys.path.insert(
+    1, 
+    'D:/job-mining-using-web-mining-and-recommendation/jobminersserver/tagprocessor/'
+)
 from tagprocessor import TagProcessor
 from metatagprocessor import MetaTagProcessor
 
@@ -20,10 +33,8 @@ class CheckJobWebsite:
     -------
     check_urls()
         Returns dictionary of checked urls.
-    check_single_url(url), @staticmethod
-        Checks single url is job website url or not.
-        * No need to initialize the class of this method for
-        using this function.     
+    check_single_url(url)
+        Checks single url is job website url or not.    
     """
     def __init__(self, urls=None):
         """
@@ -32,7 +43,13 @@ class CheckJobWebsite:
         urls: list of strings, optional
             Strings here are individual urls.
         """
+        print("Getting job websites...")
         self.urls_to_check = urls
+        
+        CONFIG = 'jobminersserver/checkers/checkjobwebsite.ini'
+        self.parser = ConfigParser()
+        self.parser.read(CONFIG)
+
         # needed for performing jobandjobs or joborjobs logic
         self.jobandjobs = {}
         self.joborjobs = {}
@@ -53,18 +70,15 @@ class CheckJobWebsite:
                     }
                 }
         """
-        results = {}
-        for (index, url) in enumerate(self.urls_to_check):
-            print("Checking ", url)
-            results[str(index)] = {}
-            results[str(index)]['url'] = url
-            # Check url one by one.
-            status = CheckJobWebsite.check_single_url(url, job_or_jobs_nepal)
-            results[str(index)]['status'] = status
-        return results
+        job_website_urls = []
+        for url in self.urls_to_check:
+            print(f"Verifying {url}")
+            if self.check_single_url(url): job_website_urls.append(url)
+
+        return job_website_urls
+        
     
-    @staticmethod
-    def check_single_url(url):
+    def check_single_url(self, url):
         """
         Checks single url and returns True if it is a job website.
 
@@ -82,10 +96,14 @@ class CheckJobWebsite:
             True if self.analyze_keywords() or in general terms, it is a job website.
             else False.
         """
+        # check if jobs domain present in url or it is not interested website.   
+        if parse.urlsplit(url).netloc[0:5] == 'jobs.' \
+        or not is_interested_website(url[:-1]):
+            return False
+
         # Try to get html content from the url.
-        html = ''
-        try: html = requests.get(url).content
-        except: pass
+        req = request(url)
+        html = req.request_html()
 
         meta_info = []
         # Get title tag contents
@@ -95,30 +113,33 @@ class CheckJobWebsite:
 
         # Get meta tag keywords, description, og title & description
         meta_tag = MetaTagProcessor(html)
-        to_get = [
-            meta_tag.get_keywords,
-            meta_tag.get_description,
-            meta_tag.get_og_title,
-            meta_tag.get_og_description]
-        # call each function one by one and append to meta_info.
-        meta_info += [func() for func in to_get if func()]
+        meta_info += meta_tag.get_keywords()
+        meta_info += meta_tag.get_description()
+        meta_info += meta_tag.get_og_title()
+        meta_info += meta_tag.get_og_description()
 
         # job, jobs and nepal must keywords
-        self.jobandjobs = CheckJobWebsite.check_job_website(meta_info)
+        self.jobandjobs = self.analyze_keywords(meta_info)
         # job or jobs and nepal must keywords
-        self.joborjobs = CheckJobWebsite.check_job_website(meta_info, job_or_jobs_nepal=True)
+        self.joborjobs = self.analyze_keywords(meta_info, job_or_jobs_nepal=True)
 
-        return self.analyze_keywords()
+        # if both parameters false, return False.
+        if not self.jobandjobs and not self.joborjobs: return False
 
-    @staticmethod
-    def check_job_website(meta_info, job_or_jobs_nepal=False):
+        # check if nepali website with abroad based ads.
+        if self.check_if_abroad_based(meta_info): return False
+
+        return True
+
+    def analyze_keywords(self, meta_info, job_or_jobs_nepal=False):
         """
         Check if a website is job website or not based on meta_info. 
 
         Parameters
         ----------
             meta_info: list of strings
-                meta_info here refers to all the content present in the title tag, meta name = description,
+                meta_info here refers to all the content present in 
+                the title tag, meta name = description,
                 title, property = og:title, og: description.
             job_or_jobs_nepal: boolean
                 job or jobs nepal specifies which type of checking we need.        
@@ -139,11 +160,8 @@ class CheckJobWebsite:
             No Exception. Exception gets activated when meta_info is not present.
         """
         # Job Website Checking Related Info
-        CONFIG = 'jobminersserver/checkers/checkjobwebsite.ini'
-        parser = ConfigParser()
-        parser.read(CONFIG)
 
-        must_keywords = parser.get('global', 'must_keywords').split(',')
+        must_keywords = self.parser.get('global', 'must_keywords').split(',')
         must_keywords = [keyword.strip() for keyword in must_keywords]
         
         # Default conditon_to_use is False because we want to use job and jobs
@@ -166,10 +184,53 @@ class CheckJobWebsite:
             # Exception gets activated when meta_info is not present.
             return False
 
-    def analyze_keywords(self):
-        # TODO: Need to analyze the jobandjobsnepal and joborjobsnepal keywords
-        pass
-        
+    def check_if_abroad_based(self, meta_info):
+        """
+        Checks if a website is abroad based or non-abroad 
+        based on analyzing it's meta_info.
+
+        Parameters
+        ----------
+        meta_info: list of strings
+            meta_info here refers to all the content 
+            present in the title tag, meta name = description,
+            title, property = og:title, og: description.
+
+        Returns
+        -------
+        boolean
+            True if ALL the abroad websites keywords are present.
+            False if not present or there are no keywords in the metainfo part.
+        """
+        abroad_website_keywords = \
+            self.parser.get('global', 'abroad_website_keywords').split(',')
+        abroad_website_keywords = \
+            [keyword.strip() for keyword in abroad_website_keywords]
+
+        if set(abroad_website_keywords).issubset(set(meta_info)):
+            return True
+        return False
+
 
 if __name__ == "__main__":
-    print(CheckJobWebsite.check_single_url('https://getjobnepal.com', job_or_jobs_nepal=True))
+    urls = [
+        'https://www.jobsnepal.com/',
+        'https://merojob.com/',
+        'https://www.ramrojob.com/',
+        'https://www.kumarijob.com/',
+        'https://www.merorojgari.com/',
+        'https://getjobnepal.com/',
+        'https://nepalhealthjob.com/',
+        'https://jobs.unops.org/',
+        'https://froxjob.com/',
+        'https://kantipurjob.com/',
+        'https://www.jobejee.com/',
+        'https://jobs.unicef.org/',
+        'https://www.sajhajobs.com/',
+        'https://www.cmsjob.com/',
+        'https://www.globaljob.com.np/',
+        'https://medjobsnepal.com/',
+        'httts://youtube.com/'
+    ]
+    obj = CheckJobWebsite(urls=urls)
+    print(obj.check_urls())

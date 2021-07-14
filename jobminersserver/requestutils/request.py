@@ -75,13 +75,11 @@ class request:
 			return ""
 		return html
 
+if __name__ == "__main__":
+	url = "https://globaljobnepal.com.np"
 
-url = "https://globaljobnepal.com.np"
+	R1 = request(url)
+	print(R1.check_homepage())
+	R1.get_homepage()
 
-R1 = request(url)
-print(R1.check_homepage())
-R1.get_homepage()
-
-html = R1.request_html()
-
-
+	html = R1.request_html()
