@@ -1,0 +1,45 @@
+.recommendation-container{
+    height: 35px;
+    width: 213px;
+    display:flex;
+    border:2px solid black;
+    border-radius: 10px;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+
+}
+
+.recommendation-container input{
+    height: 21px;
+    width: 20px;
+}
+
+.different-jobs{
+    height:300px;
+    width:80%;;
+    border:2px solid black;
+    display:flex;
+    justify-content: space-around;
+    
+}
+
+.items{
+    height: 222px;
+    width: 221px;
+    border:2px solid black;
+
+
+}
+
+.items img{
+    max-width: 12%;
+    
+}
+
+.different-jobs .items #job-1 .top-section{
+    background-color: #C8C8C8;
+    height:50px;
+    width:20px;
+}
+
