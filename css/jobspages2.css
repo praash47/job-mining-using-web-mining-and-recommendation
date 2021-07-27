@@ -15,14 +15,60 @@
     width: 20px;
 }
 
-.different-jobs{
-    height:300px;
-    width:80%;;
-    border:2px solid black;
+.sort-by{
     display:flex;
-    justify-content: space-around;
+    width:900px;
+    height:37px;
+    border:2px solid black;
+    position:relative;
+    top: -36px;
+    left: 229px;
+    border-radius: 10px;
+
+}
+
+
+
+.filter-and-different-jobs{
+    display:flex;
+    height:300px;
+    width:102%;
+    border:2px solid black;
+    justify-content: space-between;
     
 }
+
+
+
+.filter-and-different-jobs .filter{
+    border:2px solid black;
+    border-radius:25px;
+    width:266px;
+    
+}
+
+.filter-and-different-jobs .filter img{
+    max-width:10%;
+    max-height:50px;
+    margin:5px;
+}
+
+.filter-and-different-jobs .filter #filter-sort-1{
+    display:block;
+}
+
+.filter-and-different-jobs .filter #filter-sort-2{
+    display:block;
+}
+
+.filter-and-different-jobs .filter #filter-sort-3{
+    display:block;
+}
+
+.filter-and-different-jobs .filter #filter-sort-4{
+    display:block;
+}
+
 
 .items{
     height: 222px;
@@ -37,9 +83,11 @@
     
 }
 
-.different-jobs .items #job-1 .top-section{
+.filter-and-different-jobs .items #job-1 .top-section{
     background-color: #C8C8C8;
     height:50px;
     width:20px;
 }
+
+
 

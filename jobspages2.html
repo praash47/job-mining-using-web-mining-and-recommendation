@@ -78,12 +78,77 @@
 </header>
 
 <main>
+
 	<div class="recommendation-container">Recommendations:
 		<input type="checkbox" id="recommendation" name="recommendation">
 		<label for="recommendation"></label>
 	</div>
 
-	<div class="different-jobs">
+	<div class="sort-by">Sort By:
+		<select name="sort-by-1" id="sort-by-1">
+			<option value="Salary">Salary</option>
+			<option value="Location">Location</option>
+			<option value="Employer">Employer</option>
+			<option value="asdf">asdf</option>
+			<option value="asdfasdf">asdfasdf</option>
+
+		</select>
+
+		<select name="sort-by-2" id="sort-by-2">
+			<option value="Asc">Asc</option>
+			<option value="Des">Des</option>
+			</select>
+	</div>
+
+	
+	<div class="filter-and-different-jobs">
+		<div class="filter">
+			<img src="assets/icons/filter.png" alt="filter.png">Filter
+			<select name="filter-sort" id="filter-sort-1" style="width:250px">
+				<option value="Location">Location</option>
+				<option value="now-empty">now-empty</option>
+				<option value="now-empty">now-empty</option>
+				<option value="now-empty">now-empty</option>
+			</select>
+	
+			<select name="filter-sort" id="filter-sort-2" style="width:250px">
+				<option value="Site">Site</option>
+				<option value="now-empty">now-empty</option>
+				<option value="now-empty">now-empty</option>
+				<option value="now-empty">now-empty</option>
+			</select>
+	
+			<select name="filter-sort" id="filter-sort-3" style="width:250px">
+				<option value="Qualifications">Qualifications</option>
+				<option value="now-empty">now-empty</option>
+				<option value="now-empty">now-empty</option>
+				<option value="now-empty">now-empty</option>
+			</select>
+	
+			<select name="filter-sort" id="filter-sort-4" style="width:250px">
+				<option value="Skills">Skills</option>
+				<option value="now-empty">now-empty</option>
+				<option value="now-empty">now-empty</option>
+				<option value="now-empty">now-empty</option>
+			</select>
+
+			<input type="checkbox" id="it" name="it">
+			<label for="it">IT</label>
+
+			<form action="">
+				<input type="text" id="min-salary" name="min-salary" placeholder="Min" style="width:50px"> -
+				<input type="text" id="max-salary" name="max-salary" placeholder="Max" style="width:50px">
+				
+			</form>
+				
+
+
+		
+		</div>
+	
+
+
+
 		<div class="items" id="job-1">
 			<img src="assets/icons/jobs.png" alt="jobs.png">Frontend Designer
 			
@@ -96,8 +161,10 @@
 			<button type="button">More details</button>
 		
 		</div>
+
 		<div class="items" id="job-2">
 			<img src="assets/icons/jobs.png" alt="jobs.png">PHP Developer</div>
+
 		<div class="items" id="job-3">
 			<img src="assets/icons/jobs.png" alt="jobs.png">Frontend Designer
 			

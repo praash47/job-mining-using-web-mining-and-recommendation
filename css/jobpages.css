@@ -1,3 +1,7 @@
+.flexbox-container-1{
+  display:flex;
+}
+
 .heading img{
   
     height:50px;
@@ -28,30 +32,52 @@
     font-family: 'changa-regular';
   }
   
+  .flexbox-container-2{
+    display:flex; 
+    justify-content:space-between;
+  }
+  
   .basic-details {
     height: 155px;
     width: 238px;
     display:flex;
     
-    
-
-    /* text-align: justify; */
   }
+
+  .employer-description  {
+    
+    display:flex;
+    flex-wrap:wrap;
+    height: 87px;
+    width: 667px;
+
+  }
+
+  .flexbox-container-3{
+    display:flex;
+   
+  }
+
+  
   
   .skills ul{
     
     list-style: square inside;
   }
-  
-  .employer-description  {
+
+  .qualifications{
+    position:relative;
+    left: 510px;
+
+  }
     
-    display:flex;
-    height: 85px;
-    width: 667px;
+
+  #more {display: none;}
+
+  
+  
     
    
-  }
   
-  .qualifications{
   
-  }
+  
