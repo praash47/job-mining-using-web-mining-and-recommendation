@@ -1,0 +1,16 @@
+{
+   "Head-Business Development":"https://globaljob.com.np/job/business-development/administration-operations/head-business-development/7412",
+   "Mines Engineer":"https://globaljob.com.np/job/construction-engineering-architect/engineering/mines-engineer/7418",
+   "Area Sales Manager":"https://globaljob.com.np/job/manufacturing-production/manufacturing-production/area-sales-manager/7422",
+   "Sales Officer":"https://globaljob.com.np/job/sales-public-relations-advertising/sales/sales-officer/7540",
+   "Head - Marketing":"https://globaljob.com.np/job/automobile-automotive/marketing/head-marketing/7452",
+   "Sales Team Leader":"https://globaljob.com.np/job/sales-public-relations-advertising/sales/sales-team-leader/7508",
+   "Civil Engineer":"https://globaljob.com.np/job/construction-engineering-architect/engineering/civil-engineer/7511",
+   "Architect Engineer":"https://globaljob.com.np/job/construction-engineering-architect/architect/architect-engineer/7512",
+   "Sales Manager":"https://globaljob.com.np/job/sales-public-relations-advertising/sales/sales-manager/7513",
+   "Sales Person":"https://globaljob.com.np/job/sales-public-relations-advertising/sales/sales-person/7514",
+   "Architect/Interior Designer":"https://globaljob.com.np/job/construction-engineering-architect/architect/architectinterior-designer/7515",
+   "Senior MIS Executive":"https://globaljob.com.np/job/sales-public-relations-advertising/sales/senior-mis-executive/7516",
+   "PHP Developer":"https://globaljob.com.np/job/it/it/php-developer/7517",
+   "Sr. PHP Developer":"https://globaljob.com.np/job/it/it/sr-php-developer/7518"
+}
