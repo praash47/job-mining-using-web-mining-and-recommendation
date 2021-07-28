@@ -5,6 +5,9 @@ from requests import *
 from bs4 import BeautifulSoup
 from urllib import parse
 
+from selenium import webdriver
+
+
 class Request:
 	"""
 	A class to request html of webpage from urls
@@ -43,7 +46,7 @@ class Request:
 		if(self.url == home_page): return True
 		return False
 
-	def get_homepage(self):
+	def get_only_homepage_based(self):
 		"""
 		Returns homepage from the extracted url
 
@@ -51,11 +54,10 @@ class Request:
 
 		Paramters
 		---------
-		home_page: str
-			homepage of the url in the format https://unjobs.org
+		home_page: list
+			homepage of the urls in the format https://unjobs.org
 		"""
-		home_page = parse.urlsplit(self.url).scheme + '://' + parse.urlsplit(self.url).netloc
-		print(home_page)
+		home_page = [(parse.urlsplit(url).scheme + '://' + parse.urlsplit(url).netloc) for url in urls if (parse.urlsplit(url).scheme + '://' + parse.urlsplit(url).netloc) != '://']
 		return (home_page)
 
 
@@ -65,7 +67,6 @@ class Request:
 
 		If webpage is not accessible print error message 
 		"""
-		
 		try:
 			html = get(self.url).text
 		except:
@@ -74,10 +75,7 @@ class Request:
 		return html
 
 if __name__ == "__main__":
-	url = "https://globaljobnepal.com.np"
+	urls = 'https://nepalhealthjob.com/'
 
-	R1 = Request(url)
-	print(R1.check_homepage())
-	R1.get_homepage()
-
-	html = R1.request_html()
+	R1 = Request(urls)
+	print(R1.request_html())
