@@ -33,8 +33,9 @@
     display:flex;
     height:300px;
     width:102%;
-    border:2px solid black;
+    /* border:2px solid black; */
     justify-content: space-between;
+    flex-wrap: wrap;
     
 }
 
@@ -88,6 +89,43 @@
     height:50px;
     width:20px;
 }
+
+@media (max-width:375px){
+    .sort-by{
+        display: flex;
+        width: 333px;
+        height: 30px;
+        border: 2px solid black;
+        position: relative;
+        top: -94px;
+        left: -31px;
+        border-radius: 10px;
+    }
+        
+    .recommendation-container {
+        height: 31px;
+        width: 334px;
+        display: flex;
+        border: 2px solid black;
+        border-radius: 10px;
+        position: relative;
+        left: -31px;
+        justify-content: flex-start;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .filter{
+        display:none;
+    }
+
+}
+    
+        
+        
+        
+    
+
 
 
 
