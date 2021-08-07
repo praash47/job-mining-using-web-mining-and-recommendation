@@ -1,76 +1,75 @@
-from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from msedge.selenium_tools import Edge, EdgeOptions
 import scrapy
 from scrapy.linkextractors import LinkExtractor
-import json
-from scrapy_tutorial.spiders.crawling_site import Site
+from scrapy_tutorial.spiders.crawling_site import Site, NonAJAX
 
-class SiteSpider(scrapy.Spider):
+class JobURLSpider(scrapy.Spider):
+    """
+    This spider is used to crawl job URLs out of website urls.
+    """
     name = "CrawlSite"
-    ESTD_TOTAL_JOBS_IN_PAGE = 150
-    FILE_NAME_TO_EXTRACT_JOBS_TO = "jobURLskathmandujobs2.txt"
 
-    start_urls = [
-        # 'https://merojob.com/search/?q=',
-        # 'https://jobstalent.com.np/search-page/',
-        # 'https://globaljob.com.np/Search/jobSearch',
-        # 'https://froxjob.com/search/result?keywords=&cityzone=',
-        # 'https://kathmandujobs.com/jobs/search/'
-    ]
+    # start_urls = [
+    #     # 'https://merojob.com/search/?q=',
+    #     # 'https://jobstalent.com.np/search-page/',
+    #     # 'https://www.kumarijob.com/search?keywords=',
+    #     # 'https://globaljob.com.np/Search/jobSearch',
+    #     # 'https://froxjob.com/search/result?keywords=&cityzone=',
+    #     # 'http://jobkhoji.com/job/search?query=+',
+    #     # 'https://kathmandujobs.com/jobs/search/',
+    #     # 'https://careersinnepal.com/?s='
+    # ]
 
     def __init__(self, **kwargs):
+        """
+        A link extractor and site object is initialized with search page url
+        coming from kwargs.
+        """
         self.link_extractor = LinkExtractor()
         self.site = Site(
             search_page_url=kwargs.get('search_page_url')
         )
+
         self.start_urls = [self.site.search_page_url]
         self.jobs = {}
 
     def parse(self, response):
+        """
+        Use to extract out job URLs that are present in a website.
+        """
+        # Extract out links present in the page
         links_in_page = self.link_extractor.extract_links(response)
 
-        # Xpath is got, everything proceeds normally as expected, if False
-        # then, there is some request by the xpath module.
-        xpath_got, xpath_request = self.site.get_xpaths(response, links_in_page)
+        # Check if Non AJAX based paginated website
+        if self.site.pages.has_pages(links_in_page):
+            # Create a non-ajax object out of the site.
+            pag_na_website = NonAJAX(response, links_in_page, self.site)
+            # Determine if the site is crawlable.
+            if pag_na_website.is_crawlable():
+                # If determined as crawlable, then extracting out xpaths 
+                # for job URL in the website.
+                xpaths = pag_na_website.xpaths.get_xpaths(links_in_page)
 
-        if not xpath_got:
-            if xpath_request == "NOT_POSSIBLE": return
-            elif xpath_request == "PAGE_TRAVERSAL_REQUEST":
-                self.request_next_page()
-                xpath_got, xpath_request = self.site.get_xpaths(response, links_in_page)
+                yield self.scrape_job_urls(response, pag_na_website=pag_na_website, xpaths=xpaths)
+            
+            self.jobs = pag_na_website.jobs
+
+    def scrape_job_urls(self, response, **kwargs):
+        pag_na_website = kwargs.get('pag_na_website')
+        xpaths = kwargs.get('xpaths')
         
-        try: self.get_jobs_from_xpath(response)
-        except: pass
-
-    
-    def get_jobs_from_xpath(self, response):
-        path = self.site.xpath.copy()
-        init = path[self.var_index][:-2]
-        for i in range(1, ESTD_TOTAL_JOBS_IN_PAGE):
-            path[self.var_index] = init + str(i) + ']'
-            element_text = response.xpath('/' + "/".join(path) + '//text()').get()
-            element_href = response.xpath('/' + "/".join(path[:-1]) + '//@href').get()
-            if element_text and element_href:
-                self.jobs[element_text] = element_href
-
-    def request_next_page(self):
-        if self.sites.search_step: self.site.pages.curr_page += self.site.search_step
-        else: self.site.pages.curr_page += 1
-
-        if self.site.pages.curr_page <= self.site.pages.max_page:
-            yield scrapy.Request(
-                url=self.search_page_url + str(self.site.pages.curr_page),
-                callback=self.parse
+        # Until last page is not reached, keep on getting jobs.
+        pages_left = pag_na_website.site.pages.move_to_next_page()
+        if pages_left:
+            pag_na_website.get_jobs_from_xpath(xpaths, response)
+            request = scrapy.Request(
+                url=pag_na_website.site.pages.page_url,
+                callback=self.scrape_job_urls,
             )
+            request.cb_kwargs['pag_na_website'] = pag_na_website
+            request.cb_kwargs['xpaths'] = xpaths
 
-        url = self.site.search_page_url + str(self.site.pages.curr_page)
-        yield scrapy.Request(
-            url=url,
-            callback=self.parse
-        )
+            return request
 
     def closed(self, reason):
-        pass
-        # with open(FILE_NAME_TO_EXTRACT_JOBS_TO, 'w') as file_to_write_to:
-        #     json.dump(self.jobs, file_to_write_to)
+        # Assign the jobs thus extracted.
+        print(self.jobs)
