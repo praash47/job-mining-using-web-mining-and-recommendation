@@ -49,44 +49,26 @@ class JobURLSpider(scrapy.Spider):
                 # for job URL in the website.
                 xpaths = pag_na_website.xpaths.get_xpaths(links_in_page)
 
-                yield self.scrape_job_urls(response, na_website=pag_na_website, xpaths=xpaths)
+                yield self.scrape_job_urls(response, pag_na_website=pag_na_website, xpaths=xpaths)
             
             self.jobs = pag_na_website.jobs
 
-        # For non ajax based non paginated website
-        else:
-            na_website = NonAJAX(response, links_in_page, self.site, paginated=False)
-            xpaths = na_website.xpaths.get_xpaths(links_in_page)
-
-            if xpaths: yield self.scrape_job_urls(response, na_website=na_website, xpaths=xpaths)
-
-            self.jobs = na_website.jobs
-
     def scrape_job_urls(self, response, **kwargs):
-        na_website = kwargs.get('na_website')
+        pag_na_website = kwargs.get('pag_na_website')
         xpaths = kwargs.get('xpaths')
         
-        if na_website.site.pages.last_page:
-            pag_na_website = na_website
-            # Until last page is not reached, keep on getting jobs.
-            pages_left = pag_na_website.site.pages.move_to_next_page()
-            if pages_left:
-                pag_na_website.get_jobs_from_xpath(xpaths, response)
-                request = scrapy.Request(
-                    url=pag_na_website.site.pages.page_url,
-                    callback=self.scrape_job_urls,
-                )
-                request.cb_kwargs['pag_na_website'] = pag_na_website
-                request.cb_kwargs['xpaths'] = xpaths
+        # Until last page is not reached, keep on getting jobs.
+        pages_left = pag_na_website.site.pages.move_to_next_page()
+        if pages_left:
+            pag_na_website.get_jobs_from_xpath(xpaths, response)
+            request = scrapy.Request(
+                url=pag_na_website.site.pages.page_url,
+                callback=self.scrape_job_urls,
+            )
+            request.cb_kwargs['pag_na_website'] = pag_na_website
+            request.cb_kwargs['xpaths'] = xpaths
 
-                return request
-
-        else:
-            # TODO: jobsdynamics type website: there are multiple job titles mentioned
-            # in the same ad, that contradicts with our architecture.
-            # - Alljobnepal where links is placed inside the company's name, WHAT???
-            # yes, they even do it!
-            na_website.get_jobs_from_xpath(xpaths, response)
+            return request
 
     def closed(self, reason):
         # Assign the jobs thus extracted.

@@ -176,22 +176,16 @@ class Xpather():
         self.paginated = paginated
 
     def get_xpaths(self, links):
-        # Extract out link texts of job titles present in site and the job titles file.
-        self.link_texts = [link.text.strip('\n') for link in links if link.text.strip('\n') in self.job_titles]
-        
         if self.paginated:
             self.site.pages.get_last_page(links)
             self.site.pages.check_search_step(self.site, links)
+            
+            # Extract out link texts of job titles present in site and the job titles file.
+            self.link_texts = [link.text.strip('\n') for link in links if link.text.strip('\n') in self.job_titles]
 
             xpaths = self.find_xpaths(links)
             
             return xpaths
-        else:
-            xpaths = self.find_xpaths(links)
-
-            if xpaths: return xpaths
-
-            return False    
 
 
     def find_xpaths(self, links):   
