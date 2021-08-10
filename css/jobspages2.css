@@ -117,6 +117,9 @@
 
     .filter{
         display:none;
+        /* transform:translate(-500px,-500px) */
+
+        
     }
 
 }
