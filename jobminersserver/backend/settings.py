@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
+    'checkers',
+    'requestutils',
+    'tagprocessor'
 ]
 
 MIDDLEWARE = [
@@ -76,9 +80,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'job-miners',
-        'USER': 'root',
-        'PASSWORD': '12345678',
+        'NAME': 'jobminers',
+        'USER': 'jobminer',
+        'PASSWORD': 'jobminer',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 
@@ -125,3 +131,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# channels
+ASGI_APPLICATION = 'backend.asgi.application'

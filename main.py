@@ -1,7 +1,8 @@
 import sys
-sys.path.insert(1, 'D:/job-mining-using-web-mining-and-recommendation/jobminersserver')
-from requestutils.requestgooglemodule.requestgoogle import RequestGoogle
-from checkers.checkjobwebsite import CheckJobWebsite
+sys.path.append('/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver')
+
+from jobminersserver.requestutils.requestgooglemodule.requestgoogle import RequestGoogle
+from jobminersserver.checkers.checkjobwebsite import CheckJobWebsite
 
 rg = RequestGoogle()
 urls = rg.get_100_urls()

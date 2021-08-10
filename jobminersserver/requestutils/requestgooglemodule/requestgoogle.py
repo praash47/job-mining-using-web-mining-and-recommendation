@@ -15,7 +15,20 @@ This file consists of two classes:
 from googleapiclient.discovery import build
 
 from configparser import ConfigParser
-import time
+
+import os
+
+import sys
+
+sys.path.append('/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
+
+import django
+django.setup()
+
+from django.utils.timezone import now
+from requestutils.models import API
+
 
 class RequestGoogle:
     """
@@ -138,9 +151,17 @@ class GoogleAPI:
             unique key for search engine id
         """
         self.API_KEY = api_key
+        self.ONE_DAY = 86400
         self.SEARCH_ENGINE_ID = search_engine_id
-        self.usage_count = 0
-        self.last_used_time = time.time()
+        self.db_ref, created = API.objects.get_or_create(
+            api_key=api_key
+        )
+        if not created:
+            self.time_elapsed = now() - self.db_ref.last_access
+            if self.time_elapsed.total_seconds() > self.ONE_DAY:
+                self.db_ref.usage_count = 0
+
+        
 
     def search(self, search_query, num_results=10, start_index=1):
         """
@@ -171,8 +192,8 @@ class GoogleAPI:
             ).execute()
             
             if response:
-                self.usage_count += 1
-                self.last_used_time = time.time()
+                self.db_ref.usage_count += 1
+                self.db_ref.save()
                 return response
         except Exception as e:
             print(e)
@@ -188,12 +209,14 @@ class GoogleAPI:
             True if an API usage limit for the day hasn't exceeded.
             False else.
         """
-        ONE_DAY = 86400000
         API_DAY_LIMIT = 100
-        elapsed_time = time.time() - self.last_used_time
-        if self.usage_count < API_DAY_LIMIT and elapsed_time < ONE_DAY:
+        self.time_elapsed = now() - self.db_ref.last_access
+        
+        if self.db_ref.usage_count <= API_DAY_LIMIT and self.time_elapsed.total_seconds() < self.ONE_DAY:
             return True
         
+        self.db_ref.last_access = now()
+        self.db_ref.save()
         return False
 
 if __name__ == "__main__":

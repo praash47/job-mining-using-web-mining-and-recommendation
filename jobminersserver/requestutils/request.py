@@ -42,11 +42,12 @@ class Request:
 
 		format: https://merojob.com
 		"""
-		home_page = parse.urlsplit(self.url).scheme + '://' + parse.urlsplit(self.url).netloc
+		home_page = parse.urlsplit(self.url).scheme + '://' + parse.urlsplit(self.url).netloc + '/'
+
 		if(self.url == home_page): return True
 		return False
 
-	def get_only_homepage_based(self):
+	def get_only_homepage_based(self, urls=None):
 		"""
 		Returns homepage from the extracted url
 
@@ -57,8 +58,12 @@ class Request:
 		home_page: list
 			homepage of the urls in the format https://unjobs.org
 		"""
-		home_page = [(parse.urlsplit(url).scheme + '://' + parse.urlsplit(url).netloc) for url in urls if (parse.urlsplit(url).scheme + '://' + parse.urlsplit(url).netloc) != '://']
-		return (home_page)
+		home_page = ''
+		if urls:
+			home_page = [(parse.urlsplit(url).scheme + '://' + parse.urlsplit(url).netloc) for url in urls if (parse.urlsplit(url).scheme + '://' + parse.urlsplit(url).netloc) != '://']
+		if (parse.urlsplit(self.url).scheme + '://' + parse.urlsplit(self.url).netloc) != '://':
+			home_page = parse.urlsplit(self.url).scheme + '://' + parse.urlsplit(self.url).netloc
+		return home_page
 
 
 	def request_html(self):
@@ -75,7 +80,11 @@ class Request:
 		return html
 
 if __name__ == "__main__":
-	urls = 'https://nepalhealthjob.com/'
+	# urls = 'https://nepalhealthjob.com/'
 
-	R1 = Request(urls)
-	print(R1.request_html())
+	# R1 = Request(urls)
+	# print(R1.request_html())
+
+	req = Request("https://merojob.com/search?q=")
+	print(req.get_only_homepage_based())
+
