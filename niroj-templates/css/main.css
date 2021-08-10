@@ -1,0 +1,14 @@
+@import url(d:\job-mining-using-web-mining-and-recommendation\css\fonts.css);
+/*------------------------------------*\
+  Main
+\*------------------------------------*/
+main {
+  font-family: 'changa-regular';
+  position: relative;
+  top: 100px;
+  padding: 50px;
+  min-height: calc(100vh - 140px);
+  box-sizing: border-box;
+}
+
+/*# sourceMappingURL=main.css.map */

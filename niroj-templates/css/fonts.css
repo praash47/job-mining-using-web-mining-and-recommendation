@@ -1,0 +1,73 @@
+/*------------------------------------*\
+  Fonts Definition
+\*------------------------------------*/
+@font-face {
+  font-family: "changa-bold";
+  src: url("../assets/fonts/Changa/Changa-Bold.ttf");
+}
+
+@font-face {
+  font-family: "changa-extrabold";
+  src: url("../assets/fonts/Changa/Changa-ExtraBold.ttf");
+}
+
+@font-face {
+  font-family: "changa-extralight";
+  src: url("../assets/fonts/Changa/Changa-ExtraLight.ttf");
+}
+
+@font-face {
+  font-family: "changa-light";
+  src: url("../assets/fonts/Changa/Changa-Light.ttf");
+}
+
+@font-face {
+  font-family: "changa-medium";
+  src: url("../assets/fonts/Changa/Changa-Medium.ttf");
+}
+
+@font-face {
+  font-family: "changa-regular";
+  src: url("../assets/fonts/Changa/Changa-Regular.ttf");
+}
+
+@font-face {
+  font-family: "changa-semibold";
+  src: url("../assets/fonts/Changa/Changa-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "cairo-bold";
+  src: url("../assets/fonts/Cairo/Cairo-Bold.ttf");
+}
+
+@font-face {
+  font-family: "cairo-extrabold";
+  src: url("../assets/fonts/Cairo/Cairo-ExtraBold.ttf");
+}
+
+@font-face {
+  font-family: "cairo-extralight";
+  src: url("../assets/fonts/Cairo/Cairo-ExtraLight.ttf");
+}
+
+@font-face {
+  font-family: "cairo-light";
+  src: url("../assets/fonts/Cairo/Cairo-Light.ttf");
+}
+
+@font-face {
+  font-family: "cairo-medium";
+  src: url("../assets/fonts/Cairo/Cairo-Medium.ttf");
+}
+
+@font-face {
+  font-family: "cairo-regular";
+  src: url("../assets/fonts/Cairo/Cairo-Regular.ttf");
+}
+
+@font-face {
+  font-family: "cairo-semibold";
+  src: url("../assets/fonts/Cairo/Cairo-SemiBold.ttf");
+}
+/*# sourceMappingURL=fonts.css.map */
