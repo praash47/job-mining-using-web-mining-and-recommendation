@@ -17,7 +17,7 @@ export default defineComponent({
   visibility: hidden
   justify-content: center
 img
-  width: 50px
+  width: 100px
 p
   display: flex
   justify-content: center

@@ -7,8 +7,7 @@
       </button>
     </div>
     <div class="data">
-      <DataContainer v-for="data in datas" :type="container_type"
-      :key="data.id" />
+      <DataContainer v-for="data in datas" :key="data.id" :data="data" />
     </div>
     <Loading />
   </div>
@@ -30,9 +29,7 @@ export default defineComponent({
       // Show the scraping loading component
       const loading = document.querySelector<HTMLElement>('.loading');
       loading.style.visibility = 'visible';
-      
       this.ws.send('hello');
-      
       this.ws.onmessage = (message) => {
         console.log(message);
       };
@@ -44,7 +41,38 @@ export default defineComponent({
   data() {
     return {
       container_type: '',
-      datas: [],
+      datas: [{
+        type: 'msg',
+        message: 'hello world',
+        id: 1,
+      },
+      {
+        type: 'title_content',
+        title: 'Fetched 100 URLs',
+        content: [
+          'https://www.merojob.com', 'https://www.jobsnepal.com',
+          'https://www.merojob.com', 'https://www.jobsnepal.com',
+          'https://www.merojob.com', 'https://www.jobsnepal.com',
+          'https://www.merojob.com', 'https://www.jobsnepal.com',
+          'https://www.merojob.com', 'https://www.jobsnepal.com',
+          'https://www.merojob.com', 'https://www.jobsnepal.com',
+        ],
+        id: 2,
+      },
+      {
+        type: 'title_content',
+        title: 'Fetching from merojob',
+        content: [
+          {
+            dict: {
+              key: 'Frontend Designer',
+              value: 'https://www.merojob.com/frontend-designer',
+            },
+          },
+        ],
+        id: 3,
+      },
+      ],
       ws: new WebSocket('wss://echo.websocket.org/'),
     };
   },
@@ -53,6 +81,8 @@ export default defineComponent({
 
 <style lang="sass">
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+body
+  background: rgb(203,203,203)
 
 .home
   display: flex
