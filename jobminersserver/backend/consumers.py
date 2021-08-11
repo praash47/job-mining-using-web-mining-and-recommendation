@@ -9,6 +9,7 @@ from channels.generic.websocket import WebsocketConsumer
 
 from requestutils.requestgooglemodule.requestgoogle import RequestGoogle
 from checkers.checkjobwebsite import CheckJobWebsite
+from interactor.searcher import Search
 
 
 class JobMinersConsumer(WebsocketConsumer):
@@ -96,10 +97,13 @@ class JobMinersConsumer(WebsocketConsumer):
                 }
             ))
 
-            # Placement of spider on website whose search URL is passed.
-            os.system(f'curl http://localhost:6800/schedule.json \
-                -d project=scraper -d spider=CrawlSite -d \
-                search_page_url="https://www.kumarijob.com/search?keywords="')
+            for url in job_website_urls:
+                search = Search(url)
+                search_url = search.get_search_url()
+                # Placement of spider on website whose search URL is passed.
+                os.system(f'curl http://localhost:6800/schedule.json \
+                    -d project=scraper -d spider=CrawlSite -d \
+                    search_page_url="{search_url}')
 
         elif data['action'] == 'one_website_scrape_completed':
             title = "Completed Crawling from one site! Here are the jobs:"
