@@ -72,7 +72,7 @@ export default defineComponent({
       padding: 10px
       margin: 5px
 
-      @for $i from 0 through 100
+      @for $i from 0 through 500
         &:nth-child(#{$i})
           @include randombgr
 </style>

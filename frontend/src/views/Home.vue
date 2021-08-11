@@ -7,7 +7,7 @@
       </button>
     </div>
     <div class="data">
-      <DataContainer v-for="data in datas" :key="data.id" :data="data" />
+      <DataContainer v-for="data in datas" :data="data" :key="data"/>
     </div>
     <Loading />
   </div>
@@ -29,9 +29,10 @@ export default defineComponent({
       // Show the scraping loading component
       const loading = document.querySelector<HTMLElement>('.loading');
       loading.style.visibility = 'visible';
-      this.ws.send('hello');
+      this.ws.send(JSON.stringify({ action: 'scrape' }));
+
       this.ws.onmessage = (message) => {
-        console.log(message);
+        this.datas.push(JSON.parse(message.data));
       };
       this.ws.onclose = () => {
         console.error('Chat socket closed unexpectedly!');
@@ -41,39 +42,9 @@ export default defineComponent({
   data() {
     return {
       container_type: '',
-      datas: [{
-        type: 'msg',
-        message: 'hello world',
-        id: 1,
-      },
-      {
-        type: 'title_content',
-        title: 'Fetched 100 URLs',
-        content: [
-          'https://www.merojob.com', 'https://www.jobsnepal.com',
-          'https://www.merojob.com', 'https://www.jobsnepal.com',
-          'https://www.merojob.com', 'https://www.jobsnepal.com',
-          'https://www.merojob.com', 'https://www.jobsnepal.com',
-          'https://www.merojob.com', 'https://www.jobsnepal.com',
-          'https://www.merojob.com', 'https://www.jobsnepal.com',
-        ],
-        id: 2,
-      },
-      {
-        type: 'title_content',
-        title: 'Fetching from merojob',
-        content: [
-          {
-            dict: {
-              key: 'Frontend Designer',
-              value: 'https://www.merojob.com/frontend-designer',
-            },
-          },
-        ],
-        id: 3,
-      },
+      datas: [
       ],
-      ws: new WebSocket('wss://echo.websocket.org/'),
+      ws: new WebSocket('ws://127.0.0.1:8000/ws/'),
     };
   },
 });
