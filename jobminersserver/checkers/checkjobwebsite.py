@@ -10,17 +10,14 @@ CheckJobWebsite(urls=None)
 from configparser import ConfigParser
 from urllib import parse
 
-# from models import JobWebsiteURL
+from .models import JobWebsiteURL
 
 # Need while using main for debugging.
-import sys
-sys.path.append('/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver')
 from requestutils.request import Request
 from checkers.misccheckers import is_interested_website
 
-sys.path.append('/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/tagprocessor')
-from tagprocessor import TagProcessor
-from metatagprocessor import MetaTagProcessor
+from tagprocessor.tagprocessor import TagProcessor
+from tagprocessor.metatagprocessor import MetaTagProcessor
 
 class CheckJobWebsite:
     """
@@ -40,15 +37,12 @@ class CheckJobWebsite:
         urls: list of strings, optional
             Strings here are individual urls.
         """
-        print("Getting job websites...")
         self.urls_to_check = []
-        print(urls)
         for url in urls:
             req = Request(url)
             if req.check_homepage(): self.urls_to_check.append(url)
-        print(self.urls_to_check)
         
-        CONFIG = 'jobminersserver/checkers/checkjobwebsite.ini'
+        CONFIG = 'checkers/checkjobwebsite.ini'
         self.parser = ConfigParser()
         self.parser.read(CONFIG)
 
@@ -77,8 +71,8 @@ class CheckJobWebsite:
             print(f"Verifying {url}")
             if self.check_single_url(url): 
                 job_website_urls.append(url)
-                # job_url = JobWebsiteURL(url=url)
-                # job_url.save()
+                job_website_url, _ = JobWebsiteURL.objects.get_or_create(url=url)
+                job_website_url.save()
 
         return job_website_urls
         

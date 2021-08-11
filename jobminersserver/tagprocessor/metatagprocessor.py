@@ -4,7 +4,7 @@ This file processes the meta tag in HTML.
 It can get keywords, description, og:description and
 og:title from the html.
 """
-from tagprocessor import TagProcessor
+from .tagprocessor import TagProcessor
 
 class MetaTagProcessor(TagProcessor):
     """

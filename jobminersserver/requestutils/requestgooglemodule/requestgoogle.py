@@ -16,19 +16,8 @@ from googleapiclient.discovery import build
 
 from configparser import ConfigParser
 
-import os
-
-import sys
-
-sys.path.append('/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver')
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
-
-import django
-django.setup()
-
 from django.utils.timezone import now
 from requestutils.models import API
-
 
 class RequestGoogle:
     """
@@ -55,7 +44,7 @@ class RequestGoogle:
 
         # Parser
         # Google API settings
-        CONFIG = 'jobminersserver/requestutils/requestgooglemodule/googleapis.ini'
+        CONFIG = 'requestutils/requestgooglemodule/googleapis.ini'
         self.parser = ConfigParser()
         self.parser.read(CONFIG)
         
@@ -104,7 +93,8 @@ class RequestGoogle:
         10 iterations.
         """
         # If available, take the first one available.
-        api = [curr_api for curr_api in self.google_apis if curr_api.is_available()][0]
+        apis = [curr_api for curr_api in self.google_apis if curr_api.is_available()]
+        api = apis[0]
 
         search_results = []
         
@@ -194,6 +184,9 @@ class GoogleAPI:
             if response:
                 self.db_ref.usage_count += 1
                 self.db_ref.save()
+                self.db_ref.last_access = now()
+                self.db_ref.save()
+
                 return response
         except Exception as e:
             print(e)
@@ -212,12 +205,10 @@ class GoogleAPI:
         API_DAY_LIMIT = 100
         self.time_elapsed = now() - self.db_ref.last_access
         
-        if self.db_ref.usage_count <= API_DAY_LIMIT and self.time_elapsed.total_seconds() < self.ONE_DAY:
-            return True
+        if self.db_ref.usage_count >= API_DAY_LIMIT and self.time_elapsed.total_seconds() < self.ONE_DAY:
+            return False
         
-        self.db_ref.last_access = now()
-        self.db_ref.save()
-        return False
+        return True
 
 if __name__ == "__main__":
     google_request = RequestGoogle() 

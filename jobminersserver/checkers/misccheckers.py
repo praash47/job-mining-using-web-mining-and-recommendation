@@ -30,7 +30,7 @@ def is_interested_website(home_page_url):
         interested_websites section of misccheckers.ini.
     """
     config = {}
-    CONFIG = 'jobminersserver/checkers/misccheckers.ini'
+    CONFIG = 'checkers/misccheckers.ini'
     config = ConfigParser()
     config.read(CONFIG)
     non_interested = config.get('interested_websites', 'non_interested').split(', ')

@@ -60,13 +60,15 @@ class TagProcessor:
         """
         if self.tag_to_process == 'title':
             title = self.soup.title
-            if title: 
-                title = title.string.split(' ')
-                title = [word.strip(',').strip('|').strip('.').lower() for word in title]
-                # remove empty strings
-                title = [word for word in title if word]
-
-                return title
+            if title:
+                try: 
+                    title = title.string.split(' ')
+                    title = [word.strip(',').strip('|').strip('.').lower() for word in title]
+                    # remove empty strings
+                    title = [word for word in title if word]
+                    return title
+                except:
+                    return ['']
 
     def get_content_from_name(self, name_to_get_from):
         """

@@ -3,11 +3,22 @@ from scrapy.linkextractors import LinkExtractor
 from scraper.spiders.crawling_site import Site, NonAJAX
 
 import sys
-sys.path.append('/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver')
+sys.path.append('/home/aasis/Documents/jobminersserver')
+
+import json
+
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
+
+import django
+django.setup()
+
+import websockets
 
 from requestutils.request import Request
-# import checkers.models import JobURL, JobWebsiteURL
+from checkers.models import JobURL, JobWebsiteURL
 
+from asgiref.sync import sync_to_async
 
 class JobURLSpider(scrapy.Spider):
     """
@@ -35,6 +46,7 @@ class JobURLSpider(scrapy.Spider):
         self.site = Site(
             search_page_url=kwargs.get('search_page_url')
         )
+        self.initiator_ws = kwargs.get('ws')
 
         self.start_urls = [self.site.search_page_url]
         self.jobs = {}
@@ -95,19 +107,25 @@ class JobURLSpider(scrapy.Spider):
             # yes, they even do it!
             na_website.get_jobs_from_xpath(xpaths, response)
 
-    def closed(self, reason):
+    async def closed(self, reason):
         # Put the jobs into database thus extracted.
         website = Request(self.site.search_page_url)
-        homepage = website.get_only_homepage_based()
-        # website = JobWebsiteURL.objects.get(url=homepage)
+        homepage = website.get_only_homepage_based() + '/'
+        print(homepage)
+        website = await sync_to_async(JobWebsiteURL.objects.get)(url=homepage)
 
+        ws_url = "ws://127.0.0.1:8000/ws/"
+        websocket = await websockets.connect(ws_url)
         for title, url in self.jobs.items():
             # Process the job URL
             url = self.check_or_make_url_complete(url, homepage)
-            print(title, url)
 
-            # job_url = JobURL(website=website, title=title, url=url)
-            # job_url.save()
+            job_url = JobURL(website=website, title=title, url=url)
+            await sync_to_async(job_url.save)()
+        await websocket.send(json.dumps({
+            'action': 'one_website_scrape_completed',
+            'jobs': self.jobs,
+        }))
 
     def check_or_make_url_complete(self, url, homepage):
         if homepage in url:
