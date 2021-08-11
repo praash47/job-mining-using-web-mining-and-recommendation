@@ -25,7 +25,7 @@ class Search:
                 """
         chrome_options = Options()
         chrome_options.add_argument("--headless")
-        self.driver = webdriver.Chrome(executable_path='D:\\Downloads\\chromedriver.exe')
+        self.driver = webdriver.Chrome(executable_path='/usr/lib/chromium-browser/chromedriver', options=chrome_options)
         self.url = url
 
     def search_term(self, search):
