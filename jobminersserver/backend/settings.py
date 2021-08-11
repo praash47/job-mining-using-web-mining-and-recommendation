@@ -132,7 +132,7 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# channels
+# Django Channels
 ASGI_APPLICATION = 'backend.asgi.application'
 CHANNEL_LAYERS = {
     'default': {
