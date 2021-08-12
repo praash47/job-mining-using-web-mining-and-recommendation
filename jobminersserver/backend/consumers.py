@@ -96,17 +96,25 @@ class JobMinersConsumer(WebsocketConsumer):
                     'content': job_website_urls
                 }
             ))
-
+            
             for url in job_website_urls:
                 search = Search(url)
                 search_url = search.get_search_url()
+                print(search_url)
+
+                self.send(text_data=json.dumps(
+                    {
+                        'type': 'msg',
+                        'message': f'Scraping jobs in {url}'
+                    }
+                ))
                 # Placement of spider on website whose search URL is passed.
                 os.system(f'curl http://localhost:6800/schedule.json \
                     -d project=scraper -d spider=CrawlSite -d \
-                    search_page_url="{search_url}')
+                    search_page_url="{search_url}"')
 
         elif data['action'] == 'one_website_scrape_completed':
-            title = "Completed Crawling from one site! Here are the jobs:"
+            title = f"Completed Crawling in { data['site'] }! Here are the jobs:"
             
             # Frontend's data container accepts the dictionary 
             # message data in the following format:
@@ -119,6 +127,7 @@ class JobMinersConsumer(WebsocketConsumer):
             # },
             # ]
             content = []
+            print(data['jobs'])
             for job, url in data['jobs'].items():
                 content.append({
                     'dict': {

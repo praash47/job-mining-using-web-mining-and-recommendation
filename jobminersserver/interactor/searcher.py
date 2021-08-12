@@ -48,7 +48,7 @@ class Search:
         except:
             pass
 
-        if url == check_url:
+        if self.url == check_url:
             try:
                 search.send_keys(' ')           # send ' ' key to search box
                 search.send_keys(Keys.ENTER) # Enter the search box
@@ -66,12 +66,11 @@ class Search:
         returns the search url
         '''
         try:
-            self.driver.get(url)
-        except:
-            pass
+            self.driver.get(self.url)
+        except Exception as e:
+            print(e)
 
         check_url = self.driver.current_url
-
         search_url = self.find_element_by_type('text', 3, check_url)
 
         if not search_url: search_url = self.find_element_by_type('search', 2, check_url)
@@ -81,6 +80,7 @@ class Search:
     def find_element_by_type(self, element_type, finish_index, check_url):
         self.search = ''
         self.search_url = ''
+        
         if check_url == self.url:
             try:
                 self.search = self.driver.find_element_by_xpath(
@@ -101,15 +101,6 @@ class Search:
 
 
 if __name__ == "__main__":
-    url = 'https://www.jobejee.com/'
+    url = 'https://www.kumarijob.com/'
     s1 = Search(url)
     print(s1.get_search_url())
-
-
-
-
-
-
-
-
-

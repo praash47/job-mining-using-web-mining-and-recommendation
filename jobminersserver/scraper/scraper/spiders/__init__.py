@@ -125,6 +125,7 @@ class JobURLSpider(scrapy.Spider):
         await websocket.send(json.dumps({
             'action': 'one_website_scrape_completed',
             'jobs': self.jobs,
+            'site': homepage
         }))
 
     def check_or_make_url_complete(self, url, homepage):
