@@ -96,7 +96,6 @@ class JobMinersConsumer(WebsocketConsumer):
                     'content': job_website_urls
                 }
             ))
-            
             for url in job_website_urls:
                 search = Search(url)
                 search_url = search.get_search_url()
@@ -121,7 +120,7 @@ class JobMinersConsumer(WebsocketConsumer):
             # content = [
             # {
             #   dict: {
-            #       key: job
+            #       key: job,
             #       value: url
             #   } 
             # },

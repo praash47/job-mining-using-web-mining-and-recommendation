@@ -13,11 +13,11 @@ This file consists of two classes:
     * GoogleAPI: Google API object used for making request.
 """
 from googleapiclient.discovery import build
-
 from configparser import ConfigParser
-
 from django.utils.timezone import now
+
 from requestutils.models import API
+
 
 class RequestGoogle:
     """
@@ -147,6 +147,7 @@ class GoogleAPI:
             api_key=api_key
         )
         if not created:
+            # Reset the usage count to 0 on next day
             self.time_elapsed = now() - self.db_ref.last_access
             if self.time_elapsed.total_seconds() > self.ONE_DAY:
                 self.db_ref.usage_count = 0
@@ -182,6 +183,7 @@ class GoogleAPI:
             ).execute()
             
             if response:
+                # Increment usage count and set last access time to now
                 self.db_ref.usage_count += 1
                 self.db_ref.save()
                 self.db_ref.last_access = now()

@@ -1,10 +1,6 @@
-import sys
-sys.path.insert(1,'D:\job-mining-using-web-mining-and-recommendation\jobminersserver\requestutils\request.py')
-
 from requests import *
 from bs4 import BeautifulSoup
 from urllib import parse
-
 from selenium import webdriver
 
 

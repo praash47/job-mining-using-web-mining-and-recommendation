@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
+from urllib.parse import urlparse
 
 class Search:
 
@@ -71,9 +72,16 @@ class Search:
             print(e)
 
         check_url = self.driver.current_url
+        
         search_url = self.find_element_by_type('text', 3, check_url)
 
         if not search_url: search_url = self.find_element_by_type('search', 2, check_url)
+
+        try:
+            if '_token' in search_url:
+                search_url = urlparse(search_url).scheme + '://' + urlparse(search_url).netloc \
+                    + urlparse(search_url).path + '?' + urlparse(search_url).query.split('&')[-1]
+        except: pass
 
         return search_url
 
