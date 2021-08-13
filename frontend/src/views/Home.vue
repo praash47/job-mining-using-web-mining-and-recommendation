@@ -7,8 +7,10 @@
       </button>
     </div>
     <div class="data">
+      <!-- This shows the datas and messages in the frontend -->
       <DataContainer v-for="data in datas" :data="data" :key="data"/>
     </div>
+    <!-- Loading component -->
     <Loading />
   </div>
 </template>
@@ -29,11 +31,16 @@ export default defineComponent({
       // Show the scraping loading component
       const loading = document.querySelector<HTMLElement>('.loading');
       loading.style.visibility = 'visible';
+
+      // Send the scraping trigger on button press
       this.ws.send(JSON.stringify({ action: 'scrape' }));
 
+      // When a message is pushed from the backend, push into the data object.
       this.ws.onmessage = (message) => {
         this.datas.push(JSON.parse(message.data));
       };
+
+      // On websocket error
       this.ws.onclose = () => {
         console.error('Chat socket closed unexpectedly!');
       };
@@ -44,7 +51,7 @@ export default defineComponent({
       container_type: '',
       datas: [
       ],
-      ws: new WebSocket('ws://127.0.0.1:8000/ws/'),
+      ws: new WebSocket('ws://127.0.0.1:8000/ws/'),  // websocket connection initialize
     };
   },
 });

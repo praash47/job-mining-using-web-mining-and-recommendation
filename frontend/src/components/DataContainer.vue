@@ -1,18 +1,22 @@
 <template>
     <div>
+      <!-- Simple message container with only message -->
       <div v-if="data.type=='msg'" class="message">
         {{ data.message }}
       </div>
+      <!-- Title content container -->
       <div v-if="data.type == 'title_content'" class="title-content">
         <div class="title">
           {{ data.title }}
         </div>
         <div class="content">
           <p v-for="value in data.content" :key="value">
+            <!-- Dict value sub container, for jobs -->
             <span v-if="value.dict">
               {{ value.dict.key }} :
               {{ value.dict.value }}
             </span>
+            <!-- Simple value sub container, for list like values -->
             <span v-else>
               {{ value }}
             </span>
@@ -32,6 +36,7 @@ export default defineComponent({
 });
 </script>
 <style lang="sass">
+// to generate random backgrounds
 @mixin randombgr
   background: rgb(random(255), random(255), random(255))
 
