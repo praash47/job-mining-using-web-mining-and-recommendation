@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'channels',
     'checkers',
     'requestutils',
-    'tagprocessor'
+    'tagprocessor',
+    'interactor'
 ]
 
 MIDDLEWARE = [
