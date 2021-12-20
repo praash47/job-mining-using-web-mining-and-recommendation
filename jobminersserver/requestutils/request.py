@@ -1,8 +1,6 @@
 from requests import *
-from bs4 import BeautifulSoup
 from urllib import parse
-from selenium import webdriver
-
+from lxml import html
 
 class Request:
 	"""
@@ -25,6 +23,7 @@ class Request:
 			url of the webpages
 		"""
 		self.url = url
+		self.html = None
 
 	def check_homepage(self):
 		"""
@@ -69,11 +68,24 @@ class Request:
 		If webpage is not accessible print error message 
 		"""
 		try:
-			html = get(self.url).text
+			self.html = get(self.url).text
 		except:
 			print("Error getting html from url")
 			return ""
-		return html
+		return self.html
+
+	def request_html_tree(self):
+		"""
+		Creates a html tree using lxml out of the current
+		object's HTML document.
+
+		Requirement: HTML document present in html variable.
+		"""
+		html_doc = html.fromstring(self.html)
+		tree = html_doc.getroottree()
+		
+		return tree
+
 
 if __name__ == "__main__":
 	# urls = 'https://nepalhealthjob.com/'
