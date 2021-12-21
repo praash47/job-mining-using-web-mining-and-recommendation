@@ -1,8 +1,11 @@
 # from jobminersserver.requestutils.request import Request
 from deadline import Deadline
 import requests
-from lxml import html, etree
+from lxml import html
+
 from configparser import ConfigParser
+from parameters import Parameters
+from skills import SkillSet
 
 import re
 
@@ -17,19 +20,12 @@ class JobDetails:
         self.tree = None
         self.deadline = Deadline()
         self.job_block_xpath = None
+        self.skill_set = SkillSet()
 
         # for parameter options
         CONFIG = '/home/aasis/Documents/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini'
         self.parser = ConfigParser()
         self.parser.read(CONFIG)
-        # interested parameters that we want to match
-        self.interested_parameters = \
-            self.parser.get('parameters', 'interested_parameters').split(',')
-        self.interested_parameters = \
-            [word.strip().lower() for word in self.interested_parameters]
-        # symbols that we want to omit
-        self.symbols_to_omit = \
-            self.parser.get('parameters', 'symbols_to_omit').split(',')
 
     def fetch(self):
         # self.html_page = self.request.request_html()
@@ -37,9 +33,14 @@ class JobDetails:
         resp_html = html.fromstring(self.html_page)
         self.tree = resp_html.getroottree()
     
-    def extract_parameters(self):
-        self.job_block_xpath = self.get_job_block_xpath()
-        self.get_core_parameters()
+    def get_details(self):
+        self.job_parameters = \
+            Parameters(
+                self.get_job_block_xpath(),
+                self.tree
+            )
+        self.job_parameters.get_core_parameters()
+        self.skill_set.get_skills()
 
     def get_job_block_xpath(self):
         self.deadline.tree = self.tree
@@ -52,15 +53,6 @@ class JobDetails:
 
         return job_block_xpath
 
-    def get_core_parameters(self):
-        job_block_root = self.tree.xpath(self.job_block_xpath)[0]
-        for parent in job_block_root.getparent().getchildren():
-            for node in parent.iter(tag=etree.Element):
-                print(node.text_content())
-                if not node.getchildren() and \
-                node.text_content() not in self.symbols_to_omit and \
-                node.text_content() in self.interested_parameters:
-                    print(node.text_content())
 
     def get_name_xpath(self):
         name_xpaths = self.tree.xpath(f'//*[text()="{self.name}"]')
@@ -103,6 +95,6 @@ class JobDetails:
         return ''.join(_iter())
 
 if __name__ == '__main__':
-    job_details = JobDetails('https://www.kumarijob.com/premiumjob/technical-support/34908', 'Technical Support')
+    job_details = JobDetails('https://merojob.com/public-relation-manager-account-manager/', 'Public Relation Manager (Account Manager)')
     job_details.fetch()
-    job_details.extract_parameters()
+    job_details.get_details()
