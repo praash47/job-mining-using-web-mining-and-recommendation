@@ -95,6 +95,7 @@ class JobDetails:
         return ''.join(_iter())
 
 if __name__ == '__main__':
-    job_details = JobDetails('https://merojob.com/public-relation-manager-account-manager/', 'Public Relation Manager (Account Manager)')
+    job_details = JobDetails('https://allnepaljob.com/prime-job/grade-teacher', '''PRIMARY MATH TEACHER''')
     job_details.fetch()
+    # print(repr(job_details.html_page))
     job_details.get_details()
