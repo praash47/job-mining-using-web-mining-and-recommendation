@@ -24,7 +24,7 @@ class Parameters:
     def get_core_parameters(self):
         parameters_discovered = self.get_parameters_from_node(root=self.job_block_root)
         
-        if len(parameters_discovered) < 100:
+        if len(parameters_discovered) < 4:
             parameters_discovered = self.get_parameters_from_node(root=self.job_block_tree.getroot())
 
         print(parameters_discovered)

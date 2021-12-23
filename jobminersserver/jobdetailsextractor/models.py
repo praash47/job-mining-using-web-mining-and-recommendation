@@ -1,5 +1,5 @@
 from django.db import models
-from checkers.models import JobWebsiteURL
+from checkers.models import JobWebsite
 
 # Create your models here.
 class Job(models.Model):
@@ -8,43 +8,45 @@ class Job(models.Model):
     """
     # CATEGORIES = ['IT', 'NonIT']
     # category = models.CharField(max_length=5,choices=CATEGORIES)
-    website = models.ForeignKey(JobWebsiteURL, on_delete=models.CASCADE)
+    website = models.ForeignKey(JobWebsite, on_delete=models.CASCADE)
     title = models.TextField()
     url = models.CharField(max_length=500)
-    deadline = models.DateTimeField(auto_now=False, auto_now_add=False)
-    job_skills = models.TextField()
-    company_name = models.TextField()
-    company_info = models.TextField()
-    company_email = models.EmailField(max_length=254)
-    company_location = models.TextField()
-    job_description = models.TextField()
-    salary = models.IntegerField()
-    no_vacancy = models.IntegerField()
-    level = models.TextField()
-    qualification = models.CharField(max_length=150)
-    experience = models.CharField(max_length=500)
-    misc_field = models.TextField()
+    deadline = models.DateTimeField(auto_now=False, auto_now_add=False, null=True)
+    job_skills = models.TextField(null=True)
+    company_name = models.TextField(null=True)
+    company_info = models.TextField(null=True)
+    company_email = models.EmailField(max_length=254, null=True)
+    company_location = models.TextField(null=True)
+    job_description = models.TextField(null=True)
+    salary = models.IntegerField(null=True)
+    no_vacancy = models.IntegerField(null=True)
+    level = models.TextField(null=True)
+    qualification = models.CharField(max_length=150, null=True)
+    experience = models.CharField(max_length=500, null=True)
+    misc_field = models.TextField(null=True)
+    extracted = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return str(self.title)
 
-class JobWebsiteStrucutre(models.Model):
+class WebsiteStructure(models.Model):
     """
     PostgreSQL table for xpath structure for job websites
     """
+    website = models.ForeignKey(JobWebsite, on_delete=models.CASCADE)
     url = models.CharField(max_length=500)
-    name_xpath = models.CharField(max_length=1000)
-    deadline_xpath = models.DateTimeField()
-    c_name_xpath = models.CharField(max_length=1000)
-    c_information_xpath = models.CharField(max_length=1000)
-    email_xpath = models.CharField(max_length=1000)
-    location_xpath = models.CharField(max_length=1000)
-    job_description_xpath = models.CharField(max_length=1000)
-    salary_xpath = models.CharField(max_length=1000)
-    no_vacancy_xpath = models.CharField(max_length=1000)
-    level_xpath = models.CharField(max_length=1000)
-    qualification_xpath = models.CharField(max_length=1000)
-    experience_xpath = models.CharField(max_length=1000)
+    name_xpath = models.CharField(max_length=1000, null=True)
+    deadline_xpath = models.DateTimeField(null=True)
+    company_name_xpath = models.CharField(max_length=1000,null=True)
+    company_description_xpath = models.CharField(max_length=1000, null=True)
+    email_xpath = models.CharField(max_length=1000, null=True)
+    location_xpath = models.CharField(max_length=1000, null=True)
+    job_description_xpath = models.CharField(max_length=1000, null=True)
+    salary_xpath = models.CharField(max_length=1000, null=True)
+    no_vacancy_xpath = models.CharField(max_length=1000, null=True)
+    level_xpath = models.CharField(max_length=1000, null=True)
+    qualification_xpath = models.CharField(max_length=1000, null=True)
+    experience_xpath = models.CharField(max_length=1000, null=True)
     
     def __str__(self) -> str:
-        return str(self.title)
+        return str(self.website)
