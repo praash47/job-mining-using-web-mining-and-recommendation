@@ -51,3 +51,8 @@ class Parameters:
 
     def search_for_rest_layout(self):
         pass
+
+    def match_company_name(self, text):
+        regex = r"\b[A-Z]\w+(?:\.com?)?(?:[ -]+(?:&[ -]+)?[A-Z]\w+(?:\.com?)?){0,2}[,\s]+(?i:ltd|llc|school|limited|service|services|organization|agency|corps|company|corporation|society|international|builder|clinic|inc|pvt|plc|co(?:rp)?|group|holding|gmbh)\b"
+        return(re.findall(regex, text))
+
