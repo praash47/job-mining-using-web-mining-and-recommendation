@@ -95,7 +95,8 @@ class JobDetails:
         return ''.join(_iter())
 
 if __name__ == '__main__':
-    job_details = JobDetails('https://www.ramrojob.com/service-engineer-34', '''Service Engineer ''')
+
+    job_details = JobDetails('https://merojob.com/public-relation-manager-account-manager/', 'Public Relation Manager (Account Manager)')
+
     job_details.fetch()
-    # print(repr(job_details.html_page))
     job_details.get_details()

@@ -23,25 +23,21 @@ class Parameters:
         }
 
         # for parameter options
-        CONFIG = 'C:/Users/Lenovo/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini'
+        CONFIG = '/home/aasis/Documents/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini'
         self.parser = ConfigParser()
         self.parser.read(CONFIG)
         # interested parameters that we want to match
         self.interested_parameters = \
             self.parser.get('parameters', 'interested_parameters').split(',')
         self.interested_parameters = \
-            [word.strip().lower().replace('|', ',') for word in self.interested_parameters]
+            [word.strip().lower() for word in self.interested_parameters]
         # symbols that we want to omit
         self.symbols_to_omit = \
             self.parser.get('parameters', 'symbols_to_omit').split(',')
     
     def get_core_parameters(self):
-        parameters_discovered = self.get_parameters_from_node(root=self.job_block_root)
-        
-        if len(parameters_discovered) < 4:
-            parameters_discovered = self.get_parameters_from_node(root=self.job_block_tree.getroot())
-
-        print(parameters_discovered)
+        self.get_from_structured_layout()
+        self.search_for_rest_layout()
 
     def get_parameters_from_node(self, root):
         parameters_discovered = set()
@@ -52,8 +48,6 @@ class Parameters:
         print(self.job_block_xpath)
         for parent in root:
             for node in parent.iter(tag=etree.Element):
-                node_text = re.sub(' +', ' ', node.text_content())
-                node_text = node_text.lower().replace(':', '').replace('\\n', '').replace('\n', '').strip()
                 if not node.getchildren() and \
                 node_text not in self.symbols_to_omit and \
                 node_text in self.interested_parameters:
@@ -80,11 +74,13 @@ class Parameters:
 
         return parameters_discovered
 
+
     def match_company_email(self, text):
         email_regex = self.parser.get('parameters', 'email_regex')
         match = re.search(email_regex, text)
-        try: return match.group(0)
-        except: return None
+        if match.group(0): return match.group(0)
+        
+        return None
 
     def search_for_rest_layout(self):
         pass

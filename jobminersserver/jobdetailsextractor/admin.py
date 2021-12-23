@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Job, WebsiteStructure
+from .models import Job, JobWebsiteStrucutre
 
 # Register your models here.
 admin.site.register(Job)
-admin.site.register(WebsiteStructure)
+admin.site.register(JobWebsiteStrucutre)

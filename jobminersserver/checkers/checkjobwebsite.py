@@ -10,7 +10,7 @@ CheckJobWebsite(urls=None)
 from configparser import ConfigParser
 from urllib import parse
 
-from .models import JobWebsite
+from .models import JobWebsiteURL
 
 # Need while using main for debugging.
 from requestutils.request import Request
@@ -71,7 +71,7 @@ class CheckJobWebsite:
             print(f"Verifying {url}")
             if self.check_single_url(url): 
                 job_website_urls.append(url)
-                job_website_url, _ = JobWebsite.objects.get_or_create(url=url)
+                job_website_url, _ = JobWebsiteURL.objects.get_or_create(url=url)
                 job_website_url.save()
 
         return job_website_urls

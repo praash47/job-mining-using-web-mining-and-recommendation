@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import JobWebsite
+from .models import JobWebsiteURL
 
 # Register your models here.
-admin.site.register(JobWebsite)
+admin.site.register(JobWebsiteURL)

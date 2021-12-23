@@ -39,12 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'checkers',
-    'interactor',
-    'jobdetailsextractor',
-    'recommender',
     'requestutils',
     'tagprocessor',
-    'timers'
+    'interactor'
 ]
 
 MIDDLEWARE = [
@@ -117,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Kathmandu'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
