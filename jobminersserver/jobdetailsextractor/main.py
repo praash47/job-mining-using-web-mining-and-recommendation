@@ -1,11 +1,11 @@
 # from jobminersserver.requestutils.request import Request
-from .deadline import Deadline
+from deadline import Deadline
 import requests
 from lxml import html
 
 from configparser import ConfigParser
-from .parameters import Parameters
-from .skills import SkillSet
+from parameters import Parameters
+from skills import SkillSet
 
 import re
 
@@ -95,7 +95,6 @@ class JobDetails:
         return ''.join(_iter())
 
 if __name__ == '__main__':
-    job_details = JobDetails('https://kathmandujobs.com/jobs/26346/java-developer-remote-job-in-kathmandu', '''Java Developer (Remote)''')
+    job_details = JobDetails('https://merojob.com/public-relation-manager-account-manager/', 'Public Relation Manager (Account Manager)')
     job_details.fetch()
-    # print(repr(job_details.html_page))
     job_details.get_details()

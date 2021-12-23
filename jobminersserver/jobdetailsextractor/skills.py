@@ -1,7 +1,7 @@
 
 class SkillSet():
     def __init__(self):
-        skills = []
+        pass
     
-    def get_skills(self, ):
+    def get_skills(self):
         pass
