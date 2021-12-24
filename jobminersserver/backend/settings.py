@@ -39,9 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'checkers',
+    'interactor',
+    'jobdetailsextractor',
+    'recommender',
     'requestutils',
     'tagprocessor',
-    'interactor'
+    'timers',
 ]
 
 MIDDLEWARE = [

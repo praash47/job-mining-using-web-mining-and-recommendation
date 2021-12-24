@@ -1,11 +1,12 @@
 # from jobminersserver.requestutils.request import Request
-from deadline import Deadline
+from .deadline import Deadline
 import requests
 from lxml import html
 
 from configparser import ConfigParser
-from parameters import Parameters
-from skills import SkillSet
+from .parameters import Parameters
+from .skills import SkillSet
+
 
 import re
 
@@ -21,9 +22,11 @@ class JobDetails:
         self.deadline = Deadline()
         self.job_block_xpath = None
         self.skill_set = SkillSet()
+        from .models import Job
+        self.website = Job.objects.get(url=self.url).website
 
         # for parameter options
-        CONFIG = 'C:/Users/Lenovo/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini'
+        CONFIG = '/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini'
         self.parser = ConfigParser()
         self.parser.read(CONFIG)
 
@@ -37,10 +40,12 @@ class JobDetails:
         self.job_parameters = \
             Parameters(
                 self.get_job_block_xpath(),
-                self.tree
+                self.tree,
+                self.website
             )
         self.job_parameters.get_core_parameters()
-        self.skill_set.get_skills()
+        # self.skill_set.get_skills(self.job_parameters.parameters_dict['description'])
+        # print(set(self.skill_set))
 
     def get_job_block_xpath(self):
         self.deadline.tree = self.tree
@@ -89,14 +94,12 @@ class JobDetails:
             for a, b in zip(sa, sb):
                 if a == b:
                     yield a
-                else:
+                else:   
                     return
 
         return ''.join(_iter())
 
 if __name__ == '__main__':
-
-    job_details = JobDetails('https://merojob.com/public-relation-manager-account-manager/', 'Public Relation Manager (Account Manager)')
-
+    job_details = JobDetails('https://kathmandujobs.com/jobs/26350/php-developer-job-in-kathmandu', '''Php Developer''')
     job_details.fetch()
     job_details.get_details()
