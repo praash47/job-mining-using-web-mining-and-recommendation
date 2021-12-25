@@ -1,11 +1,11 @@
 # from jobminersserver.requestutils.request import Request
-from .deadline import Deadline
+from deadline import Deadline
 import requests
 from lxml import html
 
 from configparser import ConfigParser
-from .parameters import Parameters
-from .skills import SkillSet
+from parameters import Parameters
+from skills import SkillSet
 
 
 import re
@@ -22,8 +22,9 @@ class JobDetails:
         self.deadline = Deadline()
         self.job_block_xpath = None
         self.skill_set = SkillSet()
-        from .models import Job
-        self.website = Job.objects.get(url=self.url).website
+        self.website = None
+        # from models import Job
+        # self.website = Job.objects.get(url=self.url).website
 
         # for parameter options
         CONFIG = '/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini'
@@ -100,6 +101,6 @@ class JobDetails:
         return ''.join(_iter())
 
 if __name__ == '__main__':
-    job_details = JobDetails('https://kathmandujobs.com/jobs/26350/php-developer-job-in-kathmandu', '''Php Developer''')
+    job_details = JobDetails('https://merojob.com/elmis-implementation-consultants/', '''ELMIS Implementation Consultants''')
     job_details.fetch()
     job_details.get_details()
