@@ -43,7 +43,7 @@ class Deadline:
         haven't been passed. checks if a date passed is within
         90 days.
     """
-    def __init__(self):
+    def __init__(self, xpath=None):
         """
         Parameters
         ----------
@@ -54,7 +54,7 @@ class Deadline:
         self.probable_date_strings = None
         self.tags_with_date_string = []
 
-        self.xpath = None
+        self.xpath = xpath
 
         # for deadline options
         CONFIG = '/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini'
@@ -79,12 +79,13 @@ class Deadline:
         html: string
             String in which an HTML document is present.
         """
-        self.soup = BeautifulSoup(html, 'html.parser')
-        self.get_probable_dates()  # this function summarizes date string as date.
-        self.get_tags_with_date_string()
-        self.check_deadline_words()
-        self.assign_deadline_otherwise()
-        self.get_xpath()
+        if not self.xpath:
+            self.soup = BeautifulSoup(html, 'html.parser')
+            self.get_probable_dates()  # this function summarizes date string as date.
+            self.get_tags_with_date_string()
+            self.check_deadline_words()
+            self.assign_deadline_otherwise()
+            self.get_xpath()
 
     def get_probable_dates(self):
         """
@@ -273,7 +274,6 @@ class Deadline:
                                 except: pass
                             deadline_xpaths.append(self.tree.getpath(element))
                     except Exception as e: print(e)
-        # print(deadline_xpaths[0])
         self.xpath = deadline_xpaths[0]
         # self.deadline = list(datefinder.find_dates(self.deadline))[0]
 

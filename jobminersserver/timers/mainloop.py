@@ -17,9 +17,12 @@ class Timer():
         #     schedule.run_pending()
         #     time.sleep(1)
         jobs = Job.objects.all()
-        job_details = JobDetails(jobs[0].url, jobs[0].title)
-        job_details.fetch()
-        job_details.get_details()
+        for job in jobs:
+            job_details = JobDetails(job.url, job.title)
+            job_details.fetch()
+            job_details.get_details()
+            job_details.store_into_database()   
+        pass
 
     def check_pending_job_urls(self):
         pass

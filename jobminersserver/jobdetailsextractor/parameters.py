@@ -9,10 +9,11 @@ from lxml import html
 import string
 
 class Parameters:
-    def __init__(self, job_block_xpath, tree, website):
+    def __init__(self, job_block_xpath, tree, web_structure, website=None):
         self.job_block_xpath = job_block_xpath
         self.job_block_tree = tree
         self.job_block_root = self.job_block_tree.xpath(self.job_block_xpath)[0]
+        self.web_structure = web_structure
         self.website = website
 
         self.parameters_dict = {
@@ -26,11 +27,12 @@ class Parameters:
             "level":"",
             "qualifications":"",
             "experiences":"",
-            "misc.":""
+            "misc":""
         }
 
         self.parameters_xpath_dict = {
             "company_name_xpath":"",
+            "company_info_xpath":"",
             "location_xpath":"",
             "description_xpath":"",
             "salary_xpath":"",
@@ -68,19 +70,15 @@ class Parameters:
             self.parser.get('parameters', 'symbols_to_omit').split(',')
     
     def get_core_parameters(self, xpaths_dict=None):
-        parameters_discovered = self.get_parameters_from_node(root=self.job_block_root)
+        parameters_discovered = self.get_parameters_from_node(root=self.job_block_root, xpaths_dict=xpaths_dict)
 
         if len(parameters_discovered) < 4 or not self.parameters_xpath_dict['description_xpath']:
-            parameters_discovered = self.get_parameters_from_node(root=self.job_block_tree.getroot())
-        
+            parameters_discovered = self.get_parameters_from_node(root=self.job_block_tree.getroot(), xpaths_dict=xpaths_dict)
+
         self.values_from_xpaths(xpaths_dict)
-        if not self.parameters_xpath_dict['company_name_xpath']:
-            self.search_company_path_multiple_urls()
-        print(self.parameters_xpath_dict)
-        print(self.parameters_dict)
+        self.store_xpaths(xpaths_dict)
 
-
-    def get_parameters_from_node(self, root):
+    def get_parameters_from_node(self, root, xpaths_dict):
         parameters_discovered = set()
         company_email = ""
         company_name = ""
@@ -95,19 +93,26 @@ class Parameters:
 
                 if not node.getchildren() and \
                 node_text not in self.symbols_to_omit and \
-                node_text in self.interested_parameters:
+                node_text in self.interested_parameters and \
+                not xpaths_dict:
                     if not \
                         self.job_block_tree.getpath(node)[-2] + self.job_block_tree.getpath(node)[-1] \
                              == '/a':  #ignore a tags.
                         parameters_discovered.add(node_text)
                         self.detect_and_assign_xpath(node, node_text)
-                else:
+                elif not xpaths_dict:
                     nested_parameter, nested_parameter_value = self.search_word_in_tag(node_text)
                     if nested_parameter_value: parameters_discovered.add(nested_parameter)
 
-                if not node.getchildren():
+                already_company_name, already_company_info = None, None
+                try: 
+                     already_company_name = xpaths_dict['company_name_xpath']
+                     already_company_info = xpaths_dict['company_info_xpath']
+                except: pass
+
+                if not node.getchildren() and not already_company_name and not already_company_info:
                     if not company_email: company_email = self.match_company_email(node_text)
-                    if not company_name: company_name, company_name_xpath = self.match_company_name(node, node_text)
+                    if not company_name: company_name, company_name_xpath = self.match_company_name(node_text, node)
         
         if company_name and company_name_xpath:
             self.parameters_dict['company_name'] = company_name
@@ -121,10 +126,12 @@ class Parameters:
         try: return match.group(0)
         except: return None
 
-    def match_company_name(self, node, text):
-        company_name_regex = self.parser.get('parameters', 'company_name_regex')
-        if re.findall(company_name_regex, string.capwords(text).replace("'", "")):
-            return text, self.job_block_tree.getpath(node)
+    def match_company_name(self, text, node):
+        if isinstance(text, str):
+            company_name_regex = self.parser.get('parameters', 'company_name_regex')
+            if re.findall(company_name_regex, string.capwords(text).replace("'", "")):
+                return re.findall(company_name_regex, string.capwords(text).replace("'", ""))[0], self.job_block_tree.getpath(node)
+            return None, None
         return None, None
 
     def search_word_in_tag(self, words):
@@ -153,7 +160,11 @@ class Parameters:
         return text
 
     def values_from_xpaths(self, xpaths_dict=None):
+        company_name_xpath = self.parameters_xpath_dict['company_name_xpath']
+        company_info_xpath = self.parameters_xpath_dict['company_info_xpath']
         if xpaths_dict: self.parameters_xpath_dict = xpaths_dict
+        self.parameters_xpath_dict['company_name_xpath'] = company_name_xpath
+        self.parameters_xpath_dict['company_info_xpath'] = company_info_xpath
 
         for key, value in self.parameters_xpath_dict.items():
             if value:
@@ -173,17 +184,18 @@ class Parameters:
                         key = key.replace('_xpath', '')
                         self.parameters_dict[key] = self.clean_text(node.getnext().text_content())
                 except: pass
-
-    def search_company_path_multiple_urls(self):
-        from .models import Job
-        from .main import JobDetails
         
-        jobs_of_website = Job.objects.filter(website=self.website)
-        for job in jobs_of_website:
-            job_details = JobDetails(job.url, job.title)
-            parameters = Parameters()
-        #     extracted_company_name_xpath = \
-        #          job_details.job_parameters.parameters_xpath_dict['company_name_xpath']
-        #     if extracted_company_name_xpath:
-        #         self.parameters_xpath_dict['company_name_xpath'] = extracted_company_name_xpath
-        #     if self.parameters_xpath_dict['company_name_xpath']: break
+    def store_xpaths(self, xpaths_dict):
+        if not xpaths_dict:
+            self.web_structure.location_xpath = self.parameters_xpath_dict['location_xpath']
+            self.web_structure.job_description_xpath = self.parameters_xpath_dict['description_xpath']
+            self.web_structure.salary_xpath = self.parameters_xpath_dict['salary_xpath']
+            self.web_structure.no_vacancy_xpath = self.parameters_xpath_dict['n_vacancy_xpath']
+            self.web_structure.level_xpath = self.parameters_xpath_dict['level_xpath']
+            self.web_structure.qualification_xpath = self.parameters_xpath_dict['qualifications_xpath']
+            self.web_structure.experience_xpath = self.parameters_xpath_dict['experiences_xpath']
+        if not self.web_structure.company_name_xpath and not self.web_structure.company_description_xpath:
+            if self.parameters_xpath_dict['company_name_xpath'] and self.parameters_xpath_dict['company_info_xpath']: 
+               self.web_structure.company_name_xpath = self.parameters_xpath_dict['company_name_xpath'] 
+               self.web_structure.company_description_xpath = self.parameters_xpath_dict['company_info_xpath']
+        self.web_structure.save()
