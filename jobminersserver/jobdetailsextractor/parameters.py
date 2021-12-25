@@ -43,7 +43,7 @@ class Parameters:
         }
 
         # for parameter options
-        CONFIG = '/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini'
+        CONFIG = 'C:\\Users\\Lenovo\\job-mining-using-web-mining-and-recommendation\\jobminersserver\\jobdetailsextractor\\extraction_options.ini'
         self.parser = ConfigParser()
         self.parser.read(CONFIG)
         # interested parameters that we want to match
@@ -53,18 +53,14 @@ class Parameters:
             [word.strip().lower() for word in self.interested_parameters]
         self.keywords = {}
         self.keyword_parameters = ['description', 'category', 'n_vacancy', 'location', 'level', 'salary', \
-            'qualifications', 'experiences']
+            'qualifications', 'experiences', 'misc']
         
         for parameter in self.keyword_parameters:
             self.keywords[parameter] = \
                 self.parser.get('parameters', parameter).split(',')
             self.keywords[parameter] = \
-                [word.strip().lower() for word in self.keywords[parameter]]
+                [word.strip().lower().replace('|', ',') for word in self.keywords[parameter]]
 
-        self.keywords['misc'] = \
-            self.parser.get('parameters', 'misc').split(',')
-        self.keywords['misc'] = \
-            [word.strip().lower() for word in self.keywords['misc']]
         # symbols that we want to omit
         self.symbols_to_omit = \
             self.parser.get('parameters', 'symbols_to_omit').split(',')
@@ -74,8 +70,9 @@ class Parameters:
 
         if len(parameters_discovered) < 4 or not self.parameters_xpath_dict['description_xpath']:
             parameters_discovered = self.get_parameters_from_node(root=self.job_block_tree.getroot(), xpaths_dict=xpaths_dict)
-
+        
         self.values_from_xpaths(xpaths_dict)
+        self.get_paragraph_values(self.keywords['description'])
         self.store_xpaths(xpaths_dict)
 
     def get_parameters_from_node(self, root, xpaths_dict):
@@ -184,7 +181,32 @@ class Parameters:
                         key = key.replace('_xpath', '')
                         self.parameters_dict[key] = self.clean_text(node.getnext().text_content())
                 except: pass
-        
+    
+    def get_paragraph_values(self,keywords):
+        found_title = False
+        paragraph = ''
+        repeat_keywords = []
+
+        other_keywords = []
+        for parameter in self.keyword_parameters:
+            for keyword in self.keywords[parameter]:
+                if keyword not in keywords:
+                    other_keywords.append(keyword)
+    
+
+        for parent in self.job_block_tree.getroot():
+            for node in parent.iter(tag=etree.Element):
+                node_text = self.clean_text(node.text_content())
+                if not node.getchildren() and node_text:
+                    if found_title and node_text not in other_keywords:
+                        paragraph += node_text + '\n'
+                    elif node_text in other_keywords:
+                        found_title = False
+                    if node_text in keywords and node_text not in repeat_keywords:
+                        found_title = True
+                        repeat_keywords.append(node_text)
+        print(paragraph)
+                        
     def store_xpaths(self, xpaths_dict):
         if not xpaths_dict:
             self.web_structure.location_xpath = self.parameters_xpath_dict['location_xpath']

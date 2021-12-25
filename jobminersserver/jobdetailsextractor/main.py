@@ -1,12 +1,11 @@
 # from jobminersserver.requestutils.request import Request
-from unicodedata import name
 from .deadline import Deadline
 import requests
 from lxml import html
 
 from configparser import ConfigParser
-from .parameters import Parameters
-from .skills import SkillSet
+from parameters import Parameters
+from skills import SkillSet
 
 
 import re
