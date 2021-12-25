@@ -1,5 +1,5 @@
 # from jobminersserver.requestutils.request import Request
-from .deadline import Deadline
+from deadline import Deadline
 import requests
 from lxml import html
 

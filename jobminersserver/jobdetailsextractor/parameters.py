@@ -186,6 +186,28 @@ class Parameters:
         found_title = False
         paragraph = ''
         repeat_keywords = []
+        other_keywords = []
+        for parameter in self.keyword_parameters:
+            for keyword in self.keywords[parameter]:
+                if keyword not in keywords:
+                    other_keywords.append(keyword)
+    
+
+        for parent in self.job_block_tree.getroot():
+            for node in parent.iter(tag=etree.Element):
+                node_text = self.clean_text(node.text_content())
+                if not node.getchildren() and node_text:
+                    if found_title and node_text not in other_keywords:
+                        paragraph += node_text + '\n'
+                    elif node_text in other_keywords:
+                        found_title = False
+                    if node_text in keywords and node_text not in repeat_keywords:
+                        found_title = True
+                        repeat_keywords.append(node_text)
+        print(paragraph)
+                        
+
+
 
         other_keywords = []
         for parameter in self.keyword_parameters:
