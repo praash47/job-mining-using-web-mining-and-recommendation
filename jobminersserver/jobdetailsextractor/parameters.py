@@ -1,10 +1,10 @@
 import re
 from lxml import etree
 from configparser import ConfigParser
+import spacy
 
-import requests
 from requests.api import request
-from lxml import html
+from nltk.tokenize import RegexpTokenizer
 
 import string
 
@@ -15,6 +15,7 @@ class Parameters:
         self.job_block_root = self.job_block_tree.xpath(self.job_block_xpath)[0]
         self.web_structure = web_structure
         self.website = website
+        self.nlp = spacy.load("en_core_web_lg")
 
         self.parameters_dict = {
             "company_name":"",
@@ -43,7 +44,7 @@ class Parameters:
         }
 
         # for parameter options
-        CONFIG = 'C:\\Users\\Lenovo\\job-mining-using-web-mining-and-recommendation\\jobminersserver\\jobdetailsextractor\\extraction_options.ini'
+        CONFIG = '/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini'
         self.parser = ConfigParser()
         self.parser.read(CONFIG)
         # interested parameters that we want to match
@@ -72,7 +73,8 @@ class Parameters:
             parameters_discovered = self.get_parameters_from_node(root=self.job_block_tree.getroot(), xpaths_dict=xpaths_dict)
         
         self.values_from_xpaths(xpaths_dict)
-        self.get_paragraph_values(self.keywords['description'])
+        self.parameters_dict['description'] = self.get_paragraph_values(self.keywords['description'])
+        self.parameters_dict['misc'] += self.get_paragraph_values(self.keywords['misc'])
         self.store_xpaths(xpaths_dict)
 
     def get_parameters_from_node(self, root, xpaths_dict):
@@ -114,6 +116,7 @@ class Parameters:
         if company_name and company_name_xpath:
             self.parameters_dict['company_name'] = company_name
             self.parameters_xpath_dict['company_name_xpath'] = company_name_xpath
+            self.find_company_info(company_name, company_name_xpath)
 
         return parameters_discovered
 
@@ -124,8 +127,12 @@ class Parameters:
         except: return None
 
     def match_company_name(self, text, node):
-        if isinstance(text, str):
+        if isinstance(text, str) and not node.tag=='title':
             company_name_regex = self.parser.get('parameters', 'company_name_regex')
+            nlp_res = self.nlp(text)
+            for ent in nlp_res.ents:
+                if ent.label == 'ORG':
+                    return ent.text, self.self.job_block_tree.getpath(node)
             if re.findall(company_name_regex, string.capwords(text).replace("'", "")):
                 return re.findall(company_name_regex, string.capwords(text).replace("'", ""))[0], self.job_block_tree.getpath(node)
             return None, None
@@ -145,6 +152,7 @@ class Parameters:
                 self.parameters_xpath_dict[parameter + '_xpath'] = \
                      self.get_xpath(node, node_text, parameter)
 
+
     def get_xpath(self, node, node_text, parameter):
         if node_text == parameter or node_text in self.keywords[parameter]:
             return self.job_block_tree.getpath(node)
@@ -156,7 +164,36 @@ class Parameters:
 
         return text
 
-    def values_from_xpaths(self, xpaths_dict=None):
+    def find_company_info(self, company_name, company_name_xpath):
+        tokenizer = RegexpTokenizer(r'\w+')
+        tokenized = tokenizer.tokenize(company_name)
+
+        tags_interested_in = ['a', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div']
+        all_nodes_with_token = set()
+        for token in tokenized:
+            nodes_matched = self.job_block_tree.xpath(f"//*[contains(text(),'{token}')]")
+            for node in nodes_matched:
+                if node.tag in tags_interested_in:
+                    all_nodes_with_token.add(node)
+        all_text_content = set()
+        for node in all_nodes_with_token:
+            all_text_content.add(node.text_content())
+        all_text_content = list(sorted(all_text_content, key = len))
+        try:
+            print(self.job_block_tree.xpath(f"//*[contains(text(),'{all_text_content[0]}')]"))
+            # self.parameters_xpath_dict['company_info_x']
+            self.parameters_xpath_dict['company_info_xpath'] = self.job_block_tree.getpath(
+                self.job_block_tree.xpath(f"//*[contains(text(),'{all_text_content[1]}')]")[0]
+            )
+            self.parameters_dict['company_info'] += self.clean_text(all_text_content[1])
+        except: pass
+
+        try:
+            for node in self.job_block_tree.getpath(self.parameters_xpath_dict['company_info_xpath']).getparent()[0].iter(tag=etree.Element):
+                self.parameters_dict['company_info'] += self.clean_text(node.text_content())
+        except: pass
+
+    def values_from_xpaths(self, xpaths_dict):
         company_name_xpath = self.parameters_xpath_dict['company_name_xpath']
         company_info_xpath = self.parameters_xpath_dict['company_info_xpath']
         if xpaths_dict: self.parameters_xpath_dict = xpaths_dict
@@ -165,8 +202,8 @@ class Parameters:
 
         for key, value in self.parameters_xpath_dict.items():
             if value:
-                node = self.job_block_tree.xpath(value)[0]
                 try: 
+                    node = self.job_block_tree.xpath(value)[0]
                     if not node.getnext():
                         parent_text = self.clean_text(node.getparent().text_content())
                         
@@ -181,53 +218,66 @@ class Parameters:
                         key = key.replace('_xpath', '')
                         self.parameters_dict[key] = self.clean_text(node.getnext().text_content())
                 except: pass
-    
-    def get_paragraph_values(self,keywords):
+
+        # misc text property extraction
+        for parent in self.job_block_tree.getroot():
+            for node in parent.iter(tag=etree.Element):
+                node_text = self.clean_text(node.text_content())
+
+                if not node.getchildren() and \
+                node_text not in self.symbols_to_omit and \
+                node_text in self.interested_parameters:
+                    self.assign_misc_parameters_value(node, node_text)
+
+    def assign_misc_parameters_value(self, node, node_text):
+        if node_text in self.keywords['misc']:
+            self.parameters_dict['misc'] += node_text + ': '
+            try: 
+                while node.getnext().text_content() in self.symbols_to_omit:
+                    node = node.getnext()
+                self.parameters_dict['misc'] += self.clean_text(node.getnext().text_content()) + '\n'
+            except: pass
+        
+    def get_paragraph_values(self, keywords):
         found_title = False
         paragraph = ''
         repeat_keywords = []
         other_keywords = []
+        common_parent = None
         for parameter in self.keyword_parameters:
             for keyword in self.keywords[parameter]:
                 if keyword not in keywords:
                     other_keywords.append(keyword)
-    
 
         for parent in self.job_block_tree.getroot():
             for node in parent.iter(tag=etree.Element):
                 node_text = self.clean_text(node.text_content())
                 if not node.getchildren() and node_text:
                     if found_title and node_text not in other_keywords:
+                        if common_parent:
+                            if id(self.get_parent(node)) != id(common_parent): 
+                                found_title = False
+                                continue
                         paragraph += node_text + '\n'
                     elif node_text in other_keywords:
                         found_title = False
                     if node_text in keywords and node_text not in repeat_keywords:
                         found_title = True
+                        if node_text in self.keywords['misc']:
+                            paragraph += node_text + '\n'
                         repeat_keywords.append(node_text)
-        print(paragraph)
-                        
+                        try:
+                            if len(self.get_parent(node).getchildren()) < 2:
+                                common_parent = self.get_parent(node).getnext()
+                            else: common_parent = self.get_parent(node)
+                        except: pass
+        return paragraph
 
-
-
-        other_keywords = []
-        for parameter in self.keyword_parameters:
-            for keyword in self.keywords[parameter]:
-                if keyword not in keywords:
-                    other_keywords.append(keyword)
-    
-
-        for parent in self.job_block_tree.getroot():
-            for node in parent.iter(tag=etree.Element):
-                node_text = self.clean_text(node.text_content())
-                if not node.getchildren() and node_text:
-                    if found_title and node_text not in other_keywords:
-                        paragraph += node_text + '\n'
-                    elif node_text in other_keywords:
-                        found_title = False
-                    if node_text in keywords and node_text not in repeat_keywords:
-                        found_title = True
-                        repeat_keywords.append(node_text)
-        print(paragraph)
+    def get_parent(self, node):
+        parent = node.getparent()
+        while not parent.tag == 'div':
+            parent = parent.getparent()
+        return parent
                         
     def store_xpaths(self, xpaths_dict):
         if not xpaths_dict:

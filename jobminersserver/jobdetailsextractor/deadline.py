@@ -57,7 +57,7 @@ class Deadline:
         self.xpath = xpath
 
         # for deadline options
-        CONFIG = 'C:\\Users\\Lenovo\\job-mining-using-web-mining-and-recommendation\\jobminersserver\\jobdetailsextractor\\extraction_options.ini'
+        CONFIG = '/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini'
         self.parser = ConfigParser()
         self.parser.read(CONFIG)
         # commonly used words in the deadline such as Apply before,
