@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap');
+*{
+    margin:0;
+    padding:0;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+
+body{
+    background: url(bg.jpg) no-repeat center center fixed;
+    background-size:cover;
+}
+.top {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    z-index: 200;
+    background: rgba(255, 253, 253, 0.459);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.082);
+    width: 100%;
+}
+.top ul {
+    list-style-type: none;
+}
+.top ul li {
+    display: inline-block;  
+    margin: 20px;
+    background: #c44910;
+    box-shadow: inset 5px 5px 4px #b2420f,
+            inset -5px -5px 4px #d65011;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    text-shadow: -1px -1px 0 rgb(36, 19, 19), 1px -1px 0 rgb(17, 9, 9), -1px 1px 0 rgb(17, 10, 10), 1px 1px 0 rgb(14, 5, 5);
+}
+.top ul li:nth-child(2) {
+    display: inline-block;
+    background: #001fac;
+    box-shadow: inset 5px 5px 10px #001a8f,
+            inset -5px -5px 10px #0024c9;
+    color: white;
+    padding: 10px;
+}
+.back-to-job-button button{
+    background-color: rgb(10, 4, 4);
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 15px 32px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 20px;
+    box-shadow: inset 8px 8px 16px rgb(12, 12, 12),
+    inset -8px -8px 16px rgb(12, 12, 12);
+}
+.left {
+    position:absolute;
+    top: 90px;
+}
+
+.jobs-list{
+    width:300px;
+    margin:0 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+}
+
+.jobs-list ul{
+    height: 100%;
+    position:relative;
+    background:#fff;
+    max-height: 82vh;
+}
+
+.jobs-list ul li{
+    list-style: none;
+    padding:10px;
+    width:calc(100%-20px);
+    background:#fff;
+    box-shadow: 0 5px 25px rgba(0,0,0,.1);
+    transition:transform 0.5;
+    cursor: pointer;
+}
+
+
+.jobs-list ul li:hover, .jobs-list ul li.active{
+    transform: scale(1.1) translateX(13px);
+    width: calc(100% - 50px);
+    z-index:100;
+    background:#25bcff;
+    box-shadow: 0 5px 25px rgba(0,0,0,.1);
+    color:#fff;
+}
+
+.right{
+    background:rgba(151, 141, 141, 0.5);
+    position:absolute;
+    top: 90px;
+    right: 15px;
+    width: 970px;
+    padding:10px;
+}
+
+.right .first-segment{
+    display:flex;
+    justify-content:space-between;
+    border-bottom: 2px solid black;
+}
+
+.first-segment a {
+    color: white;
+    color: rgb(15, 17, 20);
+}
+
+.right .second-segment{
+    padding-bottom: 5px;
+    border-bottom: 2px solid black;
+}
+.right .second-segment .second-segment-skills-list{
+    padding: 20px;
+    columns: 150px 10;
+    overflow-x: auto;
+    height: 100px;
+    word-wrap: break-word;
+}
+
+.right .third-segment{
+    padding: 10px 0;
+    display:flex;
+    justify-content: space-between;
+    border-bottom: 2px solid black;
+    
+}
+
+.right .third-segment .qualification-heading{
+    display:inline-block;
+}
+ 
+.fourth-segment{
+    border-bottom: 2px solid black;
+    padding-bottom:10px;
+}
+
+
+.fifth-segment{
+    border-bottom: 2px solid black;
+    padding-bottom:10px;
+}
+
+.sixth-segment{
+    padding-bottom:10px;
+}
+
+

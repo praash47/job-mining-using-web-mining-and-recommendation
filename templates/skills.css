@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap');
+*{
+    margin:0;
+    padding:0;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+
+body{
+    background: url(bg.jpg) no-repeat center center fixed;
+    background-size:cover;
+    box-sizing: border-box;
+    overflow: none;
+}
+
+h1{
+    font-size:46px;
+    padding:10px;
+    color:white;
+}
+
+.container{
+    width: 600px;
+    height: 500px;
+    position: relative;
+}
+.search-box{
+    position:absolute;
+    top:3%;
+    left:1%;
+    /* transform:translate(-50%,-50%); */
+    height:40px;
+    background:white;
+    border-radius: 40px;
+    padding:10px;
+}
+
+.search-box:hover > .search-txt{
+     width:500px;
+     padding:0 6px;
+
+}
+
+.search-box:hover > .search-btn{
+    background:white;
+
+}
+
+.search-btn{
+    color:#e84118;
+    float:right;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#2f3640;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    transition:0.4s;
+
+}
+
+.search-txt{
+    border:none;
+    background:none;
+    outline:none;
+    float:left;
+    padding:0;
+    color:black;
+    font-size:16px;
+    transition:0.4s;
+    line-height:40px;
+    width:240px;
+}
+
+ul {
+    position: absolute;
+    top: 20%;
+    left: 1%;
+    height: 400px;
+    overflow-y: auto;
+    width: calc(100% - 1.15%);
+}
+
+.skill {
+    width: 100%;
+    background: white;
+    border-bottom: 2px solid gray;
+    padding: 10px;
+    font-size: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    margin-bottom: 2px;
+}
+
+.fa.fa-arrow-circle-right, .fa.fa-arrow-circle-left{
+    float:right;
+    cursor: pointer;
+}
+
+h2{
+    /* display:inline; */
+    font-size:46px;
+    bottom: 0px;
+    color:white;
+    position: absolute;
+    right: 31%;
+    top: 2.9%;
+}
+.container-1{
+    left: 1%;
+}
+
+.container-2{
+    position: relative;
+    top: -504px;
+    left: 48%;
+}
+
+.continue-button{
+    position: absolute;
+    top: 612px;
+    left: 15px;
+}
+
+.continue-button button{
+    background-color: cadetblue;
+    bottom:45px;
+    color: white;
+    padding: 15px 32px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 16px;
+    
+}
+
