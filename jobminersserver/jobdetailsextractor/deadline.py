@@ -43,7 +43,7 @@ class Deadline:
         haven't been passed. checks if a date passed is within
         90 days.
     """
-    def __init__(self, xpath=None):
+    def __init__(self, tree, xpath=None):
         """
         Parameters
         ----------
@@ -54,6 +54,7 @@ class Deadline:
         self.probable_date_strings = None
         self.tags_with_date_string = []
 
+        self.tree = tree
         self.xpath = xpath
 
         # for deadline options

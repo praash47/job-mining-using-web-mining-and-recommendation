@@ -1,7 +1,10 @@
 from requests import *
 from urllib import parse
 from lxml import html
+import logging
+import re
 
+mainlogger = logging.getLogger('main')
 class Request:
 	"""
 	A class to request html of webpage from urls
@@ -14,6 +17,15 @@ class Request:
 
 	check_homepage(url)
 		returns true if url passed is homepage and has no subdomain
+
+	get_only_homepage_based(urls)
+		returns only the homepage based in urls list
+
+	get_html_tree()
+		returns the html tree
+
+	filter_script_tags()
+		filters the script tags from the html.
 	"""
 	def __init__(self, url):
 		"""
@@ -69,22 +81,34 @@ class Request:
 		"""
 		try:
 			self.html = get(self.url).text
-		except:
-			print("Error getting html from url")
+		except Exception as e:
+			mainlogger.error(f'Error while requesting {self.url}: {e}\n so returning "')
 			return ""
 		return self.html
 
-	def request_html_tree(self):
+	def get_html_tree(self):
 		"""
 		Creates a html tree using lxml out of the current
-		object's HTML document.
+		object's HTML document and Returns the HTML tree.
 
 		Requirement: HTML document present in html variable.
+
+		Returns
+		-------
+		tree: lxml.etree
+			tree that is computed from the html dom.
 		"""
 		html_doc = html.fromstring(self.html)
 		tree = html_doc.getroottree()
 		
 		return tree
+
+	def filter_script_tags(self):
+		"""
+		Filters/Removes the script tags from the request html and assigns back to
+		request html.
+		"""
+		self.html = re.subn(r'<(script).*?</\1>(?s)', '', str(self.html))[0]
 
 
 if __name__ == "__main__":
@@ -95,4 +119,3 @@ if __name__ == "__main__":
 
 	req = Request("https://merojob.com/search?q=")
 	print(req.get_only_homepage_based())
-

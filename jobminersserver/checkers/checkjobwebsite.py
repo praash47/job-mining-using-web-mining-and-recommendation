@@ -19,6 +19,11 @@ from checkers.misccheckers import is_interested_website
 from tagprocessor.tagprocessor import TagProcessor
 from tagprocessor.metatagprocessor import MetaTagProcessor
 
+import logging
+
+logger = logging.getLogger('checkjobs')
+mainlogger = logging.getLogger('main')
+
 class CheckJobWebsite:
     """
     Utilities required to check whether a website is job website or not.
@@ -37,18 +42,21 @@ class CheckJobWebsite:
         urls: list of strings, optional
             Strings here are individual urls.
         """
-        self.urls_to_check = []
+        logger.info('CheckJobWebsite object created')
+        mainlogger.info('Checking Homepage based websites:')
+        self._urls_to_check = []
         for url in urls:
             req = Request(url)
-            if req.check_homepage(): self.urls_to_check.append(url)
-        
-        CONFIG = 'checkers/checkjobwebsite.ini'
-        self.parser = ConfigParser()
-        self.parser.read(CONFIG)
+            if req.check_homepage(): self._urls_to_check.append(url)
+        logger.info(f'Only Homepage based websites: {self._urls_to_check}')
 
-        # needed for performing jobandjobs or joborjobs logic
-        self.jobandjobs = {}
-        self.joborjobs = {}
+        CONFIG = 'checkers/checkjobwebsite.ini'
+        self._parser = ConfigParser()
+        self._parser.read(CONFIG)
+
+        # needed for performing _jobandjobs or joborjobs logic
+        self._jobandjobs = {}
+        self._joborjobs = {}
 
     def check_urls(self):
         """
@@ -66,15 +74,27 @@ class CheckJobWebsite:
                     }
                 }
         """
-        job_website_urls = []
-        for url in self.urls_to_check:
-            print(f"Verifying {url}")
-            if self.check_single_url(url): 
-                job_website_urls.append(url)
-                job_website_url, _ = JobWebsite.objects.get_or_create(url=url)
-                job_website_url.save()
+        job_websites = []
+        for url in self._urls_to_check:
+            if not JobWebsite.objects.filter(url=url).first():
+                if self.check_single_url(url):
+                    logger.info(f"Verifying {url}")
+                    mainlogger.info(f"Verifying {url}")
+                    # extraction of domain name i.e. merojob from https://merojob.com
+                    domain_name = parse.urlparse(url).hostname.split('.')
+                    domain_name = [domain_name[0] if len(domain_name) == 2 else domain_name[1]][0]
 
-        return job_website_urls
+                    job_websites.append(url)
+                    job_website = JobWebsite.objects.create(
+                        url=url,
+                        name=domain_name
+                    )
+                    job_website.save()
+
+        logger.info(f"Verified {job_websites} to be new job websites.")
+        mainlogger.info(f"Verified {job_websites} to be new job websites.")
+
+        return job_websites
         
     
     def check_single_url(self, url):
@@ -92,12 +112,13 @@ class CheckJobWebsite:
         Returns
         -------
         boolean
-            True if self.analyze_keywords() or in general terms, it is a job website.
+            True if self._analyze_keywords() or in general terms, it is a job website.
             else False.
         """
         # check if jobs domain present in url or it is not interested website.   
         if parse.urlsplit(url).netloc[0:5] == 'jobs.' \
         or not is_interested_website(url[:-1]):
+            logger.info(f"{url} failed the jobs. test")
             return False
 
         # Try to get html content from the url.
@@ -118,19 +139,23 @@ class CheckJobWebsite:
         meta_info += meta_tag.get_og_description()
 
         # job, jobs and nepal must keywords
-        self.jobandjobs = self.analyze_keywords(meta_info)
+        self._jobandjobs = self._analyze_keywords(meta_info)
         # job or jobs and nepal must keywords
-        self.joborjobs = self.analyze_keywords(meta_info, job_or_jobs_nepal=True)
+        self.joborjobs = self._analyze_keywords(meta_info, job_or_jobs_nepal=True)
 
         # if both parameters false, return False.
-        if not self.jobandjobs and not self.joborjobs: return False
+        if not self._jobandjobs and not self.joborjobs: 
+            logger.info(f"{url} failed the andorjob test")
+            return False
 
         # check if nepali website with abroad based ads.
-        if self.check_if_abroad_based(meta_info): return False
+        if self._check_if_abroad_based(meta_info):
+            logger.info(f"{url} is an abroad based job website. Thus, ignored.")
+            return False
 
         return True
 
-    def analyze_keywords(self, meta_info, job_or_jobs_nepal=False):
+    def _analyze_keywords(self, meta_info, job_or_jobs_nepal=False):
         """
         Check if a website is job website or not based on meta_info. 
 
@@ -160,7 +185,7 @@ class CheckJobWebsite:
         """
         # Job Website Checking Related Info
 
-        must_keywords = self.parser.get('global', 'must_keywords').split(',')
+        must_keywords = self._parser.get('global', 'must_keywords').split(',')
         must_keywords = [keyword.strip() for keyword in must_keywords]
         
         # Default conditon_to_use is False because we want to use job and jobs
@@ -183,7 +208,7 @@ class CheckJobWebsite:
             # Exception gets activated when meta_info is not present.
             return False
 
-    def check_if_abroad_based(self, meta_info):
+    def _check_if_abroad_based(self, meta_info):
         """
         Checks if a website is abroad based or non-abroad 
         based on analyzing it's meta_info.
@@ -202,7 +227,7 @@ class CheckJobWebsite:
             False if not present or there are no keywords in the metainfo part.
         """
         abroad_website_keywords = \
-            self.parser.get('global', 'abroad_website_keywords').split(',')
+            self._parser.get('global', 'abroad_website_keywords').split(',')
         abroad_website_keywords = \
             [keyword.strip() for keyword in abroad_website_keywords]
 

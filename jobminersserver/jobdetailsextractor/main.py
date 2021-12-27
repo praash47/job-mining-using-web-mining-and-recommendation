@@ -1,7 +1,7 @@
 # from jobminersserver.requestutils.request import Request
 from .deadline import Deadline
-import requests
 from lxml import html
+from requestutils.request import Request
 
 from configparser import ConfigParser
 from .parameters import Parameters
@@ -14,11 +14,10 @@ class JobDetails:
     def __init__(self, url, name):
         self.url = url
         self.name = name
-        self.html_page = requests.get(self.url).content
-        self.html_page = re.subn(r'<(script).*?</\1>(?s)', '', str(self.html_page))[0]
-        # self.html_page = None
-        # self.request = Request(url)
+
+        self.html_page = None
         self.tree = None
+        
         self.job_block_xpath = None
         self.skill_set = SkillSet()
         self.parameters = None
@@ -28,20 +27,22 @@ class JobDetails:
         self.parser = ConfigParser()
         self.parser.read(CONFIG)
         
+        # Get Website and Website Structure, store if not there.
         from .models import WebsiteStructure, Job
         self.website = Job.objects.get(url=self.url).website
-        
         self.web_structure, _ = WebsiteStructure.objects.get_or_create(website=self.website)
         if self.web_structure.deadline_xpath:
-            self.deadline = Deadline(xpath=self.web_structure.deadline_xpath)
+            self.deadline = Deadline(self.tree, xpath=self.web_structure.deadline_xpath)
         else:
-            self.deadline = Deadline()
+            self.deadline = Deadline(self.tree)
 
     def fetch(self):
-        # self.html_page = self.request.request_html()
-        # self.tree = self.request.request_html_tree()
-        resp_html = html.fromstring(self.html_page)
-        self.tree = resp_html.getroottree()
+        request = Request(self.url)
+        request.request_html()
+        request.filter_script_tags()
+
+        self.html_page = request.html
+        self.tree = request.get_html_tree()
     
     def get_details(self):
         self.parameters = \
@@ -82,7 +83,6 @@ class JobDetails:
         )
 
     def get_job_block_xpath(self):
-        self.deadline.tree = self.tree
         self.deadline.get_deadline_date(self.html_page)
         if not self.web_structure.deadline_xpath: self.web_structure.deadline_xpath = self.deadline.xpath
         name_xpath = self.get_name_xpath()

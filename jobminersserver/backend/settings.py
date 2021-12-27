@@ -146,3 +146,55 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+LOGGING = {
+    'version': 1,
+    'loggers': {
+        'main': {
+            'handlers': ['main'],
+            'level': 'INFO'
+        },
+        'requestinggoogle': {
+            'handlers': ['requestinggoogle'],
+            'level': 'INFO',
+        },
+        'checkjobs': {
+            'handlers': ['checkjobs'],
+            'level': 'INFO',
+        },
+        'interactor': {
+            'handlers': ['interactor'],
+            'level': 'INFO',
+        }
+    },
+    'formatters': {
+        'default': {
+            'format': '%(asctime)s | %(funcName)s - %(levelname)s: %(message)s',
+        },
+        'mainfileformatter': {
+            'format': '%(asctime)s | %(module)s | %(funcName)s - %(levelname)s: %(message)s'
+        }
+    },
+    'handlers': {
+        'main': {
+            'class': 'logging.FileHandler',
+            'filename': 'main.log',
+            'formatter': 'mainfileformatter'
+        },
+        'requestinggoogle': {
+            'class': 'logging.FileHandler',
+            'filename': './requestutils/requestgooglemodule/requestinggoogle.log',
+            'formatter': 'default',
+        },
+        'checkjobs': {
+            'class': 'logging.FileHandler',
+            'filename': './checkers/checkjobs.log',
+            'formatter': 'default',
+        },
+        'interactor': {
+            'class': 'logging.FileHandler',
+            'filename': './interactor/interactor.log',
+            'formatter': 'default',
+        }
+    },
+}

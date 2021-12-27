@@ -1,0 +1,56 @@
+2021-12-27 15:47:41,066 | __init__ - ERROR: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2021-12-27 15:47:41,067 | get_search_url - ERROR: Couldn't get html response for {self.url}: {e}
+2021-12-27 15:53:14,086 | __init__ - INFO: Using searcher for https://www.jobsnepal.com/
+2021-12-27 15:53:17,306 | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-27 15:53:17,749 | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-27 15:53:17,783 | get_search_url - INFO: Run searcher module and got search url: 
+2021-12-27 15:53:19,082 | __init__ - INFO: Using searcher for https://merojob.com/
+2021-12-27 15:53:28,734 | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-27 15:53:31,216 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="ea05516c0dbfbabf618e132e6545ceb7", element="4b544ab5-c88f-467f-9399-f1ff83aa64b6")>
+2021-12-27 15:53:31,659 | get_search_url - INFO: Run searcher module and got search url: https://merojob.com/search/?q=
+2021-12-27 15:56:14,770 | __init__ - ERROR: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2021-12-27 16:01:00,296 | get_search_url - INFO: Using searcher for https://www.jobsnepal.com/
+2021-12-27 16:01:03,588 | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-27 16:01:04,770 | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-27 16:01:04,864 | get_search_url - INFO: Run searcher module and got search url: 
+2021-12-27 16:01:04,982 | get_search_url - INFO: Using searcher for https://merojob.com/
+2021-12-27 16:01:12,355 | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-27 16:01:15,702 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="05db74be-3b99-4eac-a8d0-a01bc4348cc6")>
+2021-12-27 16:01:16,143 | get_search_url - INFO: Run searcher module and got search url: https://merojob.com/search/?q=
+2021-12-27 16:01:16,193 | get_search_url - INFO: Using searcher for https://www.ramrojob.com/
+2021-12-27 16:01:19,049 | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-27 16:01:21,295 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="61c34bc6-b8e3-404f-acda-334516a7b01d")>
+2021-12-27 16:01:21,324 | get_search_url - INFO: Run searcher module and got search url: https://www.ramrojob.com/search?search=
+2021-12-27 16:01:21,335 | get_search_url - INFO: Using searcher for https://www.jobejee.com/
+2021-12-27 16:01:25,755 | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-27 16:01:25,917 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="85248aeb-7134-483c-b4c7-ed308a1d1f2d")>
+2021-12-27 16:01:26,221 | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="85248aeb-7134-483c-b4c7-ed308a1d1f2d")>
+2021-12-27 16:01:26,251 | get_search_url - INFO: Run searcher module and got search url: https://www.jobejee.com/job-search?q=_
+2021-12-27 16:01:26,336 | get_search_url - INFO: Using searcher for https://www.merorojgari.com/
+2021-12-27 16:01:29,284 | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-27 16:01:29,427 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="024f6f94-b01a-4573-abc4-e25d9e46aa3e")>
+2021-12-27 16:01:29,492 | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="024f6f94-b01a-4573-abc4-e25d9e46aa3e")>
+2021-12-27 16:01:29,513 | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-27 16:01:29,778 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="b0d6ee52-f545-4025-8cef-71ac133e7aac")>
+2021-12-27 16:01:30,084 | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="b0d6ee52-f545-4025-8cef-71ac133e7aac")>
+2021-12-27 16:01:30,084 | get_search_url - INFO: Run searcher module and got search url: None
+2021-12-27 16:01:30,148 | get_search_url - INFO: Using searcher for https://www.kumarijob.com/
+2021-12-27 16:01:38,875 | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-27 16:01:39,214 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="5caf745f-09e6-4c6a-9ee4-c10f9c4ed9f1")>
+2021-12-27 16:01:39,404 | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="5caf745f-09e6-4c6a-9ee4-c10f9c4ed9f1")>
+2021-12-27 16:01:39,431 | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-27 16:01:42,956 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="d8fb2a20-1d6e-4a30-9e43-d84a1a904d99")>
+2021-12-27 16:01:42,968 | get_search_url - INFO: _token found in search url, removing _token.
+2021-12-27 16:01:42,968 | get_search_url - INFO: Run searcher module and got search url: https://www.kumarijob.com/search?keywords=
+2021-12-27 16:01:43,037 | get_search_url - INFO: Using searcher for https://www.allnepaljob.com/
+2021-12-27 16:01:47,371 | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-27 16:01:48,402 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="0d425ec8-ec03-4298-b166-017dc2180b33")>
+2021-12-27 16:01:48,426 | get_search_url - INFO: Run searcher module and got search url: https://www.allnepaljob.com/search?search=
+2021-12-27 16:01:48,523 | get_search_url - INFO: Using searcher for https://kantipurjob.com/
+2021-12-27 16:01:51,244 | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-27 16:01:52,274 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="211a9ebb-333f-435e-82b8-e2a7337a2545")>
+2021-12-27 16:01:52,303 | get_search_url - INFO: Run searcher module and got search url: https://kantipurjob.com/searchjob?title=&category=
+2021-12-27 16:53:23,006 | __init__ - ERROR: Message: session not created
+from timeout: Timed out receiving message from renderer: 600.000
+  (Session info: headless chrome=96.0.4664.110)
+
