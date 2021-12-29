@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap');
+*{
+    margin:0;
+    padding:0;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+
+body{
+    background: url(background.jpg) no-repeat center center fixed;
+    background-size:cover;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    z-index: 200;
+    background: rgba(255, 253, 253, 0.459);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.082);
+    width: 100%;
+}
+.top ul {
+    list-style-type: none;
+}
+.top ul li {
+    display: inline-block;  
+    margin: 20px;
+    background: #c44910;
+    box-shadow: inset 5px 5px 4px #b2420f,
+            inset -5px -5px 4px #d65011;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    text-shadow: -1px -1px 0 rgb(36, 19, 19), 1px -1px 0 rgb(17, 9, 9), -1px 1px 0 rgb(17, 10, 10), 1px 1px 0 rgb(14, 5, 5);
+}
+.top ul li:nth-child(2) {
+    display: inline-block;
+    background: #001fac;
+    box-shadow: inset 5px 5px 10px #001a8f,
+            inset -5px -5px 10px #0024c9;
+    color: white;
+    padding: 10px;
+}
+
+
+.container-1{
+    color:white;
+    position:absolute;
+    width:500px;
+    top:70px;
+    height:250px;
+    left:50%;
+    transform: translateX(-50%);
+    margin:20px 0;
+    font-size:30px;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    
+
+.container-2{
+    background:rgba(0,0,0,0.9);
+    color:white;
+    position:absolute;
+    margin:10px;
+    padding:10px;
+    bottom:-10px;
+    width:97%;
+    height:200px;
+    overflow-y:auto;
+}
+    
+.container-2 .message{
+    display:block;
+}
+
+.container-2 .scraping{
+    color:green;
+}
+   
+.container-2 .idle{
+    color:gray;
+}
+
+.container-2 .error{
+    color:red;
+}
+.text {
+    font-size: 50px;
+}
+.container-1.scraping {
+    background:rgba(7, 187, 31);
+}
+.container-1.idle {
+    background: gray;
+}
+.container-1.error {
+    background: rgb(216, 23, 23);
+}

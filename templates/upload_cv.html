@@ -1,0 +1,49 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload CV</title>
+    <link rel="stylesheet" href="upload_cv.css">
+</head>
+
+<body>
+    <div class="top">        
+        <nav>
+            <ul>
+                <li>Edit Profile / Skills</li>
+                <li>Backend Daemon</li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="container">
+        <h1>Upload CV</h1>
+        <form>
+            <input type='file' id="pdfInp" /><br><br>
+        </form>        
+
+        <div class="confirm-button">
+            <button>Confirm</button>
+        </div>
+
+        <div class="status-bar">
+            <strong>Status: </strong>
+            <span id="status">Not uploaded</span>
+        </div>
+    </div>
+    <script>
+    const pdfInp = document.querySelector('#pdfInp')
+    const status = document.querySelector('#status')
+
+    pdfInp.onchange = evt => {
+        const [file] = pdfInp.files
+        if (file) {
+            status.innerHTML = 'Selected ' + file.name
+        }
+    }
+    </script>
+</body>
+
+</html>
