@@ -7,6 +7,8 @@ from configparser import ConfigParser
 from .parameters import Parameters
 from .skills import SkillSet
 
+from backend.misc import common_start
+
 
 import re
 
@@ -39,7 +41,7 @@ class JobDetails:
     def fetch(self):
         request = Request(self.url)
         request.request_html()
-        request.filter_script_tags()
+        request.filter_unnecessary_tags()
 
         self.html_page = request.html
         self.tree = request.get_html_tree()
@@ -89,7 +91,7 @@ class JobDetails:
         
         if not self.web_structure.name_xpath and name_xpath: self.web_structure.name_xpath = name_xpath
 
-        common_xpath = self.common_start(self.deadline.xpath, name_xpath)
+        common_xpath = common_start(self.deadline.xpath, name_xpath)
         common_xpath_list = common_xpath.split('/')
         job_block_xpath = '/'.join(common_xpath_list[:len(common_xpath_list)-1])
 
@@ -111,33 +113,6 @@ class JobDetails:
                 return title_xpaths[0]
             return self.web_structure.name_xpath
         except: return None
-
-    @staticmethod
-    def common_start(sa, sb):
-        """
-        Returns the longest common substring from the beginning of sa and sb
-
-        Parameters
-        ----------
-        sa: string
-            string 'a' to compare
-        sb: string
-            string 'b' to compare
-        # ref: https://stackoverflow.com/questions/18715688/find-common-substring-between-two-strings
-        
-        Returns
-        -------
-        string
-            common part between sa and sb.
-        """
-        def _iter():
-            for a, b in zip(sa, sb):
-                if a == b:
-                    yield a
-                else:   
-                    return
-
-        return ''.join(_iter())
 
     def store_into_database(self):
         from .models import Job

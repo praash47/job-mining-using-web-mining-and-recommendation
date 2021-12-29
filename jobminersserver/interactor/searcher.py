@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from urllib.parse import urlparse
+from .exceptions import SearchURLNotFound
 
 import logging
 
@@ -102,8 +103,11 @@ class Search:
                     + urlparse(search_url).path + '?' + urlparse(search_url).query.split('&')[-1]
         except: pass
 
+        if not search_url: raise SearchURLNotFound(url)
+
         logger.info(f'Run searcher module and got search url: {search_url}')
         mainlogger.info(f'Run searcher module and got search url: {search_url}')
+        
         return search_url
 
     def find_element_by_type(self, element_type, finish_index, check_url):

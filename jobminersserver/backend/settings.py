@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
     'checkers',
     'interactor',
     'jobdetailsextractor',
@@ -117,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kathmandu'
 
 USE_I18N = True
 
@@ -137,15 +136,15 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Django Channels
-ASGI_APPLICATION = 'backend.asgi.application'
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
+# ASGI_APPLICATION = 'backend.asgi.application'
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [('127.0.0.1', 6379)],
+#         },
+#     },
+# }
 
 LOGGING = {
     'version': 1,
@@ -169,9 +168,6 @@ LOGGING = {
     },
     'formatters': {
         'default': {
-            'format': '%(asctime)s | %(funcName)s - %(levelname)s: %(message)s',
-        },
-        'mainfileformatter': {
             'format': '%(asctime)s | %(module)s | %(funcName)s - %(levelname)s: %(message)s'
         }
     },
@@ -179,7 +175,7 @@ LOGGING = {
         'main': {
             'class': 'logging.FileHandler',
             'filename': 'main.log',
-            'formatter': 'mainfileformatter'
+            'formatter': 'default'
         },
         'requestinggoogle': {
             'class': 'logging.FileHandler',

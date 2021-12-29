@@ -82,7 +82,7 @@ class Request:
 		try:
 			self.html = get(self.url).text
 		except Exception as e:
-			mainlogger.error(f'Error while requesting {self.url}: {e}\n so returning "')
+			mainlogger.error(f'Error while requesting {self.url}: {e}\n so returning ""')
 			return ""
 		return self.html
 
@@ -98,17 +98,21 @@ class Request:
 		tree: lxml.etree
 			tree that is computed from the html dom.
 		"""
-		html_doc = html.fromstring(self.html)
-		tree = html_doc.getroottree()
-		
-		return tree
+		if self.html:
+			html_doc = html.fromstring(self.html)
+			tree = html_doc.getroottree()
+			
+			return tree
+		return None
 
-	def filter_script_tags(self):
+	def filter_unnecessary_tags(self):
 		"""
 		Filters/Removes the script tags from the request html and assigns back to
 		request html.
 		"""
 		self.html = re.subn(r'<(script).*?</\1>(?s)', '', str(self.html))[0]
+		self.html = re.subn(r'<(footer).*?</\1>(?s)', '', str(self.html))[0]
+		self.html = re.subn(r'<(header).*?</\1>(?s)', '', str(self.html))[0]
 
 
 if __name__ == "__main__":

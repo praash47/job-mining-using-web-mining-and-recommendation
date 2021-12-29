@@ -103,6 +103,7 @@ class RequestGoogle:
         """
         # If available, take the first one available.
         apis = [curr_api for curr_api in self._google_apis if curr_api._is_available()]
+        print(apis)
         api = apis[0]                
         logger.info(f'Using {api.API_KEY}')
 
@@ -118,9 +119,11 @@ class RequestGoogle:
                 apis=self._google_apis
             )
             # {items: {link: 'www.example.com'}} for all pages.
-            if len(search_result) > 1: 
-                search_results += [item['link'] for item in search_result['items']]
-            else: i -= 1  # if no search result, then don't proceed the loop
+            try:
+                if len(search_result) > 1: 
+                    search_results += [item['link'] for item in search_result['items']]
+            except:
+                i -= 1  # if no search result, then don't proceed the loop
 
         return search_results
 

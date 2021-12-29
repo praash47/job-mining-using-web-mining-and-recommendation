@@ -24,7 +24,6 @@ def extract_jobs(pending_jobs):
                 job_details.get_details()
                 job_details.store_into_database()
                 pending_jobs = Job.objects.filter(extracted=False)
-                if not pending_jobs: break
 
                 job_end_time = datetime.datetime.now()
 
@@ -33,3 +32,4 @@ def extract_jobs(pending_jobs):
                     time_to_sleep = server_wait_time - time_elapsed
                     print(time_to_sleep)
                     time.sleep(time_to_sleep.total_seconds())
+        if not pending_jobs: break

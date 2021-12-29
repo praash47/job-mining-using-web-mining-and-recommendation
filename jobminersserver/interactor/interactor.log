@@ -1,56 +1,1077 @@
-2021-12-27 15:47:41,066 | __init__ - ERROR: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
-2021-12-27 15:47:41,067 | get_search_url - ERROR: Couldn't get html response for {self.url}: {e}
-2021-12-27 15:53:14,086 | __init__ - INFO: Using searcher for https://www.jobsnepal.com/
-2021-12-27 15:53:17,306 | get_search_url - INFO: Finding in 3 <input type='text'>
-2021-12-27 15:53:17,749 | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
-2021-12-27 15:53:17,783 | get_search_url - INFO: Run searcher module and got search url: 
-2021-12-27 15:53:19,082 | __init__ - INFO: Using searcher for https://merojob.com/
-2021-12-27 15:53:28,734 | get_search_url - INFO: Finding in 3 <input type='text'>
-2021-12-27 15:53:31,216 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="ea05516c0dbfbabf618e132e6545ceb7", element="4b544ab5-c88f-467f-9399-f1ff83aa64b6")>
-2021-12-27 15:53:31,659 | get_search_url - INFO: Run searcher module and got search url: https://merojob.com/search/?q=
-2021-12-27 15:56:14,770 | __init__ - ERROR: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
-2021-12-27 16:01:00,296 | get_search_url - INFO: Using searcher for https://www.jobsnepal.com/
-2021-12-27 16:01:03,588 | get_search_url - INFO: Finding in 3 <input type='text'>
-2021-12-27 16:01:04,770 | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
-2021-12-27 16:01:04,864 | get_search_url - INFO: Run searcher module and got search url: 
-2021-12-27 16:01:04,982 | get_search_url - INFO: Using searcher for https://merojob.com/
-2021-12-27 16:01:12,355 | get_search_url - INFO: Finding in 3 <input type='text'>
-2021-12-27 16:01:15,702 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="05db74be-3b99-4eac-a8d0-a01bc4348cc6")>
-2021-12-27 16:01:16,143 | get_search_url - INFO: Run searcher module and got search url: https://merojob.com/search/?q=
-2021-12-27 16:01:16,193 | get_search_url - INFO: Using searcher for https://www.ramrojob.com/
-2021-12-27 16:01:19,049 | get_search_url - INFO: Finding in 3 <input type='text'>
-2021-12-27 16:01:21,295 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="61c34bc6-b8e3-404f-acda-334516a7b01d")>
-2021-12-27 16:01:21,324 | get_search_url - INFO: Run searcher module and got search url: https://www.ramrojob.com/search?search=
-2021-12-27 16:01:21,335 | get_search_url - INFO: Using searcher for https://www.jobejee.com/
-2021-12-27 16:01:25,755 | get_search_url - INFO: Finding in 3 <input type='text'>
-2021-12-27 16:01:25,917 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="85248aeb-7134-483c-b4c7-ed308a1d1f2d")>
-2021-12-27 16:01:26,221 | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="85248aeb-7134-483c-b4c7-ed308a1d1f2d")>
-2021-12-27 16:01:26,251 | get_search_url - INFO: Run searcher module and got search url: https://www.jobejee.com/job-search?q=_
-2021-12-27 16:01:26,336 | get_search_url - INFO: Using searcher for https://www.merorojgari.com/
-2021-12-27 16:01:29,284 | get_search_url - INFO: Finding in 3 <input type='text'>
-2021-12-27 16:01:29,427 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="024f6f94-b01a-4573-abc4-e25d9e46aa3e")>
-2021-12-27 16:01:29,492 | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="024f6f94-b01a-4573-abc4-e25d9e46aa3e")>
-2021-12-27 16:01:29,513 | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
-2021-12-27 16:01:29,778 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="b0d6ee52-f545-4025-8cef-71ac133e7aac")>
-2021-12-27 16:01:30,084 | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="b0d6ee52-f545-4025-8cef-71ac133e7aac")>
-2021-12-27 16:01:30,084 | get_search_url - INFO: Run searcher module and got search url: None
-2021-12-27 16:01:30,148 | get_search_url - INFO: Using searcher for https://www.kumarijob.com/
-2021-12-27 16:01:38,875 | get_search_url - INFO: Finding in 3 <input type='text'>
-2021-12-27 16:01:39,214 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="5caf745f-09e6-4c6a-9ee4-c10f9c4ed9f1")>
-2021-12-27 16:01:39,404 | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="5caf745f-09e6-4c6a-9ee4-c10f9c4ed9f1")>
-2021-12-27 16:01:39,431 | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
-2021-12-27 16:01:42,956 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="d8fb2a20-1d6e-4a30-9e43-d84a1a904d99")>
-2021-12-27 16:01:42,968 | get_search_url - INFO: _token found in search url, removing _token.
-2021-12-27 16:01:42,968 | get_search_url - INFO: Run searcher module and got search url: https://www.kumarijob.com/search?keywords=
-2021-12-27 16:01:43,037 | get_search_url - INFO: Using searcher for https://www.allnepaljob.com/
-2021-12-27 16:01:47,371 | get_search_url - INFO: Finding in 3 <input type='text'>
-2021-12-27 16:01:48,402 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="0d425ec8-ec03-4298-b166-017dc2180b33")>
-2021-12-27 16:01:48,426 | get_search_url - INFO: Run searcher module and got search url: https://www.allnepaljob.com/search?search=
-2021-12-27 16:01:48,523 | get_search_url - INFO: Using searcher for https://kantipurjob.com/
-2021-12-27 16:01:51,244 | get_search_url - INFO: Finding in 3 <input type='text'>
-2021-12-27 16:01:52,274 | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="846b4a07cc223e942efe5c5920b4969f", element="211a9ebb-333f-435e-82b8-e2a7337a2545")>
-2021-12-27 16:01:52,303 | get_search_url - INFO: Run searcher module and got search url: https://kantipurjob.com/searchjob?title=&category=
-2021-12-27 16:53:23,006 | __init__ - ERROR: Message: session not created
-from timeout: Timed out receiving message from renderer: 600.000
-  (Session info: headless chrome=96.0.4664.110)
-
+2021-12-29 18:11:52,648 | searcher | get_search_url - INFO: Using searcher for https://www.jobsnepal.com/
+2021-12-29 18:11:54,787 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:11:54,919 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:11:55,303 | exceptions | __init__ - ERROR: Search URL for https://www.jobsnepal.com/ site not found
+2021-12-29 18:11:55,350 | searcher | get_search_url - INFO: Using searcher for https://merojob.com/
+2021-12-29 18:12:02,598 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:12:04,694 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="ed1c0e3aae8a369261bb2b7ce1d9598c", element="543e44ae-f4b4-4f53-9ce5-39211642c413")>
+2021-12-29 18:12:05,052 | searcher | get_search_url - INFO: Run searcher module and got search url: https://merojob.com/search/?q=
+2021-12-29 18:12:05,052 | titleextractor | __init__ - INFO: Title Extraction object created for https://merojob.com/search/?q=
+2021-12-29 18:12:05,053 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:12:05,717 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f737ca41070>
+2021-12-29 18:12:05,847 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:12:05,848 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:12:05,885 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:12:06,386 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:12:06,387 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:12:06,388 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:12:06,388 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:12:06,389 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:12:06,389 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:12:06,389 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:12:06,390 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:12:06,392 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:12:06,392 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:12:06,392 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:12:06,392 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:12:06,393 | site | is_crawlable - INFO: Xpath got in first page in https://merojob.com/search/?q=
+2021-12-29 18:12:06,779 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:12:06,779 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:12:06,779 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:12:06,779 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:12:06,779 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:12:06,780 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:12:06,780 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:12:06,781 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:12:06,782 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:12:06,782 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:12:06,782 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:12:06,782 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:12:06,841 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:12:06,842 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:12:06,870 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:12:07,290 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:12:07,292 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:12:07,292 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:12:07,292 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:12:07,293 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:12:07,293 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:12:07,293 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:12:07,295 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:12:07,297 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:12:07,297 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:12:07,297 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:12:07,297 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:12:07,297 | site | is_crawlable - INFO: Xpath got in first page in https://merojob.com/search/?q=
+2021-12-29 18:12:07,297 | titleextractor | _scrape_job_urls - INFO: Scraping jobs in page: https://merojob.com/search/?q=&page=1
+2021-12-29 18:12:07,297 | titleextractor | _scrape_job_urls - INFO: Checking if further pages left.
+2021-12-29 18:12:07,298 | paginator | get_search_page_url - INFO: Got url https://merojob.com/search/?q=&page=2 for page 2.
+2021-12-29 18:12:07,298 | site | get_jobs_for_page - INFO: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:12:07,322 | searcher | get_search_url - INFO: Using searcher for https://www.ramrojob.com/
+2021-12-29 18:12:11,324 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:12:13,192 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="ed1c0e3aae8a369261bb2b7ce1d9598c", element="ec05e704-3d52-4fa5-b66e-da475650acac")>
+2021-12-29 18:12:13,217 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.ramrojob.com/search?search=
+2021-12-29 18:12:13,217 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.ramrojob.com/search?search=
+2021-12-29 18:12:13,217 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:12:13,442 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f73772bd8e0>
+2021-12-29 18:12:13,451 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:12:13,451 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:12:13,473 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:12:13,514 | xpather | get_xpath - INFO: Found matching titles: ['Marketing Officer']
+2021-12-29 18:12:13,515 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:12:13,515 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:12:13,515 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:12:13,515 | xpather | find_nth_xpath - INFO: Couldn't find the xpath.
+2021-12-29 18:12:13,515 | xpather | find_xpath - INFO: One of the xpath not found, trying to find nested
+2021-12-29 18:12:13,551 | xpather | find_xpath - INFO: not even nested xpath found
+2021-12-29 18:12:13,552 | xpather | get_xpath - ERROR: Couldn't find the xpath.
+2021-12-29 18:12:13,597 | searcher | get_search_url - INFO: Using searcher for https://www.merorojgari.com/
+2021-12-29 18:12:16,704 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:12:16,860 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="ed1c0e3aae8a369261bb2b7ce1d9598c", element="f0c5b527-1c6f-4ca5-8d69-2ea0fc53b45d")>
+2021-12-29 18:12:16,928 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="ed1c0e3aae8a369261bb2b7ce1d9598c", element="f0c5b527-1c6f-4ca5-8d69-2ea0fc53b45d")>
+2021-12-29 18:12:16,945 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:12:17,085 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="ed1c0e3aae8a369261bb2b7ce1d9598c", element="06a3a6b6-8b5a-4c84-88d0-b16623252768")>
+2021-12-29 18:12:17,348 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="ed1c0e3aae8a369261bb2b7ce1d9598c", element="06a3a6b6-8b5a-4c84-88d0-b16623252768")>
+2021-12-29 18:12:17,348 | exceptions | __init__ - ERROR: Search URL for https://www.merorojgari.com/ site not found
+2021-12-29 18:12:17,385 | searcher | get_search_url - INFO: Using searcher for https://www.jobejee.com/
+2021-12-29 18:12:22,262 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:12:22,514 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="ed1c0e3aae8a369261bb2b7ce1d9598c", element="e1c6f91f-a411-4be8-98f3-2d24b4cbbeaa")>
+2021-12-29 18:12:22,863 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="ed1c0e3aae8a369261bb2b7ce1d9598c", element="e1c6f91f-a411-4be8-98f3-2d24b4cbbeaa")>
+2021-12-29 18:12:22,904 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.jobejee.com/job-search?q=_
+2021-12-29 18:12:22,905 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.jobejee.com/job-search?q=_
+2021-12-29 18:12:22,905 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:12:23,255 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f73770e7430>
+2021-12-29 18:12:23,257 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:12:23,257 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:12:23,288 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:12:23,365 | searcher | get_search_url - INFO: Using searcher for https://www.allnepaljob.com/
+2021-12-29 18:12:27,196 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:12:28,179 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="ed1c0e3aae8a369261bb2b7ce1d9598c", element="4f7edbf9-9235-4f03-9b45-fca1a0aa69a1")>
+2021-12-29 18:12:28,203 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.allnepaljob.com/search?search=
+2021-12-29 18:12:28,203 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.allnepaljob.com/search?search=
+2021-12-29 18:12:28,203 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:12:28,685 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f737ca413d0>
+2021-12-29 18:12:28,702 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:12:28,702 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:12:28,721 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:12:28,854 | searcher | get_search_url - INFO: Using searcher for https://kantipurjob.com/
+2021-12-29 18:12:31,628 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:12:32,755 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="ed1c0e3aae8a369261bb2b7ce1d9598c", element="2ed9decc-7bff-4b1b-a3da-ae0f501dc368")>
+2021-12-29 18:12:32,786 | searcher | get_search_url - INFO: Run searcher module and got search url: https://kantipurjob.com/searchjob?title=&category=
+2021-12-29 18:12:32,787 | titleextractor | __init__ - INFO: Title Extraction object created for https://kantipurjob.com/searchjob?title=&category=
+2021-12-29 18:12:32,787 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:12:33,213 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f737ca41070>
+2021-12-29 18:12:33,237 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:12:33,237 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:12:33,256 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:12:33,388 | searcher | get_search_url - INFO: Using searcher for https://froxjob.com/
+2021-12-29 18:12:37,849 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:12:39,315 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="ed1c0e3aae8a369261bb2b7ce1d9598c", element="beecf0e8-5f92-4e70-84d0-b3d293dc6fa9")>
+2021-12-29 18:12:39,343 | searcher | get_search_url - INFO: Run searcher module and got search url: https://froxjob.com/search/result?keywords=&cityzone=
+2021-12-29 18:12:39,344 | titleextractor | __init__ - INFO: Title Extraction object created for https://froxjob.com/search/result?keywords=&cityzone=
+2021-12-29 18:12:39,344 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:12:39,825 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f73770e7c10>
+2021-12-29 18:12:39,868 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:12:39,868 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:12:39,905 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:12:40,012 | xpather | get_xpath - INFO: Found matching titles: ['Sales Officer', 'Accountant']
+2021-12-29 18:12:40,012 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:12:40,013 | paginator | get_last_page - INFO: Got the last page as 7
+2021-12-29 18:12:40,013 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:12:40,014 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:12:40,014 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:12:40,015 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:12:40,016 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:12:40,017 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[4]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[7]/div[1]/div[2]/h3/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:12:40,017 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:12:40,017 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:12:40,017 | xpather | find_xpath - INFO: Title xpath: /html/body/div/footer/div[2]/div/div/div[2]/ul/li[|]/a
+2021-12-29 18:12:40,017 | site | is_crawlable - INFO: Xpath got in first page in https://froxjob.com/search/result?keywords=&cityzone=
+2021-12-29 18:12:40,209 | xpather | get_xpath - INFO: Found matching titles: ['Sales Officer', 'Accountant']
+2021-12-29 18:12:40,210 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:12:40,210 | paginator | get_last_page - INFO: Got the last page as 7
+2021-12-29 18:12:40,210 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:12:40,211 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:12:40,211 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:12:40,211 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:12:40,212 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:12:40,213 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[4]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[7]/div[1]/div[2]/h3/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:12:40,213 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:12:40,213 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:12:40,213 | xpather | find_xpath - INFO: Title xpath: /html/body/div/footer/div[2]/div/div/div[2]/ul/li[|]/a
+2021-12-29 18:12:40,276 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:12:40,276 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:12:40,307 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:12:40,420 | xpather | get_xpath - INFO: Found matching titles: ['Sales Officer', 'Accountant']
+2021-12-29 18:12:40,420 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:12:40,420 | paginator | get_last_page - INFO: Got the last page as 7
+2021-12-29 18:12:40,420 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:12:40,421 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:12:40,421 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:12:40,421 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:12:40,422 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:12:40,427 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[4]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[7]/div[1]/div[2]/h3/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:12:40,427 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:12:40,427 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:12:40,428 | xpather | find_xpath - INFO: Title xpath: /html/body/div/footer/div[2]/div/div/div[2]/ul/li[|]/a
+2021-12-29 18:12:40,428 | site | is_crawlable - INFO: Xpath got in first page in https://froxjob.com/search/result?keywords=&cityzone=
+2021-12-29 18:12:40,428 | titleextractor | _scrape_job_urls - INFO: Scraping jobs in page: https://froxjob.com/search/result?keywords=&cityzone=&page=2
+2021-12-29 18:12:40,428 | titleextractor | _scrape_job_urls - INFO: Checking if further pages left.
+2021-12-29 18:12:40,428 | paginator | get_search_page_url - INFO: Got url https://froxjob.com/search/result?keywords=&cityzone=&page=2 for page 2.
+2021-12-29 18:12:40,428 | site | get_jobs_for_page - INFO: /html/body/div/footer/div[2]/div/div/div[2]/ul/li[|]/a
+2021-12-29 18:12:40,464 | titleextractor | __init__ - INFO: Title Extraction object created for kumarijob
+2021-12-29 18:12:40,464 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:16:20,220 | searcher | get_search_url - INFO: Using searcher for https://www.jobsnepal.com/
+2021-12-29 18:16:22,334 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:16:23,287 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:16:23,340 | exceptions | __init__ - ERROR: Search URL for https://www.jobsnepal.com/ site not found
+2021-12-29 18:16:23,376 | searcher | get_search_url - INFO: Using searcher for https://merojob.com/
+2021-12-29 18:16:30,641 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:16:32,704 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="a6191a5a-7d17-4ed3-a695-c5a8d7bb679d")>
+2021-12-29 18:16:32,758 | searcher | get_search_url - INFO: Run searcher module and got search url: https://merojob.com/search/?q=
+2021-12-29 18:16:32,759 | titleextractor | __init__ - INFO: Title Extraction object created for https://merojob.com/search/?q=
+2021-12-29 18:16:32,760 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:16:34,398 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f88f8d99ee0>
+2021-12-29 18:16:34,598 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:16:34,599 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:16:34,660 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:16:35,290 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:16:35,298 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:16:35,301 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:16:35,302 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:16:35,308 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:16:35,308 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:16:35,309 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:16:35,317 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:16:35,319 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:16:35,319 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:16:35,319 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:16:35,319 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:16:35,320 | site | is_crawlable - INFO: Xpath got in first page in https://merojob.com/search/?q=
+2021-12-29 18:16:35,855 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:16:35,855 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:16:35,855 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:16:35,855 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:16:35,856 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:16:35,856 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:16:35,856 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:16:35,858 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:16:35,860 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:16:35,861 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:16:35,861 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:16:35,861 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:16:35,990 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:16:35,992 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:16:36,038 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:16:36,441 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:16:36,442 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:16:36,442 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:16:36,442 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:16:36,442 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:16:36,443 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:16:36,443 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:16:36,444 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:16:36,446 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:16:36,446 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:16:36,446 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:16:36,446 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:16:36,446 | site | is_crawlable - INFO: Xpath got in first page in https://merojob.com/search/?q=
+2021-12-29 18:16:36,446 | titleextractor | _scrape_job_urls - INFO: Scraping jobs in page: https://merojob.com/search/?q=&page=1
+2021-12-29 18:16:36,447 | titleextractor | _scrape_job_urls - INFO: Checking if further pages left.
+2021-12-29 18:16:36,447 | paginator | get_search_page_url - INFO: Got url https://merojob.com/search/?q=&page=2 for page 2.
+2021-12-29 18:16:36,447 | site | get_jobs_for_page - INFO: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:16:36,488 | searcher | get_search_url - INFO: Using searcher for https://www.ramrojob.com/
+2021-12-29 18:16:38,786 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:16:40,666 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="24675437-64f2-4c0f-a7f5-b8aa49589f24")>
+2021-12-29 18:16:40,706 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.ramrojob.com/search?search=
+2021-12-29 18:16:40,706 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.ramrojob.com/search?search=
+2021-12-29 18:16:40,707 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:16:40,975 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f88f8d99c10>
+2021-12-29 18:16:40,986 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:16:40,987 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:16:41,010 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:16:41,049 | xpather | get_xpath - INFO: Found matching titles: ['Marketing Officer']
+2021-12-29 18:16:41,049 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:16:41,049 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:16:41,049 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:16:41,050 | xpather | find_nth_xpath - INFO: Couldn't find the xpath.
+2021-12-29 18:16:41,050 | xpather | find_xpath - INFO: One of the xpath not found, trying to find nested
+2021-12-29 18:16:41,088 | xpather | find_xpath - INFO: not even nested xpath found
+2021-12-29 18:16:41,090 | xpather | get_xpath - ERROR: Couldn't find the xpath.
+2021-12-29 18:16:41,136 | searcher | get_search_url - INFO: Using searcher for https://www.merorojgari.com/
+2021-12-29 18:16:44,132 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:16:44,256 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="854eb4ed-6faf-430d-bdbd-5666248dac8e")>
+2021-12-29 18:16:44,324 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="854eb4ed-6faf-430d-bdbd-5666248dac8e")>
+2021-12-29 18:16:44,340 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:16:44,493 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="76aac163-65fa-4197-bf25-c58e96431962")>
+2021-12-29 18:16:44,701 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="76aac163-65fa-4197-bf25-c58e96431962")>
+2021-12-29 18:16:44,701 | exceptions | __init__ - ERROR: Search URL for https://www.merorojgari.com/ site not found
+2021-12-29 18:16:44,732 | searcher | get_search_url - INFO: Using searcher for https://www.jobejee.com/
+2021-12-29 18:16:49,836 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:16:50,057 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="3f57827c-6c26-480c-b133-291328290910")>
+2021-12-29 18:16:50,318 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="3f57827c-6c26-480c-b133-291328290910")>
+2021-12-29 18:16:50,419 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.jobejee.com/job-search?q=_
+2021-12-29 18:16:50,420 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.jobejee.com/job-search?q=_
+2021-12-29 18:16:50,421 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:16:50,795 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f88f8d99ac0>
+2021-12-29 18:16:50,796 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:16:50,796 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:16:50,820 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:16:51,079 | searcher | get_search_url - INFO: Using searcher for https://www.kumarijob.com/
+2021-12-29 18:16:59,034 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:16:59,368 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="9662a82b-0ce9-4990-8c47-93e858e22344")>
+2021-12-29 18:16:59,459 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="9662a82b-0ce9-4990-8c47-93e858e22344")>
+2021-12-29 18:16:59,483 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:17:03,395 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="05d6d813-15be-46ae-82e9-77e60b8b0786")>
+2021-12-29 18:17:03,405 | searcher | get_search_url - INFO: _token found in search url, removing _token.
+2021-12-29 18:17:03,405 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.kumarijob.com/search?keywords=
+2021-12-29 18:17:03,405 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.kumarijob.com/search?keywords=
+2021-12-29 18:17:03,406 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:17:05,911 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f88f8d994f0>
+2021-12-29 18:17:05,952 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:17:05,952 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:17:05,985 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:17:06,250 | xpather | get_xpath - INFO: Found matching titles: ['Bakery Chef', 'Customer Service Officer', 'Staff Nurse', 'Office Runner', 'Sales Executive', 'Marketing Representative', 'Administration Manager', 'Junior Accountant', 'Warehouse Assistant', 'Civil Engineer', 'Business Development Associate']
+2021-12-29 18:17:06,251 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:17:06,251 | paginator | get_last_page - INFO: Got the last page as 26
+2021-12-29 18:17:06,252 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:17:06,253 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:17:06,253 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:17:06,254 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:17:06,256 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:17:06,257 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:17:06,258 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:17:06,258 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:17:06,258 | xpather | find_xpath - INFO: Title xpath: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:17:06,258 | site | is_crawlable - INFO: Xpath got in first page in https://www.kumarijob.com/search?keywords=
+2021-12-29 18:17:06,531 | xpather | get_xpath - INFO: Found matching titles: ['Bakery Chef', 'Customer Service Officer', 'Staff Nurse', 'Office Runner', 'Sales Executive', 'Marketing Representative', 'Administration Manager', 'Junior Accountant', 'Warehouse Assistant', 'Civil Engineer', 'Business Development Associate']
+2021-12-29 18:17:06,532 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:17:06,532 | paginator | get_last_page - INFO: Got the last page as 26
+2021-12-29 18:17:06,532 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:17:06,532 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:17:06,532 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:17:06,532 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:17:06,534 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:17:06,536 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:17:06,536 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:17:06,536 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:17:06,536 | xpather | find_xpath - INFO: Title xpath: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:17:06,616 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:17:06,617 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:17:06,673 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:17:06,968 | xpather | get_xpath - INFO: Found matching titles: ['Bakery Chef', 'Customer Service Officer', 'Staff Nurse', 'Office Runner', 'Sales Executive', 'Marketing Representative', 'Administration Manager', 'Junior Accountant', 'Warehouse Assistant', 'Civil Engineer', 'Business Development Associate']
+2021-12-29 18:17:06,969 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:17:06,969 | paginator | get_last_page - INFO: Got the last page as 26
+2021-12-29 18:17:06,969 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:17:06,969 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:17:06,970 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:17:06,970 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:17:06,971 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:17:06,977 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:17:06,978 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:17:06,978 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:17:06,978 | xpather | find_xpath - INFO: Title xpath: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:17:06,978 | site | is_crawlable - INFO: Xpath got in first page in https://www.kumarijob.com/search?keywords=
+2021-12-29 18:17:06,978 | titleextractor | _scrape_job_urls - INFO: Scraping jobs in page: https://www.kumarijob.com/search?keywords=&page=2
+2021-12-29 18:17:06,978 | titleextractor | _scrape_job_urls - INFO: Checking if further pages left.
+2021-12-29 18:17:06,978 | paginator | get_search_page_url - INFO: Got url https://www.kumarijob.com/search?keywords=&page=2 for page 2.
+2021-12-29 18:17:06,978 | site | get_jobs_for_page - INFO: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:17:07,013 | searcher | get_search_url - INFO: Using searcher for https://www.allnepaljob.com/
+2021-12-29 18:17:09,658 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:17:10,898 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="155473bc-f015-4479-9dd4-1ba944097555")>
+2021-12-29 18:17:10,935 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.allnepaljob.com/search?search=
+2021-12-29 18:17:10,935 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.allnepaljob.com/search?search=
+2021-12-29 18:17:10,935 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:17:11,418 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f88f8d99ac0>
+2021-12-29 18:17:11,438 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:17:11,438 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:17:11,459 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:17:11,588 | searcher | get_search_url - INFO: Using searcher for https://kantipurjob.com/
+2021-12-29 18:17:14,130 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:17:15,227 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="40abc910-998c-483b-a063-da8a37f350e0")>
+2021-12-29 18:17:15,263 | searcher | get_search_url - INFO: Run searcher module and got search url: https://kantipurjob.com/searchjob?title=&category=
+2021-12-29 18:17:15,263 | titleextractor | __init__ - INFO: Title Extraction object created for https://kantipurjob.com/searchjob?title=&category=
+2021-12-29 18:17:15,263 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:17:15,980 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f88f8d99e50>
+2021-12-29 18:17:16,019 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:17:16,020 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:17:16,056 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:17:16,191 | searcher | get_search_url - INFO: Using searcher for https://froxjob.com/
+2021-12-29 18:17:20,917 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:17:22,038 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="8db6242f6201c2b7d025f5558d603725", element="03ca1e4f-bcb3-4730-ae2b-253aa7695169")>
+2021-12-29 18:17:22,060 | searcher | get_search_url - INFO: Run searcher module and got search url: https://froxjob.com/search/result?keywords=&cityzone=
+2021-12-29 18:17:22,061 | titleextractor | __init__ - INFO: Title Extraction object created for https://froxjob.com/search/result?keywords=&cityzone=
+2021-12-29 18:17:22,061 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:17:22,568 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f88f8d99d30>
+2021-12-29 18:17:22,593 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:17:22,593 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:17:22,630 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:17:22,715 | xpather | get_xpath - INFO: Found matching titles: ['Sales Officer', 'Accountant']
+2021-12-29 18:17:22,715 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:17:22,716 | paginator | get_last_page - INFO: Got the last page as 7
+2021-12-29 18:17:22,716 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:17:22,716 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:17:22,716 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:17:22,716 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:17:22,718 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:17:22,719 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[4]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[7]/div[1]/div[2]/h3/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:17:22,719 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:17:22,719 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:17:22,719 | xpather | find_xpath - INFO: Title xpath: /html/body/div/footer/div[2]/div/div/div[2]/ul/li[|]/a
+2021-12-29 18:17:22,719 | site | is_crawlable - INFO: Xpath got in first page in https://froxjob.com/search/result?keywords=&cityzone=
+2021-12-29 18:17:22,827 | xpather | get_xpath - INFO: Found matching titles: ['Sales Officer', 'Accountant']
+2021-12-29 18:17:22,827 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:17:22,827 | paginator | get_last_page - INFO: Got the last page as 7
+2021-12-29 18:17:22,827 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:17:22,828 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:17:22,828 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:17:22,828 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:17:22,829 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:17:22,830 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[4]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[7]/div[1]/div[2]/h3/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:17:22,830 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:17:22,830 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:17:22,830 | xpather | find_xpath - INFO: Title xpath: /html/body/div/footer/div[2]/div/div/div[2]/ul/li[|]/a
+2021-12-29 18:17:22,858 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:17:22,858 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:17:22,883 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:17:22,983 | xpather | get_xpath - INFO: Found matching titles: ['Sales Officer', 'Accountant']
+2021-12-29 18:17:22,983 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:17:22,984 | paginator | get_last_page - INFO: Got the last page as 7
+2021-12-29 18:17:22,984 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:17:22,984 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:17:22,985 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:17:22,985 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:17:22,986 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:17:22,987 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[4]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[7]/div[1]/div[2]/h3/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:17:22,988 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:17:22,988 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:17:22,988 | xpather | find_xpath - INFO: Title xpath: /html/body/div/footer/div[2]/div/div/div[2]/ul/li[|]/a
+2021-12-29 18:17:22,988 | site | is_crawlable - INFO: Xpath got in first page in https://froxjob.com/search/result?keywords=&cityzone=
+2021-12-29 18:17:22,989 | titleextractor | _scrape_job_urls - INFO: Scraping jobs in page: https://froxjob.com/search/result?keywords=&cityzone=&page=2
+2021-12-29 18:17:22,989 | titleextractor | _scrape_job_urls - INFO: Checking if further pages left.
+2021-12-29 18:17:22,989 | paginator | get_search_page_url - INFO: Got url https://froxjob.com/search/result?keywords=&cityzone=&page=2 for page 2.
+2021-12-29 18:17:22,989 | site | get_jobs_for_page - INFO: /html/body/div/footer/div[2]/div/div/div[2]/ul/li[|]/a
+2021-12-29 18:17:23,044 | titleextractor | __init__ - INFO: Title Extraction object created for jobsnepal
+2021-12-29 18:17:23,045 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:18:12,263 | searcher | get_search_url - INFO: Using searcher for https://www.jobsnepal.com/
+2021-12-29 18:18:14,568 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:18:15,589 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:18:15,617 | exceptions | __init__ - ERROR: Search URL for https://www.jobsnepal.com/ site not found
+2021-12-29 18:18:15,654 | searcher | get_search_url - INFO: Using searcher for https://merojob.com/
+2021-12-29 18:18:24,141 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:18:26,059 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="192fda2cdfbcf3fedbda5b03f5f30b46", element="b2924225-66a4-4270-85a1-c0b9c54cd19c")>
+2021-12-29 18:18:26,148 | searcher | get_search_url - INFO: Run searcher module and got search url: https://merojob.com/search/?q=
+2021-12-29 18:18:26,148 | titleextractor | __init__ - INFO: Title Extraction object created for https://merojob.com/search/?q=
+2021-12-29 18:18:26,149 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:18:27,217 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f391e0cedc0>
+2021-12-29 18:18:27,308 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:18:27,308 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:18:27,347 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:18:27,690 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:18:27,690 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:18:27,691 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:18:27,691 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:18:27,692 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:18:27,692 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:18:27,692 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:18:27,693 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:18:27,695 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:18:27,695 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:18:27,695 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:18:27,695 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:18:27,695 | site | is_crawlable - INFO: Xpath got in first page in https://merojob.com/search/?q=
+2021-12-29 18:18:27,955 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:18:27,955 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:18:27,955 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:18:27,955 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:18:27,956 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:18:27,956 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:18:27,956 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:18:27,957 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:18:27,958 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:18:27,958 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:18:27,958 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:18:27,958 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:18:28,046 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:18:28,046 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:18:28,088 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:18:28,498 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:18:28,499 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:18:28,499 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:18:28,499 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:18:28,499 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:18:28,500 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:18:28,500 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:18:28,501 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:18:28,503 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:18:28,503 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:18:28,503 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:18:28,504 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:18:28,504 | site | is_crawlable - INFO: Xpath got in first page in https://merojob.com/search/?q=
+2021-12-29 18:18:28,504 | titleextractor | _scrape_job_urls - INFO: Scraping jobs in page: https://merojob.com/search/?q=&page=1
+2021-12-29 18:18:28,504 | titleextractor | _scrape_job_urls - INFO: Checking if further pages left.
+2021-12-29 18:18:28,504 | paginator | get_search_page_url - INFO: Got url https://merojob.com/search/?q=&page=2 for page 2.
+2021-12-29 18:18:28,504 | site | get_jobs_for_page - INFO: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:18:28,555 | searcher | get_search_url - INFO: Using searcher for https://www.kumarijob.com/
+2021-12-29 18:18:36,912 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:18:37,394 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="192fda2cdfbcf3fedbda5b03f5f30b46", element="5590ad7c-60b0-41a4-b464-b25515f49144")>
+2021-12-29 18:18:37,524 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="192fda2cdfbcf3fedbda5b03f5f30b46", element="5590ad7c-60b0-41a4-b464-b25515f49144")>
+2021-12-29 18:18:37,554 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:18:41,257 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="192fda2cdfbcf3fedbda5b03f5f30b46", element="8eadf82f-f3f8-45ca-9f28-c7fbb50f6b0d")>
+2021-12-29 18:18:41,267 | searcher | get_search_url - INFO: _token found in search url, removing _token.
+2021-12-29 18:18:41,267 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.kumarijob.com/search?keywords=
+2021-12-29 18:18:41,267 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.kumarijob.com/search?keywords=
+2021-12-29 18:18:41,268 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:18:44,112 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f391e0cedc0>
+2021-12-29 18:18:44,151 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:18:44,151 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:18:44,181 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:18:44,338 | xpather | get_xpath - INFO: Found matching titles: ['Bakery Chef', 'Customer Service Officer', 'Staff Nurse', 'Office Runner', 'Sales Executive', 'Marketing Representative', 'Administration Manager', 'Junior Accountant', 'Warehouse Assistant', 'Civil Engineer', 'Business Development Associate']
+2021-12-29 18:18:44,339 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:18:44,340 | paginator | get_last_page - INFO: Got the last page as 26
+2021-12-29 18:18:44,340 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:18:44,341 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:18:44,341 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:18:44,341 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:18:44,343 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:18:44,344 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:18:44,344 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:18:44,344 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:18:44,344 | xpather | find_xpath - INFO: Title xpath: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:18:44,345 | site | is_crawlable - INFO: Xpath got in first page in https://www.kumarijob.com/search?keywords=
+2021-12-29 18:18:44,503 | xpather | get_xpath - INFO: Found matching titles: ['Bakery Chef', 'Customer Service Officer', 'Staff Nurse', 'Office Runner', 'Sales Executive', 'Marketing Representative', 'Administration Manager', 'Junior Accountant', 'Warehouse Assistant', 'Civil Engineer', 'Business Development Associate']
+2021-12-29 18:18:44,503 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:18:44,504 | paginator | get_last_page - INFO: Got the last page as 26
+2021-12-29 18:18:44,504 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:18:44,504 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:18:44,504 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:18:44,504 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:18:44,505 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:18:44,505 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:18:44,505 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:18:44,506 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:18:44,506 | xpather | find_xpath - INFO: Title xpath: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:18:44,538 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:18:44,539 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:18:44,560 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:18:44,766 | xpather | get_xpath - INFO: Found matching titles: ['Bakery Chef', 'Customer Service Officer', 'Staff Nurse', 'Office Runner', 'Sales Executive', 'Marketing Representative', 'Administration Manager', 'Junior Accountant', 'Warehouse Assistant', 'Civil Engineer', 'Business Development Associate']
+2021-12-29 18:18:44,767 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:18:44,767 | paginator | get_last_page - INFO: Got the last page as 26
+2021-12-29 18:18:44,767 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:18:44,768 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:18:44,768 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:18:44,768 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:18:44,769 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:18:44,770 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:18:44,770 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:18:44,770 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:18:44,771 | xpather | find_xpath - INFO: Title xpath: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:18:44,771 | site | is_crawlable - INFO: Xpath got in first page in https://www.kumarijob.com/search?keywords=
+2021-12-29 18:18:44,771 | titleextractor | _scrape_job_urls - INFO: Scraping jobs in page: https://www.kumarijob.com/search?keywords=&page=2
+2021-12-29 18:18:44,771 | titleextractor | _scrape_job_urls - INFO: Checking if further pages left.
+2021-12-29 18:18:44,771 | paginator | get_search_page_url - INFO: Got url https://www.kumarijob.com/search?keywords=&page=2 for page 2.
+2021-12-29 18:18:44,771 | site | get_jobs_for_page - INFO: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:18:44,825 | searcher | get_search_url - INFO: Using searcher for https://www.merorojgari.com/
+2021-12-29 18:18:47,483 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:18:47,611 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="192fda2cdfbcf3fedbda5b03f5f30b46", element="1fceb01b-59d8-4e4f-b390-46f1006d1a86")>
+2021-12-29 18:18:47,672 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="192fda2cdfbcf3fedbda5b03f5f30b46", element="1fceb01b-59d8-4e4f-b390-46f1006d1a86")>
+2021-12-29 18:18:47,694 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:18:47,831 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="192fda2cdfbcf3fedbda5b03f5f30b46", element="e2ac1f14-dca7-4b42-8e3e-42b944280b93")>
+2021-12-29 18:18:48,034 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="192fda2cdfbcf3fedbda5b03f5f30b46", element="e2ac1f14-dca7-4b42-8e3e-42b944280b93")>
+2021-12-29 18:18:48,034 | exceptions | __init__ - ERROR: Search URL for https://www.merorojgari.com/ site not found
+2021-12-29 18:18:48,066 | searcher | get_search_url - INFO: Using searcher for https://www.jobejee.com/
+2021-12-29 18:18:52,545 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:18:52,719 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="192fda2cdfbcf3fedbda5b03f5f30b46", element="03316234-7c7a-4521-a194-5c63be3ff3d0")>
+2021-12-29 18:18:52,984 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="192fda2cdfbcf3fedbda5b03f5f30b46", element="03316234-7c7a-4521-a194-5c63be3ff3d0")>
+2021-12-29 18:18:53,008 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.jobejee.com/job-search?q=_
+2021-12-29 18:18:53,009 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.jobejee.com/job-search?q=_
+2021-12-29 18:18:53,009 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:18:53,415 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f391e0ceca0>
+2021-12-29 18:18:53,415 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:18:53,416 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:18:53,438 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:18:53,504 | searcher | get_search_url - INFO: Using searcher for https://www.allnepaljob.com/
+2021-12-29 18:18:57,420 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:18:58,460 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="192fda2cdfbcf3fedbda5b03f5f30b46", element="bd39f4dc-3484-45b2-a688-67400b8b03ef")>
+2021-12-29 18:18:58,498 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.allnepaljob.com/search?search=
+2021-12-29 18:18:58,498 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.allnepaljob.com/search?search=
+2021-12-29 18:18:58,499 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:18:58,946 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f391e0cec70>
+2021-12-29 18:18:58,963 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:18:58,963 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:18:58,985 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:18:59,169 | searcher | get_search_url - INFO: Using searcher for https://kantipurjob.com/
+2021-12-29 18:19:02,001 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:19:02,989 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="192fda2cdfbcf3fedbda5b03f5f30b46", element="6b224713-3f85-47eb-98d0-2d012245866b")>
+2021-12-29 18:19:03,017 | searcher | get_search_url - INFO: Run searcher module and got search url: https://kantipurjob.com/searchjob?title=&category=
+2021-12-29 18:19:03,017 | titleextractor | __init__ - INFO: Title Extraction object created for https://kantipurjob.com/searchjob?title=&category=
+2021-12-29 18:19:03,018 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:19:03,386 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f391f7c2b50>
+2021-12-29 18:19:03,417 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:19:03,417 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:19:03,449 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:19:03,638 | searcher | get_search_url - INFO: Using searcher for https://froxjob.com/
+2021-12-29 18:19:07,701 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:19:08,710 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="192fda2cdfbcf3fedbda5b03f5f30b46", element="14d6e47f-cb2c-4bbb-b3e8-19f57b16f0fa")>
+2021-12-29 18:19:08,756 | searcher | get_search_url - INFO: Run searcher module and got search url: https://froxjob.com/search/result?keywords=&cityzone=
+2021-12-29 18:19:08,756 | titleextractor | __init__ - INFO: Title Extraction object created for https://froxjob.com/search/result?keywords=&cityzone=
+2021-12-29 18:19:08,756 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:19:09,235 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f391f7c2d30>
+2021-12-29 18:19:09,261 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:19:09,262 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:19:09,291 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:19:09,412 | xpather | get_xpath - INFO: Found matching titles: ['Sales Officer', 'Accountant']
+2021-12-29 18:19:09,413 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:19:09,413 | paginator | get_last_page - INFO: Got the last page as 7
+2021-12-29 18:19:09,414 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:19:09,415 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:19:09,415 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:19:09,415 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:19:09,416 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:19:09,418 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[4]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[7]/div[1]/div[2]/h3/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:19:09,419 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:19:09,420 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:19:09,420 | xpather | find_xpath - INFO: Title xpath: /html/body/div/footer/div[2]/div/div/div[2]/ul/li[|]/a
+2021-12-29 18:19:09,420 | site | is_crawlable - INFO: Xpath got in first page in https://froxjob.com/search/result?keywords=&cityzone=
+2021-12-29 18:19:09,561 | xpather | get_xpath - INFO: Found matching titles: ['Sales Officer', 'Accountant']
+2021-12-29 18:19:09,561 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:19:09,562 | paginator | get_last_page - INFO: Got the last page as 7
+2021-12-29 18:19:09,562 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:19:09,562 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:19:09,562 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:19:09,563 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:19:09,563 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:19:09,566 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[4]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[7]/div[1]/div[2]/h3/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:19:09,566 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:19:09,567 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:19:09,567 | xpather | find_xpath - INFO: Title xpath: /html/body/div/footer/div[2]/div/div/div[2]/ul/li[|]/a
+2021-12-29 18:19:09,620 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:19:09,622 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:19:09,661 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:19:09,752 | xpather | get_xpath - INFO: Found matching titles: ['Sales Officer', 'Accountant']
+2021-12-29 18:19:09,753 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:19:09,753 | paginator | get_last_page - INFO: Got the last page as 7
+2021-12-29 18:19:09,753 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:19:09,754 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:19:09,754 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:19:09,754 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:19:09,755 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:19:09,757 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[4]/div[1]/div[2]/h3/a', '/html/body/div/div[2]/div[1]/div/div/form/aside/div[3]/div/div/div[2]/div/div/div[7]/div[1]/div[2]/h3/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:19:09,757 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:19:09,757 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/footer/div[2]/div/div/div[2]/ul/li[1]/a', '/html/body/div/footer/div[2]/div/div/div[2]/ul/li[4]/a']
+2021-12-29 18:19:09,757 | xpather | find_xpath - INFO: Title xpath: /html/body/div/footer/div[2]/div/div/div[2]/ul/li[|]/a
+2021-12-29 18:19:09,757 | site | is_crawlable - INFO: Xpath got in first page in https://froxjob.com/search/result?keywords=&cityzone=
+2021-12-29 18:19:09,758 | titleextractor | _scrape_job_urls - INFO: Scraping jobs in page: https://froxjob.com/search/result?keywords=&cityzone=&page=2
+2021-12-29 18:19:09,758 | titleextractor | _scrape_job_urls - INFO: Checking if further pages left.
+2021-12-29 18:19:09,758 | paginator | get_search_page_url - INFO: Got url https://froxjob.com/search/result?keywords=&cityzone=&page=2 for page 2.
+2021-12-29 18:19:09,758 | site | get_jobs_for_page - INFO: /html/body/div/footer/div[2]/div/div/div[2]/ul/li[|]/a
+2021-12-29 18:19:09,811 | titleextractor | __init__ - INFO: Title Extraction object created for jobsnepal
+2021-12-29 18:19:09,812 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:21:48,064 | searcher | __init__ - ERROR: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2021-12-29 18:22:50,123 | searcher | __init__ - ERROR: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2021-12-29 18:23:23,781 | searcher | get_search_url - INFO: Using searcher for https://www.jobsnepal.com/
+2021-12-29 18:23:26,012 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:23:26,145 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:23:26,530 | exceptions | __init__ - ERROR: Search URL for https://www.jobsnepal.com/ site not found
+2021-12-29 18:23:26,561 | searcher | get_search_url - INFO: Using searcher for https://merojob.com/
+2021-12-29 18:23:33,305 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:23:35,300 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="2db2bab6c1729c84fedf278e771e6963", element="a6f884bb-4c41-4bcb-9cfb-8058ff5b99e8")>
+2021-12-29 18:23:35,533 | searcher | get_search_url - INFO: Run searcher module and got search url: https://merojob.com/search/?q=
+2021-12-29 18:23:35,534 | titleextractor | __init__ - INFO: Title Extraction object created for https://merojob.com/search/?q=
+2021-12-29 18:23:35,534 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:23:36,435 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f9e33223a30>
+2021-12-29 18:23:36,486 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:23:36,486 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:23:36,509 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:23:36,821 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:23:36,822 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:23:36,823 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:23:36,823 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:23:36,823 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:23:36,824 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:23:36,824 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:23:36,826 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:23:36,828 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:23:36,829 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:23:36,829 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:23:36,829 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:23:36,829 | site | is_crawlable - INFO: Xpath got in first page in https://merojob.com/search/?q=
+2021-12-29 18:23:37,350 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:23:37,351 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:23:37,351 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:23:37,351 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:23:37,352 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:23:37,352 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:23:37,352 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:23:37,365 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:23:37,367 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:23:37,367 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:23:37,367 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:23:37,367 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:23:37,532 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:23:37,533 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:23:37,560 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:23:37,957 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:23:37,963 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:23:37,965 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:23:37,965 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:23:37,965 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:23:37,965 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:23:37,965 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:23:37,967 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:23:37,974 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:23:37,975 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:23:37,975 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:23:37,976 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:23:37,976 | site | is_crawlable - INFO: Xpath got in first page in https://merojob.com/search/?q=
+2021-12-29 18:23:37,976 | titleextractor | _scrape_job_urls - INFO: Scraping jobs in page: https://merojob.com/search/?q=&page=1
+2021-12-29 18:23:37,976 | titleextractor | _scrape_job_urls - INFO: Checking if further pages left.
+2021-12-29 18:23:37,978 | paginator | get_search_page_url - INFO: Got url https://merojob.com/search/?q=&page=2 for page 2.
+2021-12-29 18:23:37,978 | site | get_jobs_for_page - INFO: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:23:38,024 | searcher | get_search_url - INFO: Using searcher for https://www.ramrojob.com/
+2021-12-29 18:23:40,429 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:23:42,315 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="2db2bab6c1729c84fedf278e771e6963", element="1230eb77-9608-42ee-afe7-dbee4c50c1e1")>
+2021-12-29 18:23:42,348 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.ramrojob.com/search?search=
+2021-12-29 18:23:42,348 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.ramrojob.com/search?search=
+2021-12-29 18:23:42,349 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:23:42,694 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f9e33223640>
+2021-12-29 18:23:42,705 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:23:42,705 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:23:42,728 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:23:42,768 | xpather | get_xpath - INFO: Found matching titles: ['Marketing Officer']
+2021-12-29 18:23:42,768 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:23:42,768 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:23:42,769 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:23:42,769 | xpather | find_nth_xpath - INFO: Couldn't find the xpath.
+2021-12-29 18:23:42,769 | xpather | find_xpath - INFO: One of the xpath not found, trying to find nested
+2021-12-29 18:23:42,809 | xpather | find_xpath - INFO: not even nested xpath found
+2021-12-29 18:23:42,809 | xpather | get_xpath - ERROR: Couldn't find the xpath.
+2021-12-29 18:23:42,842 | searcher | get_search_url - INFO: Using searcher for https://www.merorojgari.com/
+2021-12-29 18:23:45,716 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:23:45,857 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="2db2bab6c1729c84fedf278e771e6963", element="621e6b4d-9412-4db9-929f-3e304a723d90")>
+2021-12-29 18:23:45,926 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="2db2bab6c1729c84fedf278e771e6963", element="621e6b4d-9412-4db9-929f-3e304a723d90")>
+2021-12-29 18:23:45,944 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:23:46,081 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="2db2bab6c1729c84fedf278e771e6963", element="2c4acd47-a767-4b2f-9815-29d05b9445f0")>
+2021-12-29 18:23:46,332 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="2db2bab6c1729c84fedf278e771e6963", element="2c4acd47-a767-4b2f-9815-29d05b9445f0")>
+2021-12-29 18:23:46,332 | exceptions | __init__ - ERROR: Search URL for https://www.merorojgari.com/ site not found
+2021-12-29 18:23:46,363 | searcher | get_search_url - INFO: Using searcher for https://www.jobejee.com/
+2021-12-29 18:23:50,328 | searcher | get_search_url - ERROR: Couldn't get html response for https://www.jobejee.com/: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2021-12-29 18:23:50,385 | searcher | get_search_url - INFO: Using searcher for https://www.kumarijob.com/
+2021-12-29 18:23:50,389 | searcher | get_search_url - ERROR: Couldn't get html response for https://www.kumarijob.com/: HTTPConnectionPool(host='127.0.0.1', port=41121): Max retries exceeded with url: /session/2db2bab6c1729c84fedf278e771e6963/url (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9e33223fd0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2021-12-29 18:23:50,442 | searcher | get_search_url - INFO: Using searcher for https://www.allnepaljob.com/
+2021-12-29 18:23:50,448 | searcher | get_search_url - ERROR: Couldn't get html response for https://www.allnepaljob.com/: HTTPConnectionPool(host='127.0.0.1', port=41121): Max retries exceeded with url: /session/2db2bab6c1729c84fedf278e771e6963/url (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9e3323b820>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2021-12-29 18:23:50,463 | searcher | get_search_url - INFO: Using searcher for https://kantipurjob.com/
+2021-12-29 18:23:50,467 | searcher | get_search_url - ERROR: Couldn't get html response for https://kantipurjob.com/: HTTPConnectionPool(host='127.0.0.1', port=41121): Max retries exceeded with url: /session/2db2bab6c1729c84fedf278e771e6963/url (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9e332235e0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2021-12-29 18:23:50,484 | searcher | get_search_url - INFO: Using searcher for https://getjobnepal.com/
+2021-12-29 18:23:50,488 | searcher | get_search_url - ERROR: Couldn't get html response for https://getjobnepal.com/: HTTPConnectionPool(host='127.0.0.1', port=41121): Max retries exceeded with url: /session/2db2bab6c1729c84fedf278e771e6963/url (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f9e3323b0d0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2021-12-29 18:23:50,507 | titleextractor | __init__ - INFO: Title Extraction object created for jobsnepal
+2021-12-29 18:23:50,509 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:39:43,284 | searcher | get_search_url - INFO: Using searcher for https://froxjob.com/
+2021-12-29 18:39:53,159 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:39:56,346 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:39:56,350 | exceptions | __init__ - ERROR: Search URL for https://froxjob.com/ site not found
+2021-12-29 18:39:56,375 | titleextractor | __init__ - INFO: Title Extraction object created for froxjob
+2021-12-29 18:39:56,375 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:39:56,377 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7fce792808b0>
+2021-12-29 18:40:26,937 | searcher | get_search_url - INFO: Using searcher for https://www.jobsnepal.com/
+2021-12-29 18:40:30,038 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:40:30,857 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:40:30,886 | exceptions | __init__ - ERROR: Search URL for https://www.jobsnepal.com/ site not found
+2021-12-29 18:40:30,899 | searcher | get_search_url - INFO: Using searcher for https://merojob.com/
+2021-12-29 18:40:38,815 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:40:40,739 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="0cbd77e704196b78fc03a45b08dd215a", element="362f68fb-ae11-4da0-8fce-1e3ec5cda795")>
+2021-12-29 18:40:41,099 | searcher | get_search_url - INFO: Run searcher module and got search url: https://merojob.com/search/?q=
+2021-12-29 18:40:41,100 | titleextractor | __init__ - INFO: Title Extraction object created for https://merojob.com/search/?q=
+2021-12-29 18:40:41,100 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:40:42,003 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f078a3307f0>
+2021-12-29 18:40:42,076 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:40:42,076 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:40:42,105 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:40:42,359 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:40:42,359 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:40:42,360 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:40:42,360 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:40:42,360 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:40:42,361 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:40:42,361 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:40:42,363 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:40:42,364 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:40:42,364 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:40:42,364 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:40:42,364 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:40:42,364 | site | is_crawlable - INFO: Xpath got in first page in https://merojob.com/search/?q=
+2021-12-29 18:40:42,631 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:40:42,631 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:40:42,631 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:40:42,632 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:40:42,632 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:40:42,632 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:40:42,632 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:40:42,633 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:40:42,635 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:40:42,635 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:40:42,635 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:40:42,635 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:40:42,695 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:40:42,695 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:40:42,719 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:40:43,009 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:40:43,009 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:40:43,009 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:40:43,010 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:40:43,010 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:40:43,010 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:40:43,010 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:40:43,011 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:40:43,012 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:40:43,012 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:40:43,012 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:40:43,012 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:40:43,012 | site | is_crawlable - INFO: Xpath got in first page in https://merojob.com/search/?q=
+2021-12-29 18:40:43,013 | titleextractor | _scrape_job_urls - INFO: Scraping jobs in page: https://merojob.com/search/?q=&page=1
+2021-12-29 18:40:43,013 | titleextractor | _scrape_job_urls - INFO: Checking if further pages left.
+2021-12-29 18:40:43,013 | paginator | get_search_page_url - INFO: Got url https://merojob.com/search/?q=&page=2 for page 2.
+2021-12-29 18:40:43,013 | site | get_jobs_for_page - INFO: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:40:43,047 | searcher | get_search_url - INFO: Using searcher for https://www.ramrojob.com/
+2021-12-29 18:40:45,539 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:40:47,541 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="0cbd77e704196b78fc03a45b08dd215a", element="98f9921c-aa87-453e-9cdd-fdabcd3d8f62")>
+2021-12-29 18:40:47,567 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.ramrojob.com/search?search=
+2021-12-29 18:40:47,568 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.ramrojob.com/search?search=
+2021-12-29 18:40:47,568 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:40:48,632 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f078a330910>
+2021-12-29 18:40:48,638 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:40:48,638 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:40:48,657 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:40:48,683 | xpather | get_xpath - INFO: Found matching titles: ['Marketing Officer']
+2021-12-29 18:40:48,683 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:40:48,684 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:40:48,685 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:40:48,685 | xpather | find_nth_xpath - INFO: Couldn't find the xpath.
+2021-12-29 18:40:48,685 | xpather | find_xpath - INFO: One of the xpath not found, trying to find nested
+2021-12-29 18:40:48,711 | xpather | find_xpath - INFO: not even nested xpath found
+2021-12-29 18:40:48,712 | xpather | get_xpath - ERROR: Couldn't find the xpath.
+2021-12-29 18:40:48,745 | searcher | get_search_url - INFO: Using searcher for https://www.merorojgari.com/
+2021-12-29 18:40:51,997 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:40:52,121 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="0cbd77e704196b78fc03a45b08dd215a", element="604779a2-13b1-4df2-b962-88762967b613")>
+2021-12-29 18:40:52,186 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="0cbd77e704196b78fc03a45b08dd215a", element="604779a2-13b1-4df2-b962-88762967b613")>
+2021-12-29 18:40:52,205 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:40:52,348 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="0cbd77e704196b78fc03a45b08dd215a", element="d184601b-ef9e-4243-8c79-80e6459b9d14")>
+2021-12-29 18:40:52,471 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="0cbd77e704196b78fc03a45b08dd215a", element="d184601b-ef9e-4243-8c79-80e6459b9d14")>
+2021-12-29 18:40:52,471 | exceptions | __init__ - ERROR: Search URL for https://www.merorojgari.com/ site not found
+2021-12-29 18:40:52,489 | searcher | get_search_url - INFO: Using searcher for https://www.jobejee.com/
+2021-12-29 18:40:56,913 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:40:57,205 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="0cbd77e704196b78fc03a45b08dd215a", element="681a6d3f-50ba-402f-9c45-653618009b9a")>
+2021-12-29 18:40:57,432 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="0cbd77e704196b78fc03a45b08dd215a", element="681a6d3f-50ba-402f-9c45-653618009b9a")>
+2021-12-29 18:40:57,454 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.jobejee.com/job-search?q=_
+2021-12-29 18:40:57,454 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.jobejee.com/job-search?q=_
+2021-12-29 18:40:57,455 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:40:57,993 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f078a330250>
+2021-12-29 18:40:57,994 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:40:57,994 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:40:58,032 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:40:58,058 | searcher | get_search_url - INFO: Using searcher for https://www.kumarijob.com/
+2021-12-29 18:41:06,047 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:41:06,356 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="0cbd77e704196b78fc03a45b08dd215a", element="3ddc1f8f-e601-4a56-8980-e5b596788f5c")>
+2021-12-29 18:41:06,439 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="0cbd77e704196b78fc03a45b08dd215a", element="3ddc1f8f-e601-4a56-8980-e5b596788f5c")>
+2021-12-29 18:41:06,462 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:41:09,761 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="0cbd77e704196b78fc03a45b08dd215a", element="4e232a49-903c-4519-a49c-4dd2c6c22af3")>
+2021-12-29 18:41:09,770 | searcher | get_search_url - INFO: _token found in search url, removing _token.
+2021-12-29 18:41:09,770 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.kumarijob.com/search?keywords=
+2021-12-29 18:41:09,771 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.kumarijob.com/search?keywords=
+2021-12-29 18:41:09,771 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:41:12,650 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f078a330550>
+2021-12-29 18:41:12,674 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:41:12,674 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:41:12,699 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:41:12,796 | xpather | get_xpath - INFO: Found matching titles: ['Bakery Chef', 'Customer Service Officer', 'Staff Nurse', 'Office Runner', 'Sales Executive', 'Marketing Representative', 'Administration Manager', 'Junior Accountant', 'Warehouse Assistant', 'Civil Engineer', 'Business Development Associate']
+2021-12-29 18:41:12,796 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:41:12,797 | paginator | get_last_page - INFO: Got the last page as 26
+2021-12-29 18:41:12,797 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:41:12,797 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:41:12,797 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:41:12,797 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:41:12,798 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:41:12,798 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:41:12,798 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:41:12,799 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:41:12,799 | xpather | find_xpath - INFO: Title xpath: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:41:12,799 | site | is_crawlable - INFO: Xpath got in first page in https://www.kumarijob.com/search?keywords=
+2021-12-29 18:41:12,892 | xpather | get_xpath - INFO: Found matching titles: ['Bakery Chef', 'Customer Service Officer', 'Staff Nurse', 'Office Runner', 'Sales Executive', 'Marketing Representative', 'Administration Manager', 'Junior Accountant', 'Warehouse Assistant', 'Civil Engineer', 'Business Development Associate']
+2021-12-29 18:41:12,893 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:41:12,893 | paginator | get_last_page - INFO: Got the last page as 26
+2021-12-29 18:41:12,893 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:41:12,893 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:41:12,894 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:41:12,894 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:41:12,895 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:41:12,896 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:41:12,896 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:41:12,897 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:41:12,897 | xpather | find_xpath - INFO: Title xpath: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:41:12,925 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:41:12,925 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:41:12,949 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:41:13,114 | xpather | get_xpath - INFO: Found matching titles: ['Bakery Chef', 'Customer Service Officer', 'Staff Nurse', 'Office Runner', 'Sales Executive', 'Marketing Representative', 'Administration Manager', 'Junior Accountant', 'Warehouse Assistant', 'Civil Engineer', 'Business Development Associate']
+2021-12-29 18:41:13,115 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:41:13,115 | paginator | get_last_page - INFO: Got the last page as 26
+2021-12-29 18:41:13,115 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:41:13,115 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:41:13,115 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:41:13,115 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:41:13,116 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:41:13,117 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:41:13,118 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:41:13,118 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:41:13,118 | xpather | find_xpath - INFO: Title xpath: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:41:13,118 | site | is_crawlable - INFO: Xpath got in first page in https://www.kumarijob.com/search?keywords=
+2021-12-29 18:41:13,118 | titleextractor | _scrape_job_urls - INFO: Scraping jobs in page: https://www.kumarijob.com/search?keywords=&page=2
+2021-12-29 18:41:13,118 | titleextractor | _scrape_job_urls - INFO: Checking if further pages left.
+2021-12-29 18:41:13,118 | paginator | get_search_page_url - INFO: Got url https://www.kumarijob.com/search?keywords=&page=2 for page 2.
+2021-12-29 18:41:13,119 | site | get_jobs_for_page - INFO: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:41:13,150 | searcher | get_search_url - INFO: Using searcher for https://www.allnepaljob.com/
+2021-12-29 18:41:16,186 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:41:17,474 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="0cbd77e704196b78fc03a45b08dd215a", element="e4f7e2de-0c7a-45e6-89e4-9dfee39cf546")>
+2021-12-29 18:41:17,552 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.allnepaljob.com/search?search=
+2021-12-29 18:41:17,553 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.allnepaljob.com/search?search=
+2021-12-29 18:41:17,553 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:41:18,281 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f078a330250>
+2021-12-29 18:41:18,295 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:41:18,296 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:41:18,329 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:41:18,484 | searcher | get_search_url - INFO: Using searcher for https://kantipurjob.com/
+2021-12-29 18:41:20,922 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:41:22,126 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="0cbd77e704196b78fc03a45b08dd215a", element="b81b1300-143c-4492-8ec1-4f5103f6c19c")>
+2021-12-29 18:41:22,173 | searcher | get_search_url - INFO: Run searcher module and got search url: https://kantipurjob.com/searchjob?title=&category=
+2021-12-29 18:41:22,173 | titleextractor | __init__ - INFO: Title Extraction object created for https://kantipurjob.com/searchjob?title=&category=
+2021-12-29 18:41:22,174 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:41:22,668 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f078a330b50>
+2021-12-29 18:41:22,689 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:41:22,689 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:41:22,720 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:41:22,850 | titleextractor | __init__ - INFO: Title Extraction object created for jobsnepal
+2021-12-29 18:41:22,851 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:41:22,852 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f078a326490>
+2021-12-29 18:50:06,662 | titleextractor | __init__ - INFO: Title Extraction object created for jobsnepal
+2021-12-29 18:50:06,663 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:50:06,665 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7fa9bad21160>
+2021-12-29 18:50:42,718 | searcher | get_search_url - INFO: Using searcher for https://www.jobsnepal.com/
+2021-12-29 18:50:45,300 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:50:45,419 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:50:45,771 | exceptions | __init__ - ERROR: Search URL for https://www.jobsnepal.com/ site not found
+2021-12-29 18:50:45,798 | searcher | get_search_url - INFO: Using searcher for https://merojob.com/
+2021-12-29 18:50:53,142 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:50:58,038 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="c478b8e83c6501d40b7bb9ce2e6ce364", element="4dbe1df8-1612-4dad-9f64-34f0b2f1d574")>
+2021-12-29 18:50:58,066 | searcher | get_search_url - INFO: Run searcher module and got search url: https://merojob.com/search/?q=
+2021-12-29 18:50:58,066 | titleextractor | __init__ - INFO: Title Extraction object created for https://merojob.com/search/?q=
+2021-12-29 18:50:58,066 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:50:58,700 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f9cfc70b220>
+2021-12-29 18:50:58,744 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:50:58,745 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:50:58,770 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:50:59,009 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:50:59,009 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:50:59,010 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:50:59,010 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:50:59,010 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:50:59,010 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:50:59,010 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:50:59,011 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:50:59,012 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:50:59,012 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:50:59,012 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:50:59,012 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:50:59,012 | site | is_crawlable - INFO: Xpath got in first page in https://merojob.com/search/?q=
+2021-12-29 18:50:59,323 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:50:59,323 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:50:59,323 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:50:59,323 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:50:59,324 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:50:59,324 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:50:59,324 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:50:59,325 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:50:59,327 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:50:59,327 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:50:59,327 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:50:59,327 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:50:59,425 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:50:59,425 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:50:59,449 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:50:59,696 | xpather | get_xpath - INFO: Found matching titles: ['QA Engineer', 'Delphi Developer', 'Front Desk Officer']
+2021-12-29 18:50:59,697 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:50:59,697 | paginator | get_last_page - INFO: Got the last page as 81
+2021-12-29 18:50:59,697 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:50:59,697 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:50:59,697 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:50:59,697 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:50:59,698 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:50:59,699 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:50:59,700 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:50:59,700 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[2]/div[1]/div/div[2]/h1/a', '/html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[3]/div[1]/div/div[2]/h1/a']
+2021-12-29 18:50:59,700 | xpather | find_xpath - INFO: Title xpath: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:50:59,700 | site | is_crawlable - INFO: Xpath got in first page in https://merojob.com/search/?q=
+2021-12-29 18:50:59,700 | titleextractor | _scrape_job_urls - INFO: Scraping jobs in page: https://merojob.com/search/?q=&page=1
+2021-12-29 18:50:59,700 | titleextractor | _scrape_job_urls - INFO: Checking if further pages left.
+2021-12-29 18:50:59,700 | paginator | get_search_page_url - INFO: Got url https://merojob.com/search/?q=&page=2 for page 2.
+2021-12-29 18:50:59,700 | site | get_jobs_for_page - INFO: /html/body/form/div/div[3]/div[1]/div[2]/div[4]/div[|]/div[1]/div/div[2]/h1/a
+2021-12-29 18:51:01,483 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:51:01,512 | searcher | get_search_url - INFO: Using searcher for https://www.ramrojob.com/
+2021-12-29 18:51:03,488 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:51:05,374 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="c478b8e83c6501d40b7bb9ce2e6ce364", element="72db7e66-1e01-4d74-a710-f81afb31395b")>
+2021-12-29 18:51:05,401 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.ramrojob.com/search?search=
+2021-12-29 18:51:05,401 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.ramrojob.com/search?search=
+2021-12-29 18:51:05,402 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:51:05,663 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f9cfc70beb0>
+2021-12-29 18:51:05,670 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:51:05,673 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:51:05,696 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:51:05,728 | xpather | get_xpath - INFO: Found matching titles: ['Marketing Officer']
+2021-12-29 18:51:05,728 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:51:05,728 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:51:05,728 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:51:05,729 | xpather | find_nth_xpath - INFO: Couldn't find the xpath.
+2021-12-29 18:51:05,729 | xpather | find_xpath - INFO: One of the xpath not found, trying to find nested
+2021-12-29 18:51:05,758 | xpather | find_xpath - INFO: not even nested xpath found
+2021-12-29 18:51:05,758 | xpather | get_xpath - ERROR: Couldn't find the xpath.
+2021-12-29 18:51:05,812 | searcher | get_search_url - INFO: Using searcher for https://www.merorojgari.com/
+2021-12-29 18:51:08,766 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:51:08,896 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="c478b8e83c6501d40b7bb9ce2e6ce364", element="8d5acd1a-a8b4-4468-9298-783cb705e08f")>
+2021-12-29 18:51:08,963 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="c478b8e83c6501d40b7bb9ce2e6ce364", element="8d5acd1a-a8b4-4468-9298-783cb705e08f")>
+2021-12-29 18:51:08,981 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:51:09,117 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="c478b8e83c6501d40b7bb9ce2e6ce364", element="fa5e529a-4a83-4e27-88fb-2d8e363f6a98")>
+2021-12-29 18:51:09,249 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="c478b8e83c6501d40b7bb9ce2e6ce364", element="fa5e529a-4a83-4e27-88fb-2d8e363f6a98")>
+2021-12-29 18:51:09,249 | exceptions | __init__ - ERROR: Search URL for https://www.merorojgari.com/ site not found
+2021-12-29 18:51:09,278 | searcher | get_search_url - INFO: Using searcher for https://www.jobejee.com/
+2021-12-29 18:51:13,278 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:51:13,480 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="c478b8e83c6501d40b7bb9ce2e6ce364", element="f89f3fc8-f6c0-4897-b6ec-6680015290b5")>
+2021-12-29 18:51:13,773 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="c478b8e83c6501d40b7bb9ce2e6ce364", element="f89f3fc8-f6c0-4897-b6ec-6680015290b5")>
+2021-12-29 18:51:13,795 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.jobejee.com/job-search?q=_
+2021-12-29 18:51:13,795 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.jobejee.com/job-search?q=_
+2021-12-29 18:51:13,795 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:51:14,135 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f9cfc70b460>
+2021-12-29 18:51:14,137 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:51:14,137 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:51:14,164 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:51:14,190 | searcher | get_search_url - INFO: Using searcher for https://www.kumarijob.com/
+2021-12-29 18:51:22,872 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:51:23,261 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="c478b8e83c6501d40b7bb9ce2e6ce364", element="0139bcba-3e48-432f-851b-3e069820c2a7")>
+2021-12-29 18:51:23,362 | searcher | search_term - INFO: sent " " to <selenium.webdriver.remote.webelement.WebElement (session="c478b8e83c6501d40b7bb9ce2e6ce364", element="0139bcba-3e48-432f-851b-3e069820c2a7")>
+2021-12-29 18:51:23,392 | searcher | get_search_url - INFO: Couldn't find in <input type='text'>, so checking in 2 <input type='search'>
+2021-12-29 18:51:26,647 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="c478b8e83c6501d40b7bb9ce2e6ce364", element="568397e9-c408-41d8-beff-996096c6c9e3")>
+2021-12-29 18:51:26,655 | searcher | get_search_url - INFO: _token found in search url, removing _token.
+2021-12-29 18:51:26,655 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.kumarijob.com/search?keywords=
+2021-12-29 18:51:26,656 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.kumarijob.com/search?keywords=
+2021-12-29 18:51:26,656 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:51:29,609 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f9cfc70be80>
+2021-12-29 18:51:29,642 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:51:29,642 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:51:29,663 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:51:29,770 | xpather | get_xpath - INFO: Found matching titles: ['Bakery Chef', 'Customer Service Officer', 'Staff Nurse', 'Office Runner', 'Sales Executive', 'Marketing Representative', 'Administration Manager', 'Junior Accountant', 'Warehouse Assistant', 'Civil Engineer', 'Business Development Associate']
+2021-12-29 18:51:29,770 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:51:29,771 | paginator | get_last_page - INFO: Got the last page as 26
+2021-12-29 18:51:29,771 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:51:29,771 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:51:29,771 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:51:29,771 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:51:29,772 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:51:29,773 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:51:29,773 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:51:29,773 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:51:29,773 | xpather | find_xpath - INFO: Title xpath: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:51:29,773 | site | is_crawlable - INFO: Xpath got in first page in https://www.kumarijob.com/search?keywords=
+2021-12-29 18:51:29,868 | xpather | get_xpath - INFO: Found matching titles: ['Bakery Chef', 'Customer Service Officer', 'Staff Nurse', 'Office Runner', 'Sales Executive', 'Marketing Representative', 'Administration Manager', 'Junior Accountant', 'Warehouse Assistant', 'Civil Engineer', 'Business Development Associate']
+2021-12-29 18:51:29,869 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:51:29,869 | paginator | get_last_page - INFO: Got the last page as 26
+2021-12-29 18:51:29,869 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:51:29,869 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:51:29,869 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:51:29,869 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:51:29,870 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:51:29,872 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:51:29,872 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:51:29,872 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:51:29,872 | xpather | find_xpath - INFO: Title xpath: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:51:29,898 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:51:29,899 | paginator | has_pages - INFO: Paginator found the site has pages, there is integer in range 1-100 in page.
+2021-12-29 18:51:29,917 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:51:30,013 | xpather | get_xpath - INFO: Found matching titles: ['Bakery Chef', 'Customer Service Officer', 'Staff Nurse', 'Office Runner', 'Sales Executive', 'Marketing Representative', 'Administration Manager', 'Junior Accountant', 'Warehouse Assistant', 'Civil Engineer', 'Business Development Associate']
+2021-12-29 18:51:30,013 | paginator | get_last_page - INFO: Getting last page
+2021-12-29 18:51:30,014 | paginator | get_last_page - INFO: Got the last page as 26
+2021-12-29 18:51:30,014 | paginator | check_search_step - INFO: Checking the search step for the paginated website.
+2021-12-29 18:51:30,014 | paginator | check_search_step - INFO: Got the search step as 1
+2021-12-29 18:51:30,014 | xpather | find_xpath - INFO: Finding the xpath...
+2021-12-29 18:51:30,014 | xpather | find_nth_xpath - INFO: Finding the n = 0 xpath...
+2021-12-29 18:51:30,015 | xpather | find_nth_xpath - INFO: Finding the n = 1 xpath...
+2021-12-29 18:51:30,016 | xpather | find_xpath - INFO: Got xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:51:30,016 | xpather | get_eligible_xpaths - INFO: Filtering out non eligible xpaths
+2021-12-29 18:51:30,016 | xpather | find_xpath - INFO: Eligible xpaths: ['/html/body/div/div[1]/div[6]/div/div/div/div/div/div[1]/div[1]/div[2]/h5/a', '/html/body/div/div[1]/div[6]/div/div/div/div/div/div[2]/div[1]/div[2]/h5/a']
+2021-12-29 18:51:30,016 | xpather | find_xpath - INFO: Title xpath: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:51:30,016 | site | is_crawlable - INFO: Xpath got in first page in https://www.kumarijob.com/search?keywords=
+2021-12-29 18:51:30,016 | titleextractor | _scrape_job_urls - INFO: Scraping jobs in page: https://www.kumarijob.com/search?keywords=&page=2
+2021-12-29 18:51:30,016 | titleextractor | _scrape_job_urls - INFO: Checking if further pages left.
+2021-12-29 18:51:30,017 | paginator | get_search_page_url - INFO: Got url https://www.kumarijob.com/search?keywords=&page=2 for page 2.
+2021-12-29 18:51:30,017 | site | get_jobs_for_page - INFO: /html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a
+2021-12-29 18:51:32,711 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:51:32,747 | searcher | get_search_url - INFO: Using searcher for https://www.allnepaljob.com/
+2021-12-29 18:51:36,669 | searcher | get_search_url - INFO: Finding in 3 <input type='text'>
+2021-12-29 18:51:37,669 | searcher | search_term - INFO: sent "" to <selenium.webdriver.remote.webelement.WebElement (session="c478b8e83c6501d40b7bb9ce2e6ce364", element="39ee86a8-2f2b-4ec9-89b4-c091e9192f6d")>
+2021-12-29 18:51:37,695 | searcher | get_search_url - INFO: Run searcher module and got search url: https://www.allnepaljob.com/search?search=
+2021-12-29 18:51:37,695 | titleextractor | __init__ - INFO: Title Extraction object created for https://www.allnepaljob.com/search?search=
+2021-12-29 18:51:37,695 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:51:38,395 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f9cfc70bca0>
+2021-12-29 18:51:38,407 | paginator | has_pages - INFO: Site, Xpather object created
+2021-12-29 18:51:38,408 | paginator | has_pages - INFO: No integer value in range 1-100 found in page. So, Non paginated
+2021-12-29 18:51:38,427 | xpather | __init__ - INFO: Read 70,000 titles.
+2021-12-29 18:51:38,514 | titleextractor | __init__ - INFO: Title Extraction object created for jobsnepal
+2021-12-29 18:51:38,515 | titleextractor | __init__ - INFO: Site, Xpather object created
+2021-12-29 18:51:38,516 | titleextractor | __init__ - INFO: Mocked Scrapy Response: <interactor.titleextractor.MockResponse object at 0x7f9cfc70b520>
+2021-12-29 20:04:53,715 | searcher | __init__ - ERROR: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
