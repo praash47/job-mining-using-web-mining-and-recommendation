@@ -103,7 +103,6 @@ class RequestGoogle:
         """
         # If available, take the first one available.
         apis = [curr_api for curr_api in self._google_apis if curr_api._is_available()]
-        print(apis)
         api = apis[0]                
         logger.info(f'Using {api.API_KEY}')
 
@@ -111,19 +110,19 @@ class RequestGoogle:
         
         # 11, 21, 31, ..., 91
         SEARCH_INDEX_STEP = 10
-        for i in range(1, self._parser.getint('global', 'num_links'), SEARCH_INDEX_STEP): 
+        for i in range(1, self._parser.getint('global', 'num_links'),SEARCH_INDEX_STEP): 
             search_result, api = api.search(
                 search_query=self._parser.get('global', 'search_query'),
                 start_index=i,  # search index for getting from paged search result.
                 api=api, # if api is invalid, to return the api
                 apis=self._google_apis
             )
-            # {items: {link: 'www.example.com'}} for all pages.
             try:
+            # {items: {link: 'www.example.com'}} for all pages.
                 if len(search_result) > 1: 
                     search_results += [item['link'] for item in search_result['items']]
             except:
-                i -= 1  # if no search result, then don't proceed the loop
+                i -= 10  # if no search result, then don't proceed the loop
 
         return search_results
 
@@ -161,7 +160,8 @@ class GoogleAPI:
         self._ONE_DAY = 86400
         self._SEARCH_ENGINE_ID = search_engine_id
         self._db_ref, _created = API.objects.get_or_create(
-            api_key=api_key
+            api_key=api_key,
+            search_engine_id=search_engine_id
         )
         if not _created:
             # Reset the usage count to 0 on next day
@@ -219,7 +219,7 @@ class GoogleAPI:
         except HttpError as e:
             logger.error(f'{e}')
             mainlogger.error(f'{e}')
-            apis = [curr_api for curr_api in apis if curr_api._is_available() and curr_api.API_KEY != api.API_KEY]
+            apis = [curr_api for curr_api in apis if curr_api._is_available() and curr_api._SEARCH_ENGINE_ID != api._SEARCH_ENGINE_ID]
             api = apis[0]
             logger.info(f'So using {api.API_KEY}')
             mainlogger.info(f'So using {api.API_KEY}')
@@ -242,10 +242,10 @@ class GoogleAPI:
         """
         API_DAY_LIMIT = 100
         self._time_elapsed = now() - self._db_ref.last_access
-        
+
         if self._db_ref.usage_count >= API_DAY_LIMIT and self._time_elapsed.total_seconds() < self._ONE_DAY:
             return False
-        
+
         return True
 
 if __name__ == "__main__":
