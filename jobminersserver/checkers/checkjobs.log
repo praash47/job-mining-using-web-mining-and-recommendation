@@ -854,3 +854,182 @@
 2021-12-29 20:05:06,684 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
 2021-12-29 20:05:06,685 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
 2021-12-29 20:05:06,685 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:15:10,356 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:15:10,356 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 21:15:10,357 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:16:01,140 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:16:01,140 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 21:16:01,141 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:17:09,307 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:17:09,307 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 21:17:09,307 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:22:28,205 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:22:28,206 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: ['https://jobs.unops.org/']
+2021-12-29 21:22:28,211 | checkjobwebsite | check_single_url - INFO: https://jobs.unops.org/ failed the jobs. test
+2021-12-29 21:22:28,211 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:25:11,671 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:25:11,671 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 21:25:11,672 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:26:01,054 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:26:01,054 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 21:26:01,055 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:28:37,873 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:28:37,874 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 21:28:37,874 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:33:08,109 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:33:08,109 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 21:33:08,110 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:33:31,973 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:33:31,973 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 21:33:31,974 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:34:13,023 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:34:13,023 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 21:34:13,024 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:34:36,869 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:34:36,869 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 21:34:36,869 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:35:44,624 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:35:44,625 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 21:35:44,626 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:59:06,509 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:59:06,510 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 21:59:06,511 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 21:59:32,837 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 21:59:32,837 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 21:59:32,838 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 22:00:57,064 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 22:00:57,065 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 22:00:57,065 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-29 22:01:46,541 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-29 22:01:46,541 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-29 22:01:46,541 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-30 15:02:21,339 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:02:21,341 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.kumarijob.com/', 'https://www.jobejee.com/', 'https://www.allnepaljob.com/', 'https://getjobnepal.com/', 'https://nepalhealthjob.com/', 'https://jobs.unops.org/', 'https://www.globaljob.com.np/', 'https://kantipurjob.com/']
+2021-12-30 15:02:22,595 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobsnepal.com/
+2021-12-30 15:02:23,773 | checkjobwebsite | check_urls - INFO: Verifying https://merojob.com/
+2021-12-30 15:02:24,443 | checkjobwebsite | check_urls - INFO: Verifying https://www.ramrojob.com/
+2021-12-30 15:02:27,817 | checkjobwebsite | check_urls - INFO: Verifying https://www.merorojgari.com/
+2021-12-30 15:02:33,363 | checkjobwebsite | check_urls - INFO: Verifying https://www.kumarijob.com/
+2021-12-30 15:02:34,404 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobejee.com/
+2021-12-30 15:02:36,733 | checkjobwebsite | check_urls - INFO: Verifying https://www.allnepaljob.com/
+2021-12-30 15:02:43,036 | checkjobwebsite | check_urls - INFO: Verifying https://getjobnepal.com/
+2021-12-30 15:02:44,009 | checkjobwebsite | check_single_url - INFO: https://nepalhealthjob.com/ failed the andorjob test
+2021-12-30 15:02:44,031 | checkjobwebsite | check_single_url - INFO: https://jobs.unops.org/ failed the jobs. test
+2021-12-30 15:02:45,534 | checkjobwebsite | check_single_url - INFO: https://www.globaljob.com.np/ failed the andorjob test
+2021-12-30 15:02:47,023 | checkjobwebsite | check_urls - INFO: Verifying https://kantipurjob.com/
+2021-12-30 15:02:47,084 | checkjobwebsite | check_urls - INFO: Verified ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.kumarijob.com/', 'https://www.jobejee.com/', 'https://www.allnepaljob.com/', 'https://getjobnepal.com/', 'https://kantipurjob.com/'] to be new job websites.
+2021-12-30 15:07:56,687 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:07:56,689 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.kumarijob.com/', 'https://www.jobejee.com/', 'https://www.allnepaljob.com/', 'https://getjobnepal.com/', 'https://nepalhealthjob.com/', 'https://jobs.unops.org/', 'https://www.globaljob.com.np/', 'https://kantipurjob.com/']
+2021-12-30 15:07:57,652 | checkjobwebsite | check_single_url - INFO: https://nepalhealthjob.com/ failed the andorjob test
+2021-12-30 15:07:57,658 | checkjobwebsite | check_single_url - INFO: https://jobs.unops.org/ failed the jobs. test
+2021-12-30 15:08:00,192 | checkjobwebsite | check_single_url - INFO: https://www.globaljob.com.np/ failed the andorjob test
+2021-12-30 15:08:00,196 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-30 15:15:47,909 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:15:47,910 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.kumarijob.com/', 'https://www.jobejee.com/', 'https://www.allnepaljob.com/', 'https://getjobnepal.com/', 'https://nepalhealthjob.com/', 'https://jobs.unops.org/', 'https://www.globaljob.com.np/', 'https://kantipurjob.com/']
+2021-12-30 15:15:48,887 | checkjobwebsite | check_single_url - INFO: https://nepalhealthjob.com/ failed the andorjob test
+2021-12-30 15:15:48,890 | checkjobwebsite | check_single_url - INFO: https://jobs.unops.org/ failed the jobs. test
+2021-12-30 15:15:50,074 | checkjobwebsite | check_single_url - INFO: https://www.globaljob.com.np/ failed the andorjob test
+2021-12-30 15:15:50,077 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-30 15:16:26,057 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:16:26,060 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.kumarijob.com/', 'https://www.jobejee.com/', 'https://www.allnepaljob.com/', 'https://getjobnepal.com/', 'https://nepalhealthjob.com/', 'https://jobs.unops.org/', 'https://www.globaljob.com.np/', 'https://kantipurjob.com/']
+2021-12-30 15:16:27,487 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobsnepal.com/
+2021-12-30 15:16:29,305 | checkjobwebsite | check_urls - INFO: Verifying https://merojob.com/
+2021-12-30 15:16:30,508 | checkjobwebsite | check_urls - INFO: Verifying https://www.ramrojob.com/
+2021-12-30 15:16:32,284 | checkjobwebsite | check_urls - INFO: Verifying https://www.merorojgari.com/
+2021-12-30 15:16:38,503 | checkjobwebsite | check_urls - INFO: Verifying https://www.kumarijob.com/
+2021-12-30 15:16:39,110 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobejee.com/
+2021-12-30 15:16:40,263 | checkjobwebsite | check_urls - INFO: Verifying https://www.allnepaljob.com/
+2021-12-30 15:16:43,912 | checkjobwebsite | check_urls - INFO: Verifying https://getjobnepal.com/
+2021-12-30 15:16:45,236 | checkjobwebsite | check_single_url - INFO: https://nepalhealthjob.com/ failed the andorjob test
+2021-12-30 15:16:45,237 | checkjobwebsite | check_single_url - INFO: https://jobs.unops.org/ failed the jobs. test
+2021-12-30 15:16:46,156 | checkjobwebsite | check_single_url - INFO: https://www.globaljob.com.np/ failed the andorjob test
+2021-12-30 15:16:47,018 | checkjobwebsite | check_urls - INFO: Verifying https://kantipurjob.com/
+2021-12-30 15:16:47,056 | checkjobwebsite | check_urls - INFO: Verified ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.kumarijob.com/', 'https://www.jobejee.com/', 'https://www.allnepaljob.com/', 'https://getjobnepal.com/', 'https://kantipurjob.com/'] to be new job websites.
+2021-12-30 15:24:39,246 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:24:39,247 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.kumarijob.com/', 'https://www.jobejee.com/', 'https://www.allnepaljob.com/', 'https://getjobnepal.com/', 'https://nepalhealthjob.com/', 'https://jobs.unops.org/', 'https://www.globaljob.com.np/', 'https://kantipurjob.com/']
+2021-12-30 15:24:40,429 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobsnepal.com/
+2021-12-30 15:24:42,149 | checkjobwebsite | check_urls - INFO: Verifying https://merojob.com/
+2021-12-30 15:24:44,450 | checkjobwebsite | check_urls - INFO: Verifying https://www.ramrojob.com/
+2021-12-30 15:24:46,798 | checkjobwebsite | check_urls - INFO: Verifying https://www.merorojgari.com/
+2021-12-30 15:24:53,611 | checkjobwebsite | check_urls - INFO: Verifying https://www.kumarijob.com/
+2021-12-30 15:24:54,968 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobejee.com/
+2021-12-30 15:24:57,143 | checkjobwebsite | check_urls - INFO: Verifying https://www.allnepaljob.com/
+2021-12-30 15:25:00,323 | checkjobwebsite | check_urls - INFO: Verifying https://getjobnepal.com/
+2021-12-30 15:25:01,310 | checkjobwebsite | check_single_url - INFO: https://nepalhealthjob.com/ failed the andorjob test
+2021-12-30 15:25:01,312 | checkjobwebsite | check_single_url - INFO: https://jobs.unops.org/ failed the jobs. test
+2021-12-30 15:25:02,594 | checkjobwebsite | check_single_url - INFO: https://www.globaljob.com.np/ failed the andorjob test
+2021-12-30 15:25:04,542 | checkjobwebsite | check_urls - INFO: Verifying https://kantipurjob.com/
+2021-12-30 15:25:04,580 | checkjobwebsite | check_urls - INFO: Verified ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.kumarijob.com/', 'https://www.jobejee.com/', 'https://www.allnepaljob.com/', 'https://getjobnepal.com/', 'https://kantipurjob.com/'] to be new job websites.
+2021-12-30 15:32:03,591 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:32:03,606 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.jobejee.com/', 'https://www.kumarijob.com/', 'https://www.allnepaljob.com/', 'https://getjobnepal.com/', 'https://nepalhealthjob.com/', 'https://jobs.unops.org/', 'https://www.globaljob.com.np/', 'https://kantipurjob.com/']
+2021-12-30 15:32:05,121 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobsnepal.com/
+2021-12-30 15:32:06,306 | checkjobwebsite | check_urls - INFO: Verifying https://merojob.com/
+2021-12-30 15:32:07,488 | checkjobwebsite | check_urls - INFO: Verifying https://www.ramrojob.com/
+2021-12-30 15:32:09,856 | checkjobwebsite | check_urls - INFO: Verifying https://www.merorojgari.com/
+2021-12-30 15:32:10,665 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobejee.com/
+2021-12-30 15:32:17,245 | checkjobwebsite | check_urls - INFO: Verifying https://www.kumarijob.com/
+2021-12-30 15:32:19,623 | checkjobwebsite | check_urls - INFO: Verifying https://www.allnepaljob.com/
+2021-12-30 15:32:22,462 | checkjobwebsite | check_urls - INFO: Verifying https://getjobnepal.com/
+2021-12-30 15:32:23,476 | checkjobwebsite | check_single_url - INFO: https://nepalhealthjob.com/ failed the andorjob test
+2021-12-30 15:32:23,480 | checkjobwebsite | check_single_url - INFO: https://jobs.unops.org/ failed the jobs. test
+2021-12-30 15:32:25,589 | checkjobwebsite | check_single_url - INFO: https://www.globaljob.com.np/ failed the andorjob test
+2021-12-30 15:32:26,892 | checkjobwebsite | check_urls - INFO: Verifying https://kantipurjob.com/
+2021-12-30 15:32:26,969 | checkjobwebsite | check_urls - INFO: Verified ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.jobejee.com/', 'https://www.kumarijob.com/', 'https://www.allnepaljob.com/', 'https://getjobnepal.com/', 'https://kantipurjob.com/'] to be new job websites.
+2021-12-30 15:34:14,808 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:34:14,811 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.kumarijob.com/', 'https://www.jobejee.com/', 'https://www.allnepaljob.com/', 'https://getjobnepal.com/', 'https://nepalhealthjob.com/', 'https://jobs.unops.org/', 'https://www.globaljob.com.np/', 'https://kantipurjob.com/']
+2021-12-30 15:34:16,036 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobsnepal.com/
+2021-12-30 15:34:17,347 | checkjobwebsite | check_urls - INFO: Verifying https://merojob.com/
+2021-12-30 15:34:18,276 | checkjobwebsite | check_urls - INFO: Verifying https://www.ramrojob.com/
+2021-12-30 15:34:21,163 | checkjobwebsite | check_urls - INFO: Verifying https://www.merorojgari.com/
+2021-12-30 15:34:29,328 | checkjobwebsite | check_urls - INFO: Verifying https://www.kumarijob.com/
+2021-12-30 15:34:30,847 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobejee.com/
+2021-12-30 15:34:32,818 | checkjobwebsite | check_urls - INFO: Verifying https://www.allnepaljob.com/
+2021-12-30 15:34:35,334 | checkjobwebsite | check_urls - INFO: Verifying https://getjobnepal.com/
+2021-12-30 15:34:36,362 | checkjobwebsite | check_single_url - INFO: https://nepalhealthjob.com/ failed the andorjob test
+2021-12-30 15:34:36,364 | checkjobwebsite | check_single_url - INFO: https://jobs.unops.org/ failed the jobs. test
+2021-12-30 15:34:37,595 | checkjobwebsite | check_single_url - INFO: https://www.globaljob.com.np/ failed the andorjob test
+2021-12-30 15:34:38,879 | checkjobwebsite | check_urls - INFO: Verifying https://kantipurjob.com/
+2021-12-30 15:34:38,921 | checkjobwebsite | check_urls - INFO: Verified ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.kumarijob.com/', 'https://www.jobejee.com/', 'https://www.allnepaljob.com/', 'https://getjobnepal.com/', 'https://kantipurjob.com/'] to be new job websites.
+2021-12-30 15:36:24,182 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:36:24,182 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.kumarijob.com/', 'https://www.jobejee.com/']
+2021-12-30 15:36:25,571 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobsnepal.com/
+2021-12-30 15:36:26,965 | checkjobwebsite | check_urls - INFO: Verifying https://merojob.com/
+2021-12-30 15:36:27,857 | checkjobwebsite | check_urls - INFO: Verifying https://www.ramrojob.com/
+2021-12-30 15:36:29,621 | checkjobwebsite | check_urls - INFO: Verifying https://www.merorojgari.com/
+2021-12-30 15:36:36,058 | checkjobwebsite | check_urls - INFO: Verifying https://www.kumarijob.com/
+2021-12-30 15:36:37,339 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobejee.com/
+2021-12-30 15:36:37,427 | checkjobwebsite | check_urls - INFO: Verified ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.kumarijob.com/', 'https://www.jobejee.com/'] to be new job websites.
+2021-12-30 15:45:34,468 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:45:34,469 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-30 15:45:34,469 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-30 15:46:21,249 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:46:21,249 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-30 15:46:21,250 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-30 15:48:55,739 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:48:55,739 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-30 15:48:55,739 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-30 15:49:18,474 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:49:18,474 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-30 15:49:18,474 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-30 15:51:13,448 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:51:13,448 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-30 15:51:13,449 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-30 15:51:33,067 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:51:33,068 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-30 15:51:33,069 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-30 15:57:45,998 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 15:57:45,998 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.allnepaljob.com/']
+2021-12-30 15:57:48,085 | checkjobwebsite | check_urls - INFO: Verifying https://www.allnepaljob.com/
+2021-12-30 15:57:48,118 | checkjobwebsite | check_urls - INFO: Verified ['https://www.allnepaljob.com/'] to be new job websites.
+2021-12-30 16:04:47,672 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 16:04:47,673 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-30 16:04:47,674 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-30 16:19:23,912 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 16:19:23,912 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-30 16:19:23,913 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-30 17:57:04,592 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 17:57:04,686 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-30 17:57:04,698 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.
+2021-12-30 18:00:30,424 | checkjobwebsite | __init__ - INFO: CheckJobWebsite object created
+2021-12-30 18:00:30,432 | checkjobwebsite | __init__ - INFO: Only Homepage based websites: []
+2021-12-30 18:00:30,436 | checkjobwebsite | check_urls - INFO: Verified [] to be new job websites.

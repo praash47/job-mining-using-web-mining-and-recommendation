@@ -2,6 +2,7 @@ from jobdetailsextractor.models import Job
 from .jobextractor import extract_jobs
 import schedule
 from backend.main import check_for_new_job_website_urls, check_deadline_existing_job
+from django_eventstream import send_event
 
 import time
 import logging
@@ -12,6 +13,7 @@ class Timer():
         pass
 
     def run(self):
+        send_event('test', 'message', 'Asim')
         schedule.every().day.at('00:00').do(check_deadline_existing_job)
         schedule.every().day.at('00:00').do(check_for_new_job_website_urls)
         schedule.every().day.at('00:00').do(self.check_pending_job_urls)

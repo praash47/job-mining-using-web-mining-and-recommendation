@@ -96,7 +96,7 @@ class NonAJAX:
         for i in range(1, self.ESTD_JOBS_IN_PAGE):
             try:
                 xpath = xpath_init + str(i) + xpath_end
-                print(xpath)
+                print(response.url , response.tree.xpath(xpath))
                 # Get the text and href i.e. url and save into the self.jobs
                 element_text = response.tree.xpath(xpath)[0].text_content()
                 element_href = response.tree.xpath(xpath)[0].text_content()
