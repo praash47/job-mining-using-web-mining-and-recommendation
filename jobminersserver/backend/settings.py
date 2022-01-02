@@ -164,6 +164,10 @@ LOGGING = {
         'interactor': {
             'handlers': ['interactor'],
             'level': 'INFO',
+        },
+        'jobdetailsextractor': {
+            'handlers': ['jobdetailsextractor'],
+            'level': 'INFO',
         }
     },
     'formatters': {
@@ -190,6 +194,11 @@ LOGGING = {
         'interactor': {
             'class': 'logging.FileHandler',
             'filename': './interactor/interactor.log',
+            'formatter': 'default',
+        },
+        'jobdetailsextractor': {
+            'class': 'logging.FileHandler',
+            'filename': './jobdetailsextractor/jobdetailsextractor.log',
             'formatter': 'default',
         }
     },

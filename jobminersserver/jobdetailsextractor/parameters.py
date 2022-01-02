@@ -7,6 +7,11 @@ from requests.api import request
 from nltk.tokenize import RegexpTokenizer
 
 import string
+import logging
+
+logger = logging.getLogger('jobdetailsextractor')
+mainlogger = logging.getLogger('main')
+
 
 class Parameters:
     def __init__(self, job_block_xpath, tree, web_structure, website=None):
@@ -71,6 +76,7 @@ class Parameters:
 
         if len(parameters_discovered) < 4 or not self.parameters_xpath_dict['description_xpath']:
             parameters_discovered = self.get_parameters_from_node(root=self.job_block_tree.getroot(), xpaths_dict=xpaths_dict)
+            logger.info(f"get_core_pararmeters{parameters_discovered}")
         
         self.values_from_xpaths(xpaths_dict)
         self.parameters_dict['description'] = self.get_paragraph_values(self.keywords['description'])
@@ -117,13 +123,19 @@ class Parameters:
             self.parameters_dict['company_name'] = company_name
             self.parameters_xpath_dict['company_name_xpath'] = company_name_xpath
             self.find_company_info(company_name, company_name_xpath)
+        
+            logger.info(f"company name and xpath found{company_name}--{company_xpath}")
 
+        logger.info(f"Got Parameters {self.parameters_discovered} from node")
+        mainlogger.info(f"Got Parameters  {self.parameters_discovered} from node")
         return parameters_discovered
 
     def match_company_email(self, text):
         email_regex = self.parser.get('parameters', 'email_regex')
         match = re.search(email_regex, text)
-        try: return match.group(0)
+        try: 
+            return match.group(0)
+            logger.info(f"company email is mathced{match}") 
         except: return None
 
     def match_company_name(self, text, node):
@@ -135,6 +147,7 @@ class Parameters:
                     return ent.text, self.self.job_block_tree.getpath(node)
             if re.findall(company_name_regex, string.capwords(text).replace("'", "")):
                 return re.findall(company_name_regex, string.capwords(text).replace("'", ""))[0], self.job_block_tree.getpath(node)
+                logger.info(f"Company name is matched")
             return None, None
         return None, None
 
@@ -155,13 +168,14 @@ class Parameters:
 
     def get_xpath(self, node, node_text, parameter):
         if node_text == parameter or node_text in self.keywords[parameter]:
+            logger.info(f"xpath is obtained")
             return self.job_block_tree.getpath(node)
 
     def clean_text(self, text):
         text = re.sub(' +', ' ', text)
         text = text.lower().replace(':', '').replace('\\n', '').replace('\n', '').strip()
         text = text.replace('\\r', '').replace('\\s', '')
-
+        logger.info(f"clean text{text} is obtained")
         return text
 
     def find_company_info(self, company_name, company_name_xpath):
@@ -212,11 +226,13 @@ class Parameters:
                             if alternative_name in parent_text:
                                 parent_text = parent_text.replace(alternative_name, '').strip()
                                 self.parameters_dict[key] = parent_text
+                                
                     else:
                         while node.getnext().text_content() in self.symbols_to_omit:
                             node = node.getnext()
                         key = key.replace('_xpath', '')
                         self.parameters_dict[key] = self.clean_text(node.getnext().text_content())
+                        logger.info(f"Values is got from xpath{self.parameters_dict[key]}")
                 except: pass
 
         # misc text property extraction
@@ -227,6 +243,7 @@ class Parameters:
                 if not node.getchildren() and \
                 node_text not in self.symbols_to_omit and \
                 node_text in self.interested_parameters:
+                    logger.info(f"miscellanous text {node_text} is extracted")
                     self.assign_misc_parameters_value(node, node_text)
 
     def assign_misc_parameters_value(self, node, node_text):
@@ -277,6 +294,7 @@ class Parameters:
         parent = node.getparent()
         while not parent.tag == 'div':
             parent = parent.getparent()
+        logger.info(f"parent is obtained")
         return parent
                         
     def store_xpaths(self, xpaths_dict):
@@ -288,6 +306,7 @@ class Parameters:
             self.web_structure.level_xpath = self.parameters_xpath_dict['level_xpath']
             self.web_structure.qualification_xpath = self.parameters_xpath_dict['qualifications_xpath']
             self.web_structure.experience_xpath = self.parameters_xpath_dict['experiences_xpath']
+            logger.info(f"since xpath is not already stored xpath is stored")
         if not self.web_structure.company_name_xpath and not self.web_structure.company_description_xpath:
             if self.parameters_xpath_dict['company_name_xpath'] and self.parameters_xpath_dict['company_info_xpath']: 
                self.web_structure.company_name_xpath = self.parameters_xpath_dict['company_name_xpath'] 
