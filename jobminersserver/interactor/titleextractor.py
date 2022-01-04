@@ -163,7 +163,6 @@ class TitleExtractor:
             if pages_left:
                 # Jobs are actually scraped out using this.
                 pag_na_website.get_jobs_for_page(title_xpath, response)
-
                 new_response = obj._mock_scrapy_response(pag_na_website.site.pages.page_url)
                 obj._scrape_job_urls(response=new_response, na_website=pag_na_website, title_xpath=title_xpath)
 

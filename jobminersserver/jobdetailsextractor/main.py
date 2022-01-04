@@ -2,6 +2,7 @@
 from .deadline import Deadline
 from lxml import html
 from requestutils.request import Request
+from jobdetailsextractor.models import Job
 
 from configparser import ConfigParser
 from .parameters import Parameters
@@ -31,7 +32,7 @@ class JobDetails:
         
         # Get Website and Website Structure, store if not there.
         from .models import WebsiteStructure, Job
-        self.website = Job.objects.get(url=self.url).website
+        self.website = Job.objects.filter(url=self.url).first().website
         self.web_structure, _ = WebsiteStructure.objects.get_or_create(website=self.website)
         if self.web_structure.deadline_xpath:
             self.deadline = Deadline(self.tree, xpath=self.web_structure.deadline_xpath)
@@ -47,6 +48,7 @@ class JobDetails:
         self.tree = request.get_html_tree()
     
     def get_details(self):
+        self.deadline.tree = self.tree
         self.parameters = \
             Parameters(
                 self.get_job_block_xpath(),
@@ -85,7 +87,9 @@ class JobDetails:
         )
 
     def get_job_block_xpath(self):
-        self.deadline.get_deadline_date(self.html_page)
+        if not self.deadline.get_deadline_date(self.html_page):
+            job = Job.objects.filter(url=self.url).first()
+            job.delete()
         if not self.web_structure.deadline_xpath: self.web_structure.deadline_xpath = self.deadline.xpath
         name_xpath = self.get_name_xpath()
         
@@ -116,7 +120,8 @@ class JobDetails:
 
     def store_into_database(self):
         from .models import Job
-        job = Job.objects.get(website=self.website, url=self.url)
+        job = Job.objects.filter(url=self.url).first()
+        if not job: return
         job.deadline = self.deadline.deadline
         job.job_skills = set(self.skill_set)
         job.company_name = self.parameters.parameters_dict['company_name']

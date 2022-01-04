@@ -6,7 +6,7 @@ from nltk.stem import WordNetLemmatizer
 
 class SkillSet():
     def __init__(self):
-        skills = pd.read_csv('/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/all_skills.csv')
+        skills = pd.read_csv('/home/aasis/Documents/jobminersserver/jobdetailsextractor/all_skills.csv')
         self.all_skills = set(skills['skill'])
         self.stop_words = set(stopwords.words('english'))
         self.lemmatizer = WordNetLemmatizer()

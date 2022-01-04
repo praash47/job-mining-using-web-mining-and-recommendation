@@ -7,4 +7,4 @@ class JobSeeker(models.Model):
     skill_set = models.TextField(null=True)
 
     def __str__(self) -> str:
-        return str(self.url)
+        return str(self.user)

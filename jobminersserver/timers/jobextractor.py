@@ -1,3 +1,5 @@
+
+  
 import datetime
 from configparser import ConfigParser
 from checkers.models import JobWebsite
@@ -9,7 +11,7 @@ from jobdetailsextractor.main import JobDetails
 
 def extract_jobs(pending_jobs):
     # for parameter options
-    CONFIG = '/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/timers/timersettings.ini'
+    CONFIG = '/home/aasis/Documents/jobminersserver/timers/timersettings.ini'
     parser = ConfigParser()
     parser.read(CONFIG)
     server_wait_time = datetime.timedelta(minutes=float(parser.get('times', 'server_wait_time')))
@@ -20,6 +22,7 @@ def extract_jobs(pending_jobs):
             if job.website == job_website:
                 job_start_time = datetime.datetime.now()
                 job_details = JobDetails(job.url, job.title)
+                print(job.url, job.title, pending_jobs)
                 job_details.fetch()
                 job_details.get_details()
                 job_details.store_into_database()

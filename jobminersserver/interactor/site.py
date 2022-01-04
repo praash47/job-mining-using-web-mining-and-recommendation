@@ -4,6 +4,8 @@ from .xpather import Xpather
 
 from .exceptions import NoTwoMatchingTitles
 
+from lxml import etree
+
 import logging
 logger = logging.getLogger('interactor')
 mainlogger = logging.getLogger('main')
@@ -96,10 +98,13 @@ class NonAJAX:
         for i in range(1, self.ESTD_JOBS_IN_PAGE):
             try:
                 xpath = xpath_init + str(i) + xpath_end
-                print(response.url , response.tree.xpath(xpath))
+                element = response.tree.xpath(xpath)[0]
+                if not element: break
                 # Get the text and href i.e. url and save into the self.jobs
-                element_text = response.tree.xpath(xpath)[0].text_content()
-                element_href = response.tree.xpath(xpath)[0].text_content()
+                print(element.text_content())
+                print(element.attrib('href'))
+                element_text = element.text_content()
+                element_href = element.attrib('href')
                 if element_text and element_href:
                     self.jobs[element_text] = element_href
-            except: break
+            except Exception as e: print(e)

@@ -17,7 +17,7 @@ import datefinder
 import datetime
 
 import re
-from lxml import html
+from lxml import html, etree
 from requests.api import request
 
 class Deadline:
@@ -58,7 +58,7 @@ class Deadline:
         self.xpath = xpath
 
         # for deadline options
-        CONFIG = '/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini'
+        CONFIG = '/home/aasis/Documents/jobminersserver/jobdetailsextractor/extraction_options.ini'
         self.parser = ConfigParser()
         self.parser.read(CONFIG)
         # commonly used words in the deadline such as Apply before,
@@ -87,6 +87,8 @@ class Deadline:
             self.check_deadline_words()
             self.assign_deadline_otherwise()
             self.get_xpath()
+            if not self.deadline: return False
+            else: return True
 
     def get_probable_dates(self):
         """
@@ -112,7 +114,8 @@ class Deadline:
         it in the self.tags_with_date_string variable.
         """
         for tag in self.soup.findAll():
-            if tag.string and not tag.name == 'script':  # ignore <script>:
+            if tag.string and not tag.name == 'script' and not tag.name == 'title':  
+                # ignore <script> & title:
                 # match the date string and find the tags
                 if str(tag.string) in self.probable_date_strings:
                     self.tags_with_date_string.append(tag.name)
@@ -252,14 +255,24 @@ class Deadline:
         Uses a list because there may be more than one string that
         matches the deadline string.
         """
+        if not self.deadline: return
         deadline_xpaths = []
         for tag_name in self.tags_with_date_string:
             for tag in self.soup.findAll(tag_name):
                 try:
                     if list(datefinder.find_dates(str(tag.string)))[0] == self.deadline:
-                        element = self.tree.xpath(f"//{tag.name}[contains(text(), '{str(tag.string)}')]")[0]
+                        element = None
+                        try: root = self.tree.getroot().getchildren()
+                        except: pass
+                        
+                        for parent in root:
+                            for node in parent.iter(tag=etree.Element):
+                                if not node.getchildren():
+                                    if node.text_content():
+                                        if node.text_content() == tag.string:
+                                            element = node
                         deadline_xpaths.append(self.tree.getpath(element))
-                except:
+                except Exception:
                     try:
                         # if common deadline word is in the nested tag. 
                         if self.check_for_nested_tag_label(tag, \

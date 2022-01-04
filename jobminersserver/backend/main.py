@@ -14,7 +14,8 @@ mainlogger = logging.getLogger('main')
 
 def check_deadline_existing_job():
     for job in Job.objects.all():
-        if job.deadline < datetime.datetime.now():
+        if job.deadline:
+         if job.deadline < datetime.datetime.now():
             job.delete()
 
 def check_for_new_job_website_urls():

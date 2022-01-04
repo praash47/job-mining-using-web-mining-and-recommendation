@@ -1,127 +1,193 @@
 from django.http.response import JsonResponse
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.models import User
 from recommender.models import JobSeeker
 from jobdetailsextractor.models import Job
 
+from django.middleware.csrf import get_token
+from django.views.decorators.csrf import csrf_exempt
+
 import json
 
-# Create your views here.
+@csrf_exempt
 def register(request):
-    if request.POST['action'] == 'username_check':
-        username = request.POST['username']
-        if User.objects.filter(username=username).first(): return JsonResponse({'message', 'username exists!'})
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    if body['action'] == 'username_check':
+        username = body['username']
+        if User.objects.filter(username=username).first(): 
+            return JsonResponse({'message': 'username exists!',})
         else: return JsonResponse({})
 
-    elif request.POST['action'] == 'update':
-        username = request.POST['username']
-        email = request.POST['email']
-        skills = request.POST['skills']
-        user = User.objects.get(username=request.COOKIES.get('user'))
+    elif body['action'] == 'email_needed':
+        username = body['username']
+        return JsonResponse({'email': User.objects.get(username=username).email})
+
+    elif body['action'] == 'update':
+        ousername = body['ousername']
+        username = body['username']
+        email = body['email']
+        skills = body['skills']
+        user = User.objects.get(username=ousername)
         user.username = username
         user.email = email
         user.save()
         jobseeker = JobSeeker.objects.get(user=user)
-        jobseeker.skills_set = skills
+        jobseeker.skill_set = skills
         jobseeker.save()
 
-        return JsonResponse({'message', 'successfully updated!'})
+        return JsonResponse({
+            'message': 'successfully updated!',
+            'user': user.username
+        })
 
-    elif request.POST['action'] == 'change_password':
-        user = User.objects.get(username=request.COOKIES.get('user'))
-        password = request.POST['password']
-        new_password = request.POST['new_password']
-        if not password == user.password: return JsonResponse({'message': 'wrong old password!'})
+    elif body['action'] == 'change_password':
+        username = body['username']
+        user = User.objects.get(username=username)
+        password = body['password']
+        new_password = make_password(body['new_password'])
+        if check_password(password, user.password):
+            user.password = new_password
+            user.save()
+            return JsonResponse({'message': 'password change successful'})
+        else: return JsonResponse({'message': 'wrong old password!'})
 
-        user.password = new_password
-        user.save()
-        return JsonResponse({'message': 'password change successful'})
+    elif body['action'] == 'skills_insert':
+        skills = body['skills']
+        username = body['username']
+        job_seeker = JobSeeker.objects.get(user=User.objects.get(username=username))
+        job_seeker.skill_set = skills
+        job_seeker.save()
+
+        return JsonResponse({'message': 'successfully inserted!'})
+
+    elif body['action'] == 'skills_check':
+        username = body['username']
+    
+        user = User.objects.get(username=username)
+        job_seeker = JobSeeker.objects.get(user=user)
+        
+        return JsonResponse({'skills': job_seeker.skill_set}) 
 
     else:
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
-        skills = request.POST['skills']
-        user, created = User.objects.get_or_create(
-            username=username,
-            password=password,
-            email=email
+        username = body['username']
+        email = body['email']
+        password = make_password(body['password'])
+        user= User.objects.create(
+        username=username,
+        password=password,
+        email=email
         )
-        if not created: return JsonResponse({'message': 'user already exists!'})
 
         user.save()
-        jobseeker = JobSeeker.objects.create(user=user, skill_set=skills)
+        jobseeker = JobSeeker.objects.create(user=user)
         jobseeker.save()
-        return JsonResponse({'message': 'successfully registered!'})
+        return JsonResponse({
+            'message': 'successfully registered!',
+            'user': user.username,
+        })
 
+@csrf_exempt
 def log_in_user(request):
-    username = request.POST['username']
-    password = request.POST['password']
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    username = body['username']
+    password = body['password']
 
-    user = authenticate(request, username=username, password=password)
+    user = User.objects.filter(username=username).first()
 
     if user is not None:
-        login(request, user)
-        response = JsonResponse({'message': 'user logged in'})
-        response.set_cookie(key='user', value=f'{user.get_username()}', max_age=9999999)
-        return response
-    else:
-        return {'message': "username or password doesn't match!"}
+        if check_password(password, user.password):
+            login(request, user)
+            return JsonResponse({
+                'message': 'user logged in',
+                'user': user.username
+            })
+    return JsonResponse({'message': "username or password doesn't match!"})
 
+@csrf_exempt
 def log_out_user(request):
     logout(request)
-    request.COOKIES.delete_cookie('user')
-    
+        
     return JsonResponse({'message': 'successfully logged out!'})
 
+@csrf_exempt
 def skills(request):
-    skills = set()
-    for job in Job.objects.all():
-        if job.job_skill != 'set()' and job.job_skill:
-            skills.union(set(job.job_skill.replace('{', '').replace('}', '').split(',')))
-    
-    return JsonResponse({'skills': list(skills)})
+    try:
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        username = body['username']
+        job_seeker = JobSeeker.objects.get(user=User.objects.get(username=username))
+        skills_list = job_seeker.skill_set.replace('[', '').replace(']', '')
+        skills_list = skills_list.replace(', ', ',').replace("'", "").split(',')
+        return JsonResponse({'skills': skills_list})
+    except Exception:
+        skills = set()
+        for job in Job.objects.all():
+            if job.job_skills:
+                skills_list = job.job_skills.replace('{', '').replace('}', '')
+                skills_list = skills_list.replace(', ', ',').replace("'", "").split(',')
+                skills = skills.union(set(skills_list))
+        return JsonResponse({'skills': list(skills)})
 
+@csrf_exempt
 def recommender(request):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
     similarity_dict = dict()
-    user_skills = request.POST['skills']
-    offset = int(request.POST['offset'])
+    matching_skills_dict = dict()
+    skills_list = body['skills']
+    user_skills = set(skills_list)
+    offset = int(body['offset'])
     n_results = 10
     for job in Job.objects.all():
-        job_skills = set(job.job_skills)
-        similarity_dict[job.title] = jaccard_similarity(job_skills, user_skills)
-        
+        if job.job_skills:
+            skills_list = job.job_skills.replace('{', '').replace('}', '')
+            skills_list = skills_list.replace(', ', ',').replace("'", "").split(',')
+            job_skills = set(skills_list)
+            similarity_dict[job.title], matching_skills_dict[job.title] = \
+                jaccard_similarity(job_skills, user_skills)
+
     similarity_dict = dict(sorted(similarity_dict.items(), key=lambda item: item[1], reverse=True))
-    
+    print(similarity_dict)
     result = []
     for i in range(n_results):
-        job = Job.objects.get(title=similarity_dict.keys()[i+offset])
-        to_sent_dict = dict()
-        to_sent_dict['title'] = job.title
-        to_sent_dict['deadline'] = job.deadline
-        to_sent_dict['skills'] = job.job_skills
-        to_sent_dict['qualification'] = job.qualifications
-        to_sent_dict['experience'] = job.experiences
-        to_sent_dict['description'] = job.description
-        to_sent_dict['salary'] = job.salary
-        to_sent_dict['location'] = job.location
-        to_sent_dict['level'] = job.level
-        result.append(json.dumps(to_sent_dict))
-    return JsonResponse(json.dumps(result))
+        try:
+            to_sent_dict = dict()
+            job = Job.objects.get(title=list(similarity_dict.keys())[i+offset])
+            to_sent_dict['title'] = job.title
+            to_sent_dict['id'] = job.id
+            to_sent_dict['deadline'] = job.deadline
+            to_sent_dict['skills'] = job.job_skills
+            to_sent_dict['qualification'] = job.qualifications
+            to_sent_dict['experience'] = job.experiences
+            to_sent_dict['description'] = job.description
+            to_sent_dict['salary'] = job.salary
+            to_sent_dict['location'] = job.location
+            to_sent_dict['level'] = job.level
+            to_sent_dict['matching_skills'] = matching_skills_dict[job.title]
+            result.append(json.dumps(to_sent_dict))
+        except: pass
+    return JsonResponse({'jobs': result})
 
 def jaccard_similarity(job_skills, candidate_skills):
     if job_skills:
         common_skills = set(job_skills) & set(candidate_skills)
         score = len(common_skills) / len(set(job_skills))
-        return score
+        return score, list(common_skills)
     else:
-        return 0
+        return 0, []
 
+@csrf_exempt
 def job(request):
-    title = request.POST['title']
-    job = Job.objects.get(title=title)
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    id = body['id']
+    job = Job.objects.get(id=id)
     job_object = {}
+    job_object['title'] = job.title
     job_object['deadline'] = job.deadline
     job_object['url'] = job.url
     job_object['skills'] = job.job_skills
@@ -133,9 +199,9 @@ def job(request):
     job_object['salary'] = job.salary
     job_object['n_vacancy'] = job.n_vacancy
     job_object['level'] = job.level
-    job_object['qualifications'] = job.qualifications
-    job_object['experiences'] = job.experiences
+    job_object['qualification'] = job.qualifications
+    job_object['experience'] = job.experiences
     job_object['misc'] = job.misc
     job_object['extracted'] = job.extracted
 
-    return JsonResponse(json.dumps(job_object))
+    return JsonResponse(job_object)
