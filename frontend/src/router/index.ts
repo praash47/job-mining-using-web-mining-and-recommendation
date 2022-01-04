@@ -1,11 +1,41 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import RegisterLogin from '../views/RegisterLogin.vue';
+import Skills from '../views/Skills.vue';
+import Recommend from '../views/Recommend.vue';
+import Job from '../views/Job.vue';
+import EditProfile from '../views/EditProfile.vue';
+import Daemon from '../views/Daemon.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'RegisterLogin',
     component: RegisterLogin,
+  },
+  {
+    path: '/skills',
+    name: 'Skills',
+    component: Skills,
+  },
+  {
+    path: '/recommend',
+    name: 'Recommend',
+    component: Recommend,
+  },
+  {
+    path: '/job/:id',
+    name: 'Job',
+    component: Job,
+  },
+  {
+    path: '/editprofile',
+    name: 'EditProfile',
+    component: EditProfile,
+  },
+  {
+    path: '/daemon',
+    name: 'Daemon',
+    component: Daemon,
   },
 ];
 

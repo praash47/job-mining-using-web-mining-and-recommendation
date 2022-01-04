@@ -1,52 +1,25 @@
 <template>
   <div class="body">
-    <div class="container-register">
-        <h1>Register</h1>
-        <div class="box-1">
-            <i class="fa fa-user"></i>
-            <input type="username" name="username" placeholder="Enter your username"
-            v-model="username">
-        </div>
-        <div class="box-1">
-            <i class="fa fa-envelope"></i>
-            <input type="email" name="email" id="email" placeholder="Enter your email">
-        </div>
-        <div class="box-1">
-            <i class="fa fa-key"></i>
-            <input type="password" name="password" id="password" placeholder="Enter your password">
-        </div>
-        <button class="btn">Register</button>
-    </div>
-
-    <div class="container-login">
-        <h1>Login</h1>
-        <div class="box-2">
-            <i class="fa fa-user"></i>
-            <input type="username" v-model="username" name="username"
-            placeholder="Enter your username">
-        </div>
-        <div class="box-2">
-            <i class="fa fa-key"></i>
-            <input type="password" name="password" id="password" placeholder="Enter your password">
-        </div>
-        <button class="btn">Login</button>
-    </div>
+    <Register @emit-snackbar="emitSnackbar" :message="message" />
+    <Login @emit-snackbar="emitSnackbar" :message="message" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import Register from '../components/Register.vue';
+import Login from '../components/Login.vue';
 
 export default defineComponent({
   name: 'RegisterLogin',
+  emits: ['emit-snackbar'],
+  props: ['message'],
   components: {
+    Register,
+    Login,
   },
   methods: {
-  },
-  data() {
-    return {
-      username: '',
-    };
+    emitSnackbar(message) { this.$emit('emit-snackbar', message); },
   },
 });
 </script>
@@ -152,4 +125,5 @@ export default defineComponent({
     width:25px;
     text-align:center;
 }
+
 </style>
