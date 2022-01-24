@@ -173,7 +173,7 @@ LOGGING = {
         },
         'jobdetailsextractor': {
             'handlers': ['jobdetailsextractor'],
-            'level': 'INFO',
+            'level': 'ERROR',
         }
     },
     'formatters': {

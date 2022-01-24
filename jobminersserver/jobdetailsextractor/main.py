@@ -9,6 +9,7 @@ from .parameters import Parameters
 from .skills import SkillSet
 
 from backend.misc import common_start
+from django_eventstream import send_event
 
 
 import re
@@ -57,40 +58,21 @@ class JobDetails:
                 self.website
             )
         
-        company_name_xpath = self.web_structure.company_name_xpath
-        company_desc_xpath = self.web_structure.company_description_xpath
-        location_xpath = self.web_structure.location_xpath
-        desc_xpath = self.web_structure.job_description_xpath
-        salary_xpath = self.web_structure.salary_xpath
-        no_vacancy_xpath = self.web_structure.no_vacancy_xpath
-        level_xpath = self.web_structure.level_xpath
-        qualification_xpath = self.web_structure.qualification_xpath
-        experience_xpath = self.web_structure.experience_xpath
-        
-        parameters_xpath_dict = None
-        if location_xpath:
-            parameters_xpath_dict = {
-                "company_name_xpath":company_name_xpath,
-                "company_info_xpath":company_desc_xpath,
-                "location_xpath":location_xpath,
-                "description_xpath":desc_xpath,
-                "salary_xpath":salary_xpath,
-                "n_vacancy_xpath":no_vacancy_xpath,
-                "level_xpath":level_xpath,
-                "qualifications_xpath":qualification_xpath,
-                "experiences_xpath":experience_xpath
-            }
-        
-        self.parameters.get_core_parameters(xpaths_dict=parameters_xpath_dict)
+        self.parameters.get_core_parameters()
         self.skill_set.get_skills(
             self.parameters.parameters_dict['description'] + self.parameters.parameters_dict['misc']
         )
 
     def get_job_block_xpath(self):
         if not self.deadline.get_deadline_date(self.html_page):
-            job = Job.objects.filter(url=self.url).first()
-            job.delete()
-        if not self.web_structure.deadline_xpath: self.web_structure.deadline_xpath = self.deadline.xpath
+            try:
+                job = Job.objects.get(self.url)
+                send_event('backend_daemon', 'message', {
+                    'currentMessage': f'Deleting job advert for {job.url}: Deadline Expired.',
+                    'messagePriority': 'error'
+                })
+                job.delete()
+            except: pass
         name_xpath = self.get_name_xpath()
         
         if not self.web_structure.name_xpath and name_xpath: self.web_structure.name_xpath = name_xpath
@@ -120,23 +102,24 @@ class JobDetails:
 
     def store_into_database(self):
         from .models import Job
-        job = Job.objects.filter(url=self.url).first()
-        if not job: return
-        job.deadline = self.deadline.deadline
-        job.job_skills = set(self.skill_set)
-        job.company_name = self.parameters.parameters_dict['company_name']
-        job.company_info = self.parameters.parameters_dict['company_info']
-        job.company_email = self.parameters.parameters_dict['company_email']
-        job.location = self.parameters.parameters_dict['location']
-        job.description = self.parameters.parameters_dict['description']
-        job.salary = self.parameters.parameters_dict['salary']
-        if self.parameters.parameters_dict['n_vacancy']: job.n_vacancy = re.findall(r'\d+', self.parameters.parameters_dict['n_vacancy'])[0]
-        job.level = self.parameters.parameters_dict['level']
-        job.qualifications = self.parameters.parameters_dict['qualifications']
-        job.experiences = self.parameters.parameters_dict['experiences']
-        job.misc = self.parameters.parameters_dict['misc']
-        job.extracted = True
-        job.save()
+        try: 
+            job = Job.objects.get(url=self.url)
+            job.deadline = self.deadline.deadline
+            job.job_skills = set(self.skill_set)
+            job.company_name = self.parameters.parameters_dict['company_name']
+            job.company_info = self.parameters.parameters_dict['company_info']
+            job.company_email = self.parameters.parameters_dict['company_email']
+            job.location = self.parameters.parameters_dict['location']
+            job.description = self.parameters.parameters_dict['description']
+            job.salary = self.parameters.parameters_dict['salary']
+            if self.parameters.parameters_dict['n_vacancy']: job.n_vacancy = re.findall(r'\d+', self.parameters.parameters_dict['n_vacancy'])[0]
+            job.level = self.parameters.parameters_dict['level']
+            job.qualifications = self.parameters.parameters_dict['qualifications']
+            job.experiences = self.parameters.parameters_dict['experiences']
+            job.misc = self.parameters.parameters_dict['misc']
+            job.extracted = True
+            job.save()
+        except Exception as e: print(e)
         
 if __name__ == '__main__':
     job_details = JobDetails('https://merojob.com/officer-corporate-advisory/', '''Hub Manager''')

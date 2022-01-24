@@ -5,13 +5,14 @@ from configparser import ConfigParser
 from checkers.models import JobWebsite
 import time
 from itertools import cycle
+from django_eventstream import send_event
 
 from jobdetailsextractor.models import Job
 from jobdetailsextractor.main import JobDetails
 
 def extract_jobs(pending_jobs):
     # for parameter options
-    CONFIG = '/home/aasis/Documents/jobminersserver/timers/timersettings.ini'
+    CONFIG = "C:/Users/Lenovo/job-mining-using-web-mining-and-recommendation/jobminersserver/timers/timersettings.ini"
     parser = ConfigParser()
     parser.read(CONFIG)
     server_wait_time = datetime.timedelta(minutes=float(parser.get('times', 'server_wait_time')))
@@ -20,6 +21,10 @@ def extract_jobs(pending_jobs):
     for job_website in cycle(job_websites):
         for job in pending_jobs:
             if job.website == job_website:
+                send_event('backend_daemon', 'message', {
+                    'currentMessage': f'Extracting For {job.website.name}: Job: {job.title}',
+                    'messagePriority': 'info'
+                })
                 job_start_time = datetime.datetime.now()
                 job_details = JobDetails(job.url, job.title)
                 print(job.url, job.title, pending_jobs)
@@ -35,4 +40,5 @@ def extract_jobs(pending_jobs):
                     time_to_sleep = server_wait_time - time_elapsed
                     print(time_to_sleep)
                     time.sleep(time_to_sleep.total_seconds())
+                break
         if not pending_jobs: break

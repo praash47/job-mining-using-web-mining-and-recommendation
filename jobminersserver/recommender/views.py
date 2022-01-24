@@ -154,28 +154,26 @@ def recommender(request):
     print(similarity_dict)
     result = []
     for i in range(n_results):
-        try:
-            to_sent_dict = dict()
-            job = Job.objects.get(title=list(similarity_dict.keys())[i+offset])
-            to_sent_dict['title'] = job.title
-            to_sent_dict['id'] = job.id
-            to_sent_dict['deadline'] = job.deadline
-            to_sent_dict['skills'] = job.job_skills
-            to_sent_dict['qualification'] = job.qualifications
-            to_sent_dict['experience'] = job.experiences
-            to_sent_dict['description'] = job.description
-            to_sent_dict['salary'] = job.salary
-            to_sent_dict['location'] = job.location
-            to_sent_dict['level'] = job.level
-            to_sent_dict['matching_skills'] = matching_skills_dict[job.title]
-            result.append(json.dumps(to_sent_dict))
-        except: pass
+        to_sent_dict = dict()
+        job = Job.objects.get(title=list(similarity_dict.keys())[i+offset])
+        to_sent_dict['title'] = job.title
+        to_sent_dict['id'] = job.id
+        to_sent_dict['deadline'] = str(job.deadline)
+        to_sent_dict['skills'] = job.job_skills
+        to_sent_dict['qualification'] = job.qualifications
+        to_sent_dict['experience'] = job.experiences
+        to_sent_dict['description'] = job.description
+        to_sent_dict['salary'] = job.salary
+        to_sent_dict['location'] = job.location
+        to_sent_dict['level'] = job.level
+        to_sent_dict['matching_skills'] = matching_skills_dict[job.title]
+        result.append(json.dumps(to_sent_dict))
     return JsonResponse({'jobs': result})
 
 def jaccard_similarity(job_skills, candidate_skills):
     if job_skills:
         common_skills = set(job_skills) & set(candidate_skills)
-        score = len(common_skills) / len(set(job_skills))
+        score = len(common_skills) / len(set(job_skills).union(set(candidate_skills)))
         return score, list(common_skills)
     else:
         return 0, []

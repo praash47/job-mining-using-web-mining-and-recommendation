@@ -17,33 +17,21 @@ class Timer():
         pass
 
     def run(self):
-        # priorities = ['info', 'error', 'scraping']
-        # message = 'Asim '
-        # max_messages = 200
-        # i = 1
-        # for priority in cycle(priorities):
-        #     if i > max_messages: break
-        #     send_event('backend_daemon', 'message', {
-        #         'currentMessage': message + str(i) + ' ' + priority,
-        #         'messagePriority': priority
-        #     })
-        #     time.sleep(random.randint(1, 4))
-        #     i += 1
-        # schedule.every().day.at('00:00').do(check_deadline_existing_job)
-        # schedule.every().day.at('00:00').do(check_for_new_job_website_urls)
-        # schedule.every().day.at('00:00').do(self.check_pending_job_urls)
+        schedule.every().day.at('00:00').do(check_deadline_existing_job)
+        schedule.every().day.at('00:00').do(check_for_new_job_website_urls)
+        schedule.every().day.at('00:00').do(self.check_pending_job_urls)
 
         # for the first bootup.
         # check_deadline_existing_job()
         # check_for_new_job_website_urls()
         self.check_pending_job_urls()
 
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
+        # while True:
+        #     schedule.run_pending()
+        #     time.sleep(1)
 
     def check_pending_job_urls(self):
-        with open('/home/aasis/Documents/jobminersserver/timers/sample.txt') as textfile:
+        with open("C:/Users/Lenovo/job-mining-using-web-mining-and-recommendation/jobminersserver/timers/sample.txt") as textfile:
             for line in textfile.readlines():
                 job_website, job_url, job_title = line.split(',')
                 job_website = JobWebsite.objects.get(url=job_website)

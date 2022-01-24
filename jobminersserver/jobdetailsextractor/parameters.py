@@ -49,7 +49,7 @@ class Parameters:
         }
 
         # for parameter options
-        CONFIG = '/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini'
+        CONFIG = "C:/Users/Lenovo/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini"
         self.parser = ConfigParser()
         self.parser.read(CONFIG)
         # interested parameters that we want to match
@@ -71,19 +71,21 @@ class Parameters:
         self.symbols_to_omit = \
             self.parser.get('parameters', 'symbols_to_omit').split(',')
     
-    def get_core_parameters(self, xpaths_dict=None):
-        parameters_discovered = self.get_parameters_from_node(root=self.job_block_root, xpaths_dict=xpaths_dict)
+    def get_core_parameters(self):
+        parameters_discovered = self.get_parameters_from_node(root=self.job_block_root)
 
-        if len(parameters_discovered) < 4 or not self.parameters_xpath_dict['description_xpath']:
-            parameters_discovered = self.get_parameters_from_node(root=self.job_block_tree.getroot(), xpaths_dict=xpaths_dict)
-            logger.info(f"get_core_pararmeters{parameters_discovered}")
+        if parameters_discovered:
+            if len(parameters_discovered) < 4 or not self.parameters_xpath_dict['description_xpath']:
+                parameters_discovered = self.get_parameters_from_node(root=self.job_block_tree.getroot())
+                logger.info(f"get_core_pararmeters{parameters_discovered}")
         
-        self.values_from_xpaths(xpaths_dict)
+        self.values_from_xpaths()
+        print(self.parameters_dict)
         self.parameters_dict['description'] = self.get_paragraph_values(self.keywords['description'])
         self.parameters_dict['misc'] += self.get_paragraph_values(self.keywords['misc'])
-        self.store_xpaths(xpaths_dict)
+        # self.store_xpaths(xpaths_dict)
 
-    def get_parameters_from_node(self, root, xpaths_dict):
+    def get_parameters_from_node(self, root):
         parameters_discovered = set()
         company_email = ""
         company_name = ""
@@ -98,24 +100,16 @@ class Parameters:
 
                 if not node.getchildren() and \
                 node_text not in self.symbols_to_omit and \
-                node_text in self.interested_parameters and \
-                not xpaths_dict:
+                node_text in self.interested_parameters:
                     if not \
                         self.job_block_tree.getpath(node)[-2] + self.job_block_tree.getpath(node)[-1] \
-                             == '/a':  #ignore a tags.
+                            == '/a':  #ignore a tags.
                         parameters_discovered.add(node_text)
                         self.detect_and_assign_xpath(node, node_text)
-                elif not xpaths_dict:
                     nested_parameter, nested_parameter_value = self.search_word_in_tag(node_text)
                     if nested_parameter_value: parameters_discovered.add(nested_parameter)
 
-                already_company_name, already_company_info = None, None
-                try: 
-                     already_company_name = xpaths_dict['company_name_xpath']
-                     already_company_info = xpaths_dict['company_info_xpath']
-                except: pass
-
-                if not node.getchildren() and not already_company_name and not already_company_info:
+                if not node.getchildren():
                     if not company_email: company_email = self.match_company_email(node_text)
                     if not company_name: company_name, company_name_xpath = self.match_company_name(node_text, node)
         
@@ -124,10 +118,10 @@ class Parameters:
             self.parameters_xpath_dict['company_name_xpath'] = company_name_xpath
             self.find_company_info(company_name, company_name_xpath)
         
-            logger.info(f"company name and xpath found{company_name}--{company_xpath}")
+            logger.info(f"company name and xpath found{company_name}--{company_name_xpath}")
 
-        logger.info(f"Got Parameters {self.parameters_discovered} from node")
-        mainlogger.info(f"Got Parameters  {self.parameters_discovered} from node")
+        logger.info(f"Got Parameters {parameters_discovered} from node")
+        mainlogger.info(f"Got Parameters  {parameters_discovered} from node")
         return parameters_discovered
 
     def match_company_email(self, text):
@@ -207,12 +201,12 @@ class Parameters:
                 self.parameters_dict['company_info'] += self.clean_text(node.text_content())
         except: pass
 
-    def values_from_xpaths(self, xpaths_dict):
-        company_name_xpath = self.parameters_xpath_dict['company_name_xpath']
-        company_info_xpath = self.parameters_xpath_dict['company_info_xpath']
-        if xpaths_dict: self.parameters_xpath_dict = xpaths_dict
-        self.parameters_xpath_dict['company_name_xpath'] = company_name_xpath
-        self.parameters_xpath_dict['company_info_xpath'] = company_info_xpath
+    def values_from_xpaths(self):
+        # company_name_xpath = self.parameters_xpath_dict['company_name_xpath']
+        # company_info_xpath = self.parameters_xpath_dict['company_info_xpath']
+        # self.parameters_xpath_dict['company_name_xpath'] = company_name_xpath
+        # self.parameters_xpath_dict['company_info_xpath'] = company_info_xpath
+        print(self.parameters_xpath_dict)
 
         for key, value in self.parameters_xpath_dict.items():
             if value:
@@ -307,8 +301,8 @@ class Parameters:
             self.web_structure.qualification_xpath = self.parameters_xpath_dict['qualifications_xpath']
             self.web_structure.experience_xpath = self.parameters_xpath_dict['experiences_xpath']
             logger.info(f"since xpath is not already stored xpath is stored")
-        if not self.web_structure.company_name_xpath and not self.web_structure.company_description_xpath:
-            if self.parameters_xpath_dict['company_name_xpath'] and self.parameters_xpath_dict['company_info_xpath']: 
-               self.web_structure.company_name_xpath = self.parameters_xpath_dict['company_name_xpath'] 
-               self.web_structure.company_description_xpath = self.parameters_xpath_dict['company_info_xpath']
-        self.web_structure.save()
+            if not self.web_structure.company_name_xpath and not self.web_structure.company_description_xpath:
+                if self.parameters_xpath_dict['company_name_xpath'] and self.parameters_xpath_dict['company_info_xpath']: 
+                    self.web_structure.company_name_xpath = self.parameters_xpath_dict['company_name_xpath'] 
+                    self.web_structure.company_description_xpath = self.parameters_xpath_dict['company_info_xpath']
+            self.web_structure.save()

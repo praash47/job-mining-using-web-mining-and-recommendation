@@ -20,6 +20,8 @@ import re
 from lxml import html, etree
 from requests.api import request
 
+from jobdetailsextractor.models import Job
+
 class Deadline:
     """
     Extracts deadline from a html document. You create a deadline object and
@@ -58,7 +60,7 @@ class Deadline:
         self.xpath = xpath
 
         # for deadline options
-        CONFIG = '/home/aasis/Documents/jobminersserver/jobdetailsextractor/extraction_options.ini'
+        CONFIG = "C:/Users/Lenovo/job-mining-using-web-mining-and-recommendation/jobminersserver/jobdetailsextractor/extraction_options.ini"
         self.parser = ConfigParser()
         self.parser.read(CONFIG)
         # commonly used words in the deadline such as Apply before,
@@ -80,8 +82,8 @@ class Deadline:
         html: string
             String in which an HTML document is present.
         """
-        if not self.xpath:
-            self.soup = BeautifulSoup(html, 'html.parser')
+        self.soup = BeautifulSoup(html, 'html.parser')
+        try: 
             self.get_probable_dates()  # this function summarizes date string as date.
             self.get_tags_with_date_string()
             self.check_deadline_words()
@@ -89,6 +91,8 @@ class Deadline:
             self.get_xpath()
             if not self.deadline: return False
             else: return True
+        except:
+            return False
 
     def get_probable_dates(self):
         """
