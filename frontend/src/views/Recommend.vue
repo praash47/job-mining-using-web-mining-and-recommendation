@@ -152,7 +152,7 @@ export default defineComponent({
     this.username = this.$store.getters.getUsername;
     axios({
       method: 'POST',
-      url: 'http://127.0.0.1:8000/skills',
+      url: 'http://192.168.133.141:8000/skills',
       data: {
         username: this.username,
       },
@@ -161,7 +161,7 @@ export default defineComponent({
         this.added_skills = response.data.skills;
         axios({
           method: 'POST',
-          url: 'http://127.0.0.1:8000/skills',
+          url: 'http://192.168.133.141:8000/skills',
         }).then((allskillsresponse) => {
           if (allskillsresponse.data.skills) {
             this.all_skills = allskillsresponse.data.skills.filter(
@@ -169,7 +169,7 @@ export default defineComponent({
             );
             axios({
               method: 'POST',
-              url: 'http://127.0.0.1:8000/recommend',
+              url: 'http://192.168.133.141:8000/recommend',
               data: {
                 skills: this.added_skills,
                 offset: 0,
@@ -198,7 +198,7 @@ export default defineComponent({
     added_skills() {
       axios({
         method: 'POST',
-        url: 'http://127.0.0.1:8000/recommend',
+        url: 'http://192.168.133.141:8000/recommend',
         data: {
           skills: this.added_skills,
           offset: 0,
@@ -215,7 +215,7 @@ export default defineComponent({
     all_skills() {
       axios({
         method: 'POST',
-        url: 'http://127.0.0.1:8000/recommend',
+        url: 'http://192.168.133.141:8000/recommend',
         data: {
           skills: this.added_skills,
           offset: 0,
@@ -236,7 +236,7 @@ export default defineComponent({
   methods: {
     logOut() {
       axios({
-        url: 'http://127.0.0.1:8000/logout',
+        url: 'http://192.168.133.141:8000/logout',
         method: 'POST',
       })
         .then((response) => {
@@ -263,7 +263,7 @@ export default defineComponent({
       } else {
         axios({
           method: 'POST',
-          url: 'http://127.0.0.1:8000/register',
+          url: 'http://192.168.133.141:8000/register',
           data: {
             username: this.$store.getters.getUsername,
             skills: this.added_skills,

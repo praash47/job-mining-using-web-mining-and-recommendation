@@ -40,7 +40,7 @@ export default defineComponent({
   },
   created() {
     this.setIdle();
-    const es = new EventSource('http://127.0.0.1:8000/events/');
+    const es = new EventSource('http://192.168.133.141:8000/events/');
     es.onmessage = (e) => {
       const data = JSON.parse(e.data);
       this.current_message = data.currentMessage;
@@ -57,7 +57,7 @@ export default defineComponent({
         priority: this.message_priority,
         timestamp,
       });
-      setTimeout(this.setIdle, 2000);
+      setTimeout(this.setIdle, 5000);
     };
   },
   components: {
@@ -194,7 +194,7 @@ body{
     color:green;
 }
 .message.info{
-    color:blue;
+    color:rgb(2, 2, 255);
 }
 .message.error{
     color:red;

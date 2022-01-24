@@ -134,7 +134,7 @@ export default defineComponent({
   created() {
     axios({
       method: 'POST',
-      url: 'http://127.0.0.1:8000/job',
+      url: 'http://192.168.133.141:8000/job',
       data: {
         id: this.$route.params.id,
       },
@@ -148,7 +148,7 @@ export default defineComponent({
     $route() {
       axios({
         method: 'POST',
-        url: 'http://127.0.0.1:8000/job',
+        url: 'http://192.168.133.141:8000/job',
         data: {
           id: this.$route.params.id,
         },

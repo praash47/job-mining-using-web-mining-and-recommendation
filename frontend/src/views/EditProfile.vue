@@ -101,7 +101,7 @@ export default defineComponent({
     this.username = this.$store.getters.getUsername;
     axios({
       method: 'POST',
-      url: 'http://127.0.0.1:8000/register',
+      url: 'http://192.168.133.141:8000/register',
       data: {
         action: 'email_needed',
         username: this.username,
@@ -122,7 +122,7 @@ export default defineComponent({
       } else {
         axios({
           method: 'POST',
-          url: 'http://127.0.0.1:8000/register',
+          url: 'http://192.168.133.141:8000/register',
           data: {
             username: this.username,
             action: 'username_check',
@@ -148,7 +148,7 @@ export default defineComponent({
     fillSkills() {
       axios({
         method: 'POST',
-        url: 'http://127.0.0.1:8000/register',
+        url: 'http://192.168.133.141:8000/register',
         data: {
           username: this.username,
           action: 'skills_check',
@@ -159,7 +159,7 @@ export default defineComponent({
         this.selected_skills = skills.split(',');
         axios({
           method: 'POST',
-          url: 'http://127.0.0.1:8000/skills',
+          url: 'http://192.168.133.141:8000/skills',
         }).then((selresponse) => {
           this.skills = selresponse.data.skills.filter(
             (skill) => !this.selected_skills.includes(skill),
@@ -182,7 +182,7 @@ export default defineComponent({
       && this.selected_skills.length > 0) {
         axios({
           method: 'POST',
-          url: 'http://127.0.0.1:8000/register',
+          url: 'http://192.168.133.141:8000/register',
           data: {
             username: this.username,
             ousername: localStorage.getItem('username'),
@@ -207,7 +207,7 @@ export default defineComponent({
     changePassword() {
       axios({
         method: 'POST',
-        url: 'http://127.0.0.1:8000/register',
+        url: 'http://192.168.133.141:8000/register',
         data: {
           username: this.username,
           password: this.password,

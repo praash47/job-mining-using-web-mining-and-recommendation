@@ -39,7 +39,7 @@ export default defineComponent({
   created() {
     axios({
       method: 'POST',
-      url: 'http://127.0.0.1:8000/skills',
+      url: 'http://192.168.133.141:8000/skills',
     }).then((response) => {
       this.skills = response.data.skills;
     });
@@ -67,7 +67,7 @@ export default defineComponent({
       } else {
         axios({
           method: 'POST',
-          url: 'http://127.0.0.1:8000/register',
+          url: 'http://192.168.133.141:8000/register',
           data: {
             username: this.$store.getters.getUsername,
             skills: this.selected_skills,
