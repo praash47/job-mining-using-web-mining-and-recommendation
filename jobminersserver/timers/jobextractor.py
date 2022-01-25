@@ -12,7 +12,7 @@ from jobdetailsextractor.main import JobDetails
 
 def extract_jobs(pending_jobs):
     # for parameter options
-    CONFIG = "C:/Users/Lenovo/job-mining-using-web-mining-and-recommendation/jobminersserver/timers/timersettings.ini"
+    CONFIG = "/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/timers/timersettings.ini"
     parser = ConfigParser()
     parser.read(CONFIG)
     server_wait_time = datetime.timedelta(minutes=float(parser.get('times', 'server_wait_time')))

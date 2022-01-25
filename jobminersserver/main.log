@@ -645,3 +645,102 @@
 2022-01-05 13:21:42,932 | parameters | get_parameters_from_node - INFO: Got Parameters  set() from node
 2022-01-05 13:21:57,823 | parameters | get_parameters_from_node - INFO: Got Parameters  {'salary', 'employment type', 'job description', 'job requirements', 'prefered age', 'qualification', 'experience', 'age', 'location', 'special information', 'vehicle possesion', 'gender', 'job category', 'offered salary', 'no. of vacancies', 'category', 'description', 'job location'} from node
 2022-01-05 13:21:58,836 | parameters | get_parameters_from_node - INFO: Got Parameters  {'gender', 'description', 'no. of vacancies', 'special information', 'location', 'qualification', 'prefered age', 'job category', 'job requirements', 'vehicle possesion', 'employment type', 'offered salary', 'job description', 'age', 'experience', 'salary', 'category', 'job location'} from node
+2022-01-24 21:04:30,522 | request | request_html - ERROR: Error while requesting https://getjobnepal.com/jobs/flutter-developer/47: HTTPSConnectionPool(host='getjobnepal.com', port=443): Max retries exceeded with url: /jobs/flutter-developer/47 (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f0e046a9430>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))
+ so returning ""
+2022-01-24 21:04:33,506 | request | request_html - ERROR: Error while requesting https://getjobnepal.com/jobs/flutter-developer/47: HTTPSConnectionPool(host='getjobnepal.com', port=443): Max retries exceeded with url: /jobs/flutter-developer/47 (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f0e8fee7b80>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))
+ so returning ""
+2022-01-25 13:22:10,097 | checkjobwebsite | __init__ - INFO: Checking Homepage based websites:
+2022-01-25 13:24:00,764 | checkjobwebsite | __init__ - INFO: Checking Homepage based websites:
+2022-01-25 13:24:02,291 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobsnepal.com/
+2022-01-25 13:24:03,525 | checkjobwebsite | check_urls - INFO: Verifying https://merojob.com/
+2022-01-25 13:24:04,149 | checkjobwebsite | check_urls - INFO: Verifying https://www.ramrojob.com/
+2022-01-25 13:24:08,582 | checkjobwebsite | check_urls - INFO: Verifying https://www.kumarijob.com/
+2022-01-25 13:24:10,088 | checkjobwebsite | check_urls - INFO: Verifying https://www.merorojgari.com/
+2022-01-25 13:24:17,586 | checkjobwebsite | check_urls - INFO: Verifying https://getjobnepal.com/
+2022-01-25 13:24:19,812 | checkjobwebsite | check_urls - INFO: Verifying https://froxjob.com/
+2022-01-25 13:24:20,520 | checkjobwebsite | check_urls - INFO: Verifying https://kantipurjob.com/
+2022-01-25 13:24:21,163 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobejee.com/
+2022-01-25 13:24:34,355 | request | request_html - ERROR: Error while requesting httts://youtube.com/: No connection adapters were found for 'httts://youtube.com/'
+ so returning ""
+2022-01-25 13:24:34,356 | checkjobwebsite | check_urls - INFO: Verified ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.kumarijob.com/', 'https://www.merorojgari.com/', 'https://getjobnepal.com/', 'https://froxjob.com/', 'https://kantipurjob.com/', 'https://www.jobejee.com/'] to be new job websites.
+2022-01-25 13:25:53,320 | checkjobwebsite | __init__ - INFO: Checking Homepage based websites:
+2022-01-25 13:25:54,643 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobsnepal.com/
+2022-01-25 13:25:55,809 | checkjobwebsite | check_urls - INFO: Verifying https://merojob.com/
+2022-01-25 13:25:56,120 | checkjobwebsite | check_urls - INFO: Verifying https://www.ramrojob.com/
+2022-01-25 13:25:59,628 | checkjobwebsite | check_urls - INFO: Verifying https://www.kumarijob.com/
+2022-01-25 13:26:01,164 | checkjobwebsite | check_urls - INFO: Verifying https://www.merorojgari.com/
+2022-01-25 13:26:03,209 | checkjobwebsite | check_urls - INFO: Verifying https://getjobnepal.com/
+2022-01-25 13:26:05,115 | checkjobwebsite | check_urls - INFO: Verifying https://froxjob.com/
+2022-01-25 13:26:05,732 | checkjobwebsite | check_urls - INFO: Verifying https://kantipurjob.com/
+2022-01-25 13:26:06,263 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobejee.com/
+2022-01-25 13:26:18,312 | request | request_html - ERROR: Error while requesting httts://youtube.com/: No connection adapters were found for 'httts://youtube.com/'
+ so returning ""
+2022-01-25 13:26:18,313 | checkjobwebsite | check_urls - INFO: Verified ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.kumarijob.com/', 'https://www.merorojgari.com/', 'https://getjobnepal.com/', 'https://froxjob.com/', 'https://kantipurjob.com/', 'https://www.jobejee.com/'] to be new job websites.
+2022-01-25 13:26:41,317 | checkjobwebsite | __init__ - INFO: Checking Homepage based websites:
+2022-01-25 13:26:42,668 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobsnepal.com/
+2022-01-25 13:26:44,233 | checkjobwebsite | check_urls - INFO: Verifying https://merojob.com/
+2022-01-25 13:26:44,542 | checkjobwebsite | check_urls - INFO: Verifying https://www.ramrojob.com/
+2022-01-25 13:26:48,316 | checkjobwebsite | check_urls - INFO: Verifying https://www.kumarijob.com/
+2022-01-25 13:26:50,060 | checkjobwebsite | check_urls - INFO: Verifying https://www.merorojgari.com/
+2022-01-25 13:26:51,850 | checkjobwebsite | check_urls - INFO: Verifying https://getjobnepal.com/
+2022-01-25 13:26:53,773 | checkjobwebsite | check_urls - INFO: Verifying https://froxjob.com/
+2022-01-25 13:26:54,317 | checkjobwebsite | check_urls - INFO: Verifying https://kantipurjob.com/
+2022-01-25 13:26:54,858 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobejee.com/
+2022-01-25 13:27:09,826 | request | request_html - ERROR: Error while requesting httts://youtube.com/: No connection adapters were found for 'httts://youtube.com/'
+ so returning ""
+2022-01-25 13:27:09,827 | checkjobwebsite | check_urls - INFO: Verified ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.kumarijob.com/', 'https://www.merorojgari.com/', 'https://getjobnepal.com/', 'https://froxjob.com/', 'https://kantipurjob.com/', 'https://www.jobejee.com/'] to be new job websites.
+2022-01-25 13:28:00,706 | checkjobwebsite | __init__ - INFO: Checking Homepage based websites:
+2022-01-25 13:28:02,179 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobsnepal.com/
+2022-01-25 13:28:03,250 | checkjobwebsite | check_urls - INFO: Verifying https://merojob.com/
+2022-01-25 13:28:03,571 | checkjobwebsite | check_urls - INFO: Verifying https://www.ramrojob.com/
+2022-01-25 13:28:07,218 | checkjobwebsite | check_urls - INFO: Verifying https://www.kumarijob.com/
+2022-01-25 13:28:08,653 | checkjobwebsite | check_urls - INFO: Verifying https://www.merorojgari.com/
+2022-01-25 13:28:10,475 | checkjobwebsite | check_urls - INFO: Verifying https://getjobnepal.com/
+2022-01-25 13:28:12,758 | checkjobwebsite | check_urls - INFO: Verifying https://froxjob.com/
+2022-01-25 13:28:13,364 | checkjobwebsite | check_urls - INFO: Verifying https://kantipurjob.com/
+2022-01-25 13:28:13,872 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobejee.com/
+2022-01-25 13:28:25,696 | request | request_html - ERROR: Error while requesting httts://youtube.com/: No connection adapters were found for 'httts://youtube.com/'
+ so returning ""
+2022-01-25 13:28:25,697 | checkjobwebsite | check_urls - INFO: Verified ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.kumarijob.com/', 'https://www.merorojgari.com/', 'https://getjobnepal.com/', 'https://froxjob.com/', 'https://kantipurjob.com/', 'https://www.jobejee.com/'] to be new job websites.
+2022-01-25 13:48:12,292 | checkjobwebsite | __init__ - INFO: Checking Homepage based websites:
+2022-01-25 13:48:13,579 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobsnepal.com/
+2022-01-25 13:48:14,801 | checkjobwebsite | check_urls - INFO: Verifying https://merojob.com/
+2022-01-25 13:48:15,081 | checkjobwebsite | check_urls - INFO: Verifying https://www.ramrojob.com/
+2022-01-25 13:48:18,424 | checkjobwebsite | check_urls - INFO: Verifying https://www.kumarijob.com/
+2022-01-25 13:48:19,969 | checkjobwebsite | check_urls - INFO: Verifying https://www.merorojgari.com/
+2022-01-25 13:48:22,076 | checkjobwebsite | check_urls - INFO: Verifying https://getjobnepal.com/
+2022-01-25 13:48:24,002 | checkjobwebsite | check_urls - INFO: Verifying https://froxjob.com/
+2022-01-25 13:48:24,619 | checkjobwebsite | check_urls - INFO: Verifying https://kantipurjob.com/
+2022-01-25 13:48:25,335 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobejee.com/
+2022-01-25 13:48:44,975 | request | request_html - ERROR: Error while requesting httts://youtube.com/: No connection adapters were found for 'httts://youtube.com/'
+ so returning ""
+2022-01-25 13:48:44,976 | checkjobwebsite | check_urls - INFO: Verified ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.kumarijob.com/', 'https://www.merorojgari.com/', 'https://getjobnepal.com/', 'https://froxjob.com/', 'https://kantipurjob.com/', 'https://www.jobejee.com/'] to be new job websites.
+2022-01-25 13:49:09,336 | checkjobwebsite | __init__ - INFO: Checking Homepage based websites:
+2022-01-25 13:50:23,756 | checkjobwebsite | __init__ - INFO: Checking Homepage based websites:
+2022-01-25 13:50:25,058 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobsnepal.com/
+2022-01-25 13:50:26,208 | checkjobwebsite | check_urls - INFO: Verifying https://merojob.com/
+2022-01-25 13:50:26,504 | checkjobwebsite | check_urls - INFO: Verifying https://www.ramrojob.com/
+2022-01-25 13:50:30,018 | checkjobwebsite | check_urls - INFO: Verifying https://www.kumarijob.com/
+2022-01-25 13:50:31,501 | checkjobwebsite | check_urls - INFO: Verifying https://www.merorojgari.com/
+2022-01-25 13:50:33,515 | checkjobwebsite | check_urls - INFO: Verifying https://getjobnepal.com/
+2022-01-25 13:50:35,340 | checkjobwebsite | check_urls - INFO: Verifying https://froxjob.com/
+2022-01-25 13:50:35,865 | checkjobwebsite | check_urls - INFO: Verifying https://kantipurjob.com/
+2022-01-25 13:50:36,351 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobejee.com/
+2022-01-25 13:50:49,775 | request | request_html - ERROR: Error while requesting httts://youtube.com/: No connection adapters were found for 'httts://youtube.com/'
+ so returning ""
+2022-01-25 13:50:49,776 | checkjobwebsite | check_urls - INFO: Verified ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.kumarijob.com/', 'https://www.merorojgari.com/', 'https://getjobnepal.com/', 'https://froxjob.com/', 'https://kantipurjob.com/', 'https://www.jobejee.com/'] to be new job websites.
+2022-01-25 13:51:09,753 | checkjobwebsite | __init__ - INFO: Checking Homepage based websites:
+2022-01-25 13:52:09,011 | checkjobwebsite | __init__ - INFO: Checking Homepage based websites:
+2022-01-25 13:52:10,289 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobsnepal.com/
+2022-01-25 13:52:11,329 | checkjobwebsite | check_urls - INFO: Verifying https://merojob.com/
+2022-01-25 13:52:11,610 | checkjobwebsite | check_urls - INFO: Verifying https://www.ramrojob.com/
+2022-01-25 13:52:14,955 | checkjobwebsite | check_urls - INFO: Verifying https://www.kumarijob.com/
+2022-01-25 13:52:16,424 | checkjobwebsite | check_urls - INFO: Verifying https://www.merorojgari.com/
+2022-01-25 13:52:18,410 | checkjobwebsite | check_urls - INFO: Verifying https://getjobnepal.com/
+2022-01-25 13:52:20,325 | checkjobwebsite | check_urls - INFO: Verifying https://froxjob.com/
+2022-01-25 13:52:20,915 | checkjobwebsite | check_urls - INFO: Verifying https://kantipurjob.com/
+2022-01-25 13:52:21,405 | checkjobwebsite | check_urls - INFO: Verifying https://www.jobejee.com/
+2022-01-25 13:52:33,792 | request | request_html - ERROR: Error while requesting httts://youtube.com/: No connection adapters were found for 'httts://youtube.com/'
+ so returning ""
+2022-01-25 13:52:33,792 | checkjobwebsite | check_urls - INFO: Verified ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.kumarijob.com/', 'https://www.merorojgari.com/', 'https://getjobnepal.com/', 'https://froxjob.com/', 'https://kantipurjob.com/', 'https://www.jobejee.com/'] to be new job websites.
+2022-01-25 13:52:43,415 | checkjobwebsite | __init__ - INFO: Checking Homepage based websites:

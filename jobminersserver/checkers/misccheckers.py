@@ -10,10 +10,12 @@ is_interested_website(home_page_url)
 """
 from configparser import ConfigParser
 
+
 def is_interested_website(home_page_url):
     """
     Checks if given home page url is in interested list i.e. not in non_interested
-    list of misccheckers.ini
+    list of misccheckers.ini. This is in order to ignore websites to reduce processing
+    time.
 
     Paramaters
     ----------
@@ -33,22 +35,30 @@ def is_interested_website(home_page_url):
     CONFIG = 'checkers/misccheckers.ini'
     config = ConfigParser()
     config.read(CONFIG)
-    non_interested = config.get('interested_websites', 'non_interested').split(', ')
+    non_interested = config.get(
+        'interested_websites', 'non_interested').split(', ')
     # Removing www. and https://
-    try: home_page_url = home_page_url.replace('https://', '')
-    except: home_page_url = home_page_url.replace('http://', '')
-        
-    try: home_page_url = home_page_url.replace('www.', '')
-    except: pass
-    if home_page_url in non_interested: return False
-    
+    try:
+        home_page_url = home_page_url.replace('https://', '')
+    except:
+        home_page_url = home_page_url.replace('http://', '')
+
+    try:
+        home_page_url = home_page_url.replace('www.', '')
+    except:
+        pass
+    if home_page_url in non_interested:
+        return False
+
     return True
+
 
 def main():
     print(is_interested_website('https://play.google.com'))
     print(is_interested_website('https://youtube.com'))
     print(is_interested_website('https://www.youtube.com'))
     print(is_interested_website('https://www.facebook.com'))
+
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,8 @@
 from re import search
+from turtle import title
+from scipy.fftpack import tilbert
 from scrapy.linkextractors import LinkExtractor
+
 
 from .site import Site, NonAJAX
 from requestutils.request import Request
@@ -77,6 +80,9 @@ class TitleExtractor:
         return xpath
     
     def extract_jobs_from_title_xpath(self, title_xpath):
+        from jobdetailsextractor.exceptions import JobTitleXpathNotFound
+        if not title_xpath: raise JobTitleXpathNotFound
+
         links_in_page = self._link_extractor.extract_links(self.response)
         self._scrape_job_urls(
             response=self.response,

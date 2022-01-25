@@ -1,10 +1,9 @@
+import imp
 import logging
 
-logger = logging.getLogger('interactor')
+from backend.baseexceptions import SomeThingNotFound
 
-class SomeThingNotFound(Exception):
-    def __init__(self, message):
-        super().__init__(message)
+logger = logging.getLogger('interactor')
 
 class SearchURLNotFound(SomeThingNotFound):
     def __init__(self, url):

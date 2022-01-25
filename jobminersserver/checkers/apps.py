@@ -1,3 +1,6 @@
+"""
+Django application configuration for django checkers app.
+"""
 from django.apps import AppConfig
 
 

@@ -31,7 +31,7 @@ class Timer():
         #     time.sleep(1)
 
     def check_pending_job_urls(self):
-        with open("C:/Users/Lenovo/job-mining-using-web-mining-and-recommendation/jobminersserver/timers/sample.txt") as textfile:
+        with open("/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/timers/sample.txt") as textfile:
             for line in textfile.readlines():
                 job_website, job_url, job_title = line.split(',')
                 job_website = JobWebsite.objects.get(url=job_website)

@@ -1,14 +1,12 @@
-from jobdetailsextractor.models import Job
 from .paginator import Paginator
 from .xpather import Xpather
 
 from .exceptions import NoTwoMatchingTitles
 
-from lxml import etree
-
 import logging
 logger = logging.getLogger('interactor')
 mainlogger = logging.getLogger('main')
+
 
 class Site:
     def __init__(self, search_page_url):
@@ -19,9 +17,10 @@ class Site:
         """
         # Search Page Initializations
         self.search_page_url = search_page_url
-        
+
         # Paginator Initialization
         self.pages = Paginator()
+
 
 class NonAJAX:
     def __init__(self, response, links, site, paginated=True):
@@ -70,12 +69,14 @@ class NonAJAX:
         """
         # Try to get xpath
         if self.xpaths.get_xpath(
-            self.links):
-            logger.info(f'Xpath got in first page in {self.site.search_page_url}')
+                self.links):
+            logger.info(
+                f'Xpath got in first page in {self.site.search_page_url}')
             return True  # If getting xpath is succesful, then it is crawlable.
-        
-        logger.error(f'Xpath not got in first page in {self.site.search_page_url}')
-        
+
+        logger.error(
+            f'Xpath not got in first page in {self.site.search_page_url}')
+
         raise NoTwoMatchingTitles(self.site.search_page_url)
 
     def get_jobs_for_page(self, xpath, response):
@@ -99,12 +100,26 @@ class NonAJAX:
             try:
                 xpath = xpath_init + str(i) + xpath_end
                 element = response.tree.xpath(xpath)[0]
-                if not element: break
+                if not element:
+                    break
                 # Get the text and href i.e. url and save into the self.jobs
                 print(element.text_content())
                 print(element.attrib('href'))
                 element_text = element.text_content()
                 element_href = element.attrib('href')
                 if element_text and element_href:
-                    self.jobs[element_text] = element_href
-            except Exception as e: print(e)
+                    if not self.check_if_job_already_in_database(
+                        element_text,
+                        element_href
+                    ):
+                        self.jobs[element_text] = element_href
+            except Exception as e:
+                print(e)
+
+    def check_if_job_already_in_database(self, title, url):
+        from jobdetailsextractor.models import Job
+
+        if Job.objects.filter(title=title, url=url).first():
+            return True
+
+        return False
