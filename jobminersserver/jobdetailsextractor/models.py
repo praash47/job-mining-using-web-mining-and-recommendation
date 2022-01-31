@@ -6,8 +6,6 @@ class Job(models.Model):
     """
     PostGreSQL table for Job URL
     """
-    # CATEGORIES = ['IT', 'NonIT']
-    # category = models.CharField(max_length=5,choices=CATEGORIES)
     website = models.ForeignKey(JobWebsite, on_delete=models.CASCADE)
     title = models.TextField()
     url = models.CharField(max_length=500)
@@ -28,24 +26,3 @@ class Job(models.Model):
 
     def __str__(self) -> str:
         return str(self.title)
-
-class WebsiteStructure(models.Model):
-    """
-    PostgreSQL table for xpath structure for job websites
-    """
-    website = models.ForeignKey(JobWebsite, on_delete=models.CASCADE)
-    url = models.CharField(max_length=500)
-    name_xpath = models.CharField(max_length=1000, null=True)
-    deadline_xpath = models.CharField(max_length=1000, null=True)
-    company_name_xpath = models.CharField(max_length=1000,null=True)
-    company_description_xpath = models.CharField(max_length=1000, null=True)
-    location_xpath = models.CharField(max_length=1000, null=True)
-    job_description_xpath = models.CharField(max_length=1000, null=True)
-    salary_xpath = models.CharField(max_length=1000, null=True)
-    no_vacancy_xpath = models.CharField(max_length=1000, null=True)
-    level_xpath = models.CharField(max_length=1000, null=True)
-    qualification_xpath = models.CharField(max_length=1000, null=True)
-    experience_xpath = models.CharField(max_length=1000, null=True)
-    
-    def __str__(self) -> str:
-        return str(self.website)

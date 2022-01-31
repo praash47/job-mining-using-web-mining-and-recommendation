@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class API(models.Model):
     """
     Stores info about the api.

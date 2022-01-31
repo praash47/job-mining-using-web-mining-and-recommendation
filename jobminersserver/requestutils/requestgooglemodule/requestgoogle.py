@@ -12,12 +12,14 @@ This file consists of two classes:
     google from API.
     * GoogleAPI: Google API object used for making request.
 """
+import logging
+
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from configparser import ConfigParser
+
 from django.utils.timezone import now
 
-import logging
+from backend.misc import read_config
 
 from requestutils.models import API
 
@@ -51,9 +53,7 @@ class RequestGoogle:
 
         # Parser
         # Google API settings
-        CONFIG = 'requestutils/requestgooglemodule/googleapis.ini'
-        self._parser = ConfigParser()
-        self._parser.read(CONFIG)
+        self._parser = read_config('requestutils/requestgooglemodule/googleapis.ini')
         
         # Multiple google apis for switching between apis after limit reached
         # for each api.
@@ -72,8 +72,8 @@ class RequestGoogle:
         """
         # TODO: handle logic such that 100 urls are got using different apis.
         self._100urls = self._get_from_api()
-        logger.info(f'Got 100 search URLs: {self._100urls} ')
-        mainlogger.info(f'Got 100 search URLs: {self._100urls} ')
+        logger.info(f'Got 100 search URLs')
+        mainlogger.info(f'Got 100 search URLs')
 
         return self._100urls
 
@@ -211,7 +211,6 @@ class GoogleAPI:
             if response:
                 # Increment usage count and set last access time to now
                 self._db_ref.usage_count += 1
-                self._db_ref.save()
                 self._db_ref.last_access = now()
                 self._db_ref.save()
 

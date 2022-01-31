@@ -8,13 +8,13 @@ CheckJobWebsite(urls=None)
     checks if a website is job website or not.
 """
 import logging
-from configparser import ConfigParser
 from urllib import parse
 
 from .models import JobWebsite
 
 from .misccheckers import is_interested_website
 
+from backend.misc import read_config
 from requestutils.request import Request
 from tagprocessor.tagprocessor import TagProcessor
 from tagprocessor.metatagprocessor import MetaTagProcessor
@@ -49,13 +49,12 @@ class CheckJobWebsite:
         if urls:
             for url in urls:
                 req = Request(url)
+                # Only homepage based websites: like https://www.merojob.com not, https://www.facebook.com/jobminers
                 if req.check_homepage():
                     self._urls_to_check.append(url)
         logger.info(f'Only Homepage based websites: {self._urls_to_check}')
 
-        CONFIG = 'checkers/checkjobwebsite.ini'
-        self._parser = ConfigParser()
-        self._parser.read(CONFIG)
+        self._parser = read_config('checkers/checkjobwebsite.ini')
 
         # needed for performing _jobandjobs or joborjobs logic
         self._jobandjobs = {}
@@ -84,9 +83,7 @@ class CheckJobWebsite:
                     logger.info(f"Verifying {url}")
                     mainlogger.info(f"Verifying {url}")
                     # extraction of domain name i.e. merojob from https://merojob.com
-                    domain_name = parse.urlparse(url).hostname.split('.')
-                    domain_name = [domain_name[0] if len(
-                        domain_name) == 2 else domain_name[1]][0]
+                    domain_name = self._get_domain_name(url)
 
                     job_websites.append(url)
                     job_website = JobWebsite.objects.create(
@@ -133,11 +130,11 @@ class CheckJobWebsite:
         # job, jobs and nepal must keywords
         self._jobandjobs = self._analyze_keywords(meta_info)
         # job or jobs and nepal must keywords
-        self.joborjobs = self._analyze_keywords(
+        self._joborjobs = self._analyze_keywords(
             meta_info, job_or_jobs_nepal=True)
 
         # if both parameters false, return False.
-        if not self._jobandjobs and not self.joborjobs:
+        if not self._jobandjobs and not self._joborjobs:
             logger.info(f"{url} failed the andorjob test")
             return False
 
@@ -261,6 +258,26 @@ class CheckJobWebsite:
             return True
         return False
 
+    @staticmethod
+    def _get_domain_name(url):
+        """
+        Returns the domain name. For instance: https://merojob.com's domain name is merojob.
+
+        Parameters
+        ----------
+        url: str
+            url string to extract domain name from
+
+        Returns
+        -------
+        str
+            domain_name of the url
+        """
+        domain_name = parse.urlparse(url).hostname.split('.')
+        return [domain_name[0] if (len(
+            domain_name) == 2 or len(domain_name) == 3) and domain_name[0] != 'www' 
+            else domain_name[1]][0]
+        
 
 if __name__ == "__main__":
     # urls = [

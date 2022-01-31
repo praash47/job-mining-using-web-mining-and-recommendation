@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jobdetailsextractor.tests &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jobdetailsextractor.tests</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for jobdetailsextractor.tests</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datefinder</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">cProfile</span><span class="o">,</span> <span class="nn">pstats</span><span class="o">,</span> <span class="nn">io</span>
+
+<span class="kn">from</span> <span class="nn">pstats</span> <span class="k">import</span> <span class="n">SortKey</span>
+
+<span class="kn">from</span> <span class="nn">checkers.models</span> <span class="k">import</span> <span class="n">JobWebsite</span>
+
+<span class="kn">from</span> <span class="nn">jobdetailsextractor.exceptions</span> <span class="k">import</span> <span class="n">DeadlineNotFound</span>
+
+<span class="kn">from</span> <span class="nn">.deadline</span> <span class="k">import</span> <span class="n">Deadline</span>
+<span class="kn">from</span> <span class="nn">.main</span> <span class="k">import</span> <span class="n">JobDetails</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="k">import</span> <span class="n">Job</span>
+<span class="kn">from</span> <span class="nn">.parameters</span> <span class="k">import</span> <span class="n">Parameters</span>
+<span class="kn">from</span> <span class="nn">.skills</span> <span class="k">import</span> <span class="n">SkillSet</span>
+
+<span class="kn">from</span> <span class="nn">requestutils.request</span> <span class="k">import</span> <span class="n">Request</span>
+
+
+<div class="viewcode-block" id="test_deadline"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.tests.test_deadline">[docs]</a><span class="k">def</span> <span class="nf">test_deadline</span><span class="p">():</span>
+    <span class="n">actual_deadline</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">datefinder</span><span class="o">.</span><span class="n">find_dates</span><span class="p">(</span><span class="s1">&#39;Feb. 11, 2022 23:55&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;jobdetailsextractor/reqs/sample_deadline.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">deadline_html</span><span class="p">:</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">deadline_html</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="n">request</span><span class="o">.</span><span class="n">html</span> <span class="o">=</span> <span class="n">html</span>
+    <span class="n">deadline</span> <span class="o">=</span> <span class="n">Deadline</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">get_html_tree</span><span class="p">())</span>
+    <span class="n">deadline</span><span class="o">.</span><span class="n">get_deadline_date</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">deadline</span><span class="o">.</span><span class="n">deadline</span> <span class="o">==</span> <span class="n">actual_deadline</span>
+    <span class="k">assert</span> <span class="n">deadline</span><span class="o">.</span><span class="n">xpath</span>
+
+    <span class="n">sample_html</span> <span class="o">=</span> <span class="s1">&#39;&lt;span&gt;Jan. 1, 2021 23:55&lt;/span&gt;&#39;</span>
+    <span class="n">request</span><span class="o">.</span><span class="n">html</span> <span class="o">=</span> <span class="n">sample_html</span>
+    <span class="n">deadline</span> <span class="o">=</span> <span class="n">Deadline</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">get_html_tree</span><span class="p">())</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">DeadlineNotFound</span><span class="p">):</span>
+        <span class="n">deadline</span><span class="o">.</span><span class="n">get_deadline_date</span><span class="p">(</span><span class="n">sample_html</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_skills"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.tests.test_skills">[docs]</a><span class="k">def</span> <span class="nf">test_skills</span><span class="p">():</span>
+    <span class="n">skills_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;    </span>
+<span class="s2">    Skills Required </span>
+
+<span class="s2">    Strong knowledge in javascript</span>
+<span class="s2">    Proficient in developing web applications</span>
+<span class="s2">    Must have experience in web application development using VueJs or ReactJS</span>
+<span class="s2">    Sound knowledge in working with restful API or GraphQL</span>
+<span class="s2">    Proficient in understanding of code versioning tools, such as Git</span>
+<span class="s2">    Good knowledge of SQL and No-SQL </span>
+<span class="s2">    Good knowledge of HTML and CSS (SCSS or similar) </span>
+<span class="s2">    </span>
+<span class="s2">    Skills Preferred </span>
+
+<span class="s2">    Experience in developing applications using MEARN stack </span>
+<span class="s2">    Proficient in understanding of CI/CD pipeline</span>
+<span class="s2">    Understanding differences between multiple delivery platforms, such as mobile vs. desktop, and optimizing output to match the specific platform</span>
+<span class="s2">    Sound knowledge in unit testing</span>
+<span class="s2">    Should have sound analytical skills and problem-solving skills</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="n">skills</span> <span class="o">=</span> <span class="n">SkillSet</span><span class="p">()</span>
+    <span class="n">skills</span><span class="o">.</span><span class="n">get_skills</span><span class="p">(</span><span class="n">skills_text</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">skills</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;javascript&#39;</span><span class="p">,</span> <span class="s1">&#39;application&#39;</span><span class="p">,</span> <span class="s1">&#39;web application development&#39;</span><span class="p">,</span> <span class="s1">&#39;analytical&#39;</span><span class="p">,</span> <span class="s1">&#39;web applications&#39;</span><span class="p">,</span> <span class="s1">&#39;restful api&#39;</span><span class="p">,</span> <span class="s1">&#39;development&#39;</span><span class="p">,</span> <span class="s1">&#39;unit testing&#39;</span><span class="p">,</span> <span class="s1">&#39;developing&#39;</span><span class="p">,</span> <span class="s1">&#39;desktop&#39;</span><span class="p">,</span> <span class="s1">&#39;testing&#39;</span><span class="p">,</span> <span class="s1">&#39;vuejs&#39;</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">,</span> <span class="s1">&#39;web&#39;</span><span class="p">,</span> <span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="s1">&#39;ci/cd pipeline&#39;</span><span class="p">,</span> <span class="s1">&#39;graphql&#39;</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="s1">&#39;no-sql&#39;</span><span class="p">,</span> <span class="s1">&#39;skills&#39;</span><span class="p">,</span> <span class="s1">&#39;code&#39;</span><span class="p">,</span> <span class="s1">&#39;sound&#39;</span><span class="p">,</span> <span class="s1">&#39;sql&#39;</span><span class="p">,</span> <span class="s1">&#39;css&#39;</span><span class="p">,</span> <span class="s1">&#39;experience&#39;</span><span class="p">,</span> <span class="s1">&#39;tools&#39;</span><span class="p">,</span> <span class="s1">&#39;mobile&#39;</span><span class="p">,</span> <span class="s1">&#39;applications&#39;</span><span class="p">,</span> <span class="s1">&#39;stack&#39;</span><span class="p">,</span> <span class="s1">&#39;analytical skills&#39;</span><span class="p">,</span> <span class="s1">&#39;restful&#39;</span><span class="p">,</span> <span class="s1">&#39;api&#39;</span><span class="p">,</span> <span class="s1">&#39;reactjs&#39;</span><span class="p">,</span> <span class="s1">&#39;scss&#39;</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="test_jobdetailsextractor"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.tests.test_jobdetailsextractor">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">django_db</span>
+<span class="k">def</span> <span class="nf">test_jobdetailsextractor</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">cProfile</span><span class="o">.</span><span class="n">Profile</span><span class="p">()</span> <span class="k">as</span> <span class="n">pr</span><span class="p">:</span>
+        <span class="n">job_url</span> <span class="o">=</span> <span class="s1">&#39;https://merojob.com/account-officer-revenue-collection-2/&#39;</span>
+        <span class="n">job_title</span> <span class="o">=</span> <span class="s1">&#39;Account Officer (Revenue Collection)&#39;</span>
+        <span class="n">job_website</span> <span class="o">=</span> <span class="n">JobWebsite</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://merojob.com/&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;merojob&#39;</span><span class="p">)</span>
+        <span class="n">job_website</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">website</span><span class="o">=</span><span class="n">job_website</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">job_title</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">job_url</span><span class="p">)</span>
+        <span class="n">job</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">job_details</span> <span class="o">=</span> <span class="n">JobDetails</span><span class="p">(</span><span class="n">job_url</span><span class="p">,</span> <span class="n">job_title</span><span class="p">)</span>
+        <span class="n">job_details</span><span class="o">.</span><span class="n">fetch</span><span class="p">()</span>
+        <span class="n">job_details</span><span class="o">.</span><span class="n">get_details</span><span class="p">()</span>
+        <span class="n">job_details</span><span class="o">.</span><span class="n">store_into_database</span><span class="p">()</span>
+
+        <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">job_title</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">job</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="s1">&#39;entry level&#39;</span>
+        <span class="k">assert</span> <span class="n">job</span><span class="o">.</span><span class="n">description</span>
+        <span class="k">assert</span> <span class="n">job</span><span class="o">.</span><span class="n">misc</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+        <span class="n">sortby</span> <span class="o">=</span> <span class="n">SortKey</span><span class="o">.</span><span class="n">CALLS</span>
+        <span class="n">ps</span> <span class="o">=</span> <span class="n">pstats</span><span class="o">.</span><span class="n">Stats</span><span class="p">(</span><span class="n">pr</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">sort_stats</span><span class="p">(</span><span class="n">sortby</span><span class="p">)</span>
+        <span class="kn">import</span> <span class="nn">logging</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jobdetailsextractor&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{ps.print_stats()}&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;{s.getvalue()}&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test_parameters"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.tests.test_parameters">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">django_db</span>
+<span class="k">def</span> <span class="nf">test_parameters</span><span class="p">():</span>
+    <span class="n">job_url</span> <span class="o">=</span> <span class="s1">&#39;https://merojob.com/account-officer-revenue-collection-2/&#39;</span>
+    <span class="n">job_title</span> <span class="o">=</span> <span class="s1">&#39;Account Officer (Revenue Collection)&#39;</span>
+    <span class="n">job_website</span> <span class="o">=</span> <span class="n">JobWebsite</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://merojob.com/&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;merojob&#39;</span><span class="p">)</span>
+    <span class="n">job_website</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">website</span><span class="o">=</span><span class="n">job_website</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">job_title</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">job_url</span><span class="p">)</span>
+    <span class="n">job</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="n">job_details</span> <span class="o">=</span> <span class="n">JobDetails</span><span class="p">(</span><span class="n">job_url</span><span class="p">,</span> <span class="n">job_title</span><span class="p">)</span>
+    <span class="n">job_details</span><span class="o">.</span><span class="n">fetch</span><span class="p">()</span>
+    <span class="n">job_details</span><span class="o">.</span><span class="n">deadline</span><span class="o">.</span><span class="n">_tree</span> <span class="o">=</span> <span class="n">job_details</span><span class="o">.</span><span class="n">tree</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span>
+        <span class="n">job_details</span><span class="o">.</span><span class="n">get_job_block_xpath</span><span class="p">(),</span>
+        <span class="n">job_details</span><span class="o">.</span><span class="n">tree</span>
+    <span class="p">)</span>
+    <span class="n">parameters_discovered</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">get_parameters_from_node</span><span class="p">(</span><span class="n">job_details</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">())</span>
+    <span class="k">assert</span> <span class="n">parameters_discovered</span>
+
+    <span class="n">parameters</span><span class="o">.</span><span class="n">values_from_xpaths</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">parameters</span><span class="o">.</span><span class="n">get_paragraph_values</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="n">parameters</span><span class="o">.</span><span class="n">get_paragraph_values</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="s1">&#39;misc&#39;</span><span class="p">])</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jobdetailsextractor.tests</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

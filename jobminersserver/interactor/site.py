@@ -1,9 +1,22 @@
+"""
+This submodule consists of all the classes required to abstract a job website as a 'site' and perform operations such as getting xpaths of the job title on search page and getting jobs from a page after supply of title xpath.
+
+Classes
+-------
+Site()
+    Our abstraction of any site (maybe non AJAX or AJAX based both, but non AJAX based as of now)
+NonAJAX()
+    NonAJAX is the abstraction of the procedures to get the job URL and title from the nonAJAX based websites.
+"""
+import logging
+
+from lxml.html import HtmlElement
+
 from .paginator import Paginator
 from .xpather import Xpather
 
 from .exceptions import NoTwoMatchingTitles
 
-import logging
 logger = logging.getLogger('interactor')
 mainlogger = logging.getLogger('main')
 
@@ -51,21 +64,30 @@ class NonAJAX:
         self.site = site
         self.paginated = paginated
 
+
         # This estimates the number of jobs per page. This is
         # just an arbitrary number and maynot be also not enough
         # in certain scenarios.
-        self.ESTD_JOBS_IN_PAGE = 150
+        self._ESTD_JOBS_IN_PAGE = 150
 
         # xpath initialization
         self.xpaths = Xpather(response, site, paginated)
-        self.var_index = None  # var index variable is the index of the
-        # variable div of the site in case of jobs div.
 
         self.jobs = {}
 
     def is_crawlable(self):
         """
         Returns true if xpaths can be got from the links of the first page.
+
+        Returns
+        -------
+        boolean
+            True if crawlable else raises Exceptions
+        
+        Raises
+        ------
+        NoTwoMatchingTitles
+            No two matching titles found
         """
         # Try to get xpath
         if self.xpaths.get_xpath(
@@ -93,30 +115,42 @@ class NonAJAX:
         response: str
             html response of the site
         """
+        logger.info('Getting jobs for the page')
         xpath_init, xpath_end = xpath.split('|')[0], xpath.split('|')[1]
-        logger.info(f'{xpath_init}|{xpath_end}')
-
-        for i in range(1, self.ESTD_JOBS_IN_PAGE):
+        
+        for i in range(1, self._ESTD_JOBS_IN_PAGE):
             try:
                 xpath = xpath_init + str(i) + xpath_end
                 element = response.tree.xpath(xpath)[0]
-                if not element:
-                    break
+                if type(element) is not HtmlElement:
+                    continue
                 # Get the text and href i.e. url and save into the self.jobs
-                print(element.text_content())
-                print(element.attrib('href'))
                 element_text = element.text_content()
-                element_href = element.attrib('href')
+                element_href = element.get('href')
                 if element_text and element_href:
-                    if not self.check_if_job_already_in_database(
+                    if not self._check_if_job_already_in_database(
                         element_text,
                         element_href
                     ):
                         self.jobs[element_text] = element_href
-            except Exception as e:
-                print(e)
+            except: pass
+            
+    def _check_if_job_already_in_database(self, title, url):
+        """
+        Checks if the job that is extracted is already stored in the database. This function is so as to not double create job advertisements. It also facilitates new job URLs posted in the website.
 
-    def check_if_job_already_in_database(self, title, url):
+        Parameters
+        ----------
+        title: str
+            title of the job to check in the database
+        url: str
+            url of the job to check in the database
+
+        Returns
+        -------
+        boolean
+            True if job exists else False
+        """
         from jobdetailsextractor.models import Job
 
         if Job.objects.filter(title=title, url=url).first():

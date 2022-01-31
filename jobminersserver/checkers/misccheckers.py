@@ -8,8 +8,11 @@ is_interested_website(home_page_url)
     Returns False for websites present in the misccheckers.ini's interested_websites
     non_interested variable.
 """
-from configparser import ConfigParser
+import logging
 
+from backend.misc import read_config
+
+logger = logging.getLogger('checkjobs')
 
 def is_interested_website(home_page_url):
     """
@@ -31,13 +34,11 @@ def is_interested_website(home_page_url):
         False, if present in non_interested section of
         interested_websites section of misccheckers.ini.
     """
-    config = {}
-    CONFIG = 'checkers/misccheckers.ini'
-    config = ConfigParser()
-    config.read(CONFIG)
+    config = read_config('checkers/misccheckers.ini')
     non_interested = config.get(
         'interested_websites', 'non_interested').split(', ')
     # Removing www. and https://
+
     try:
         home_page_url = home_page_url.replace('https://', '')
     except:
@@ -50,6 +51,7 @@ def is_interested_website(home_page_url):
     if home_page_url in non_interested:
         return False
 
+    logger.info(f'{home_page_url} is not an intrested website.')
     return True
 
 

@@ -40,7 +40,7 @@ class MetaTagProcessor(TagProcessor):
             list
                 list of keywords
         """
-        return self.get_property('keywords', name=True)
+        return self._get_property('keywords', name=True)
     
     def get_description(self):
         """
@@ -51,7 +51,7 @@ class MetaTagProcessor(TagProcessor):
             list
                 list of description words
         """
-        return self.get_property('description', name=True)
+        return self._get_property('description', name=True)
 
     def get_og_title(self):
         """
@@ -62,7 +62,7 @@ class MetaTagProcessor(TagProcessor):
             list
                 list of og:titles
         """
-        return self.get_property('title', og=True)
+        return self._get_property('title', og=True)
 
     def get_og_description(self):
         """
@@ -73,9 +73,9 @@ class MetaTagProcessor(TagProcessor):
             list
                 list of og:descriptions
         """
-        return self.get_property('description', og=True)
+        return self._get_property('description', og=True)
 
-    def get_property(self, property_name, name=False, og=False):
+    def _get_property(self, property_name, name=False, og=False):
         """
         Inner method. Gets a value of property. Property is either
         a name or a real "property" attribute. It is a hybrid function

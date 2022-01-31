@@ -47,9 +47,8 @@ class TagProcessor:
             tag without <>.
             Eg: for <section> tag, pass 'section'. 
         """
-        self.html_page = html
-        self.tag_to_process = tag
-        self.soup = BeautifulSoup(html, 'html.parser')
+        self._tag_to_process = tag
+        self._soup = BeautifulSoup(html, 'html.parser')
 
     def get_content(self):
         """
@@ -58,8 +57,8 @@ class TagProcessor:
         * For title: a list is returned with , | . split and lower
         cased.
         """
-        if self.tag_to_process == 'title':
-            title = self.soup.title
+        if self._tag_to_process == 'title':
+            title = self._soup.title
             if title:
                 try: 
                     title = title.string.split(' ')
@@ -95,7 +94,7 @@ class TagProcessor:
         No exception. If error is encountered, empty string is returned.
         """
         try:
-            tag = self.soup.find(self.tag_to_process, {"name":name_to_get_from})
+            tag = self._soup.find(self._tag_to_process, {"name":name_to_get_from})
             return tag['content']
         except:
             return ''
@@ -131,7 +130,7 @@ class TagProcessor:
         """
         try:
             if og: property_name = "og:" + property_name 
-            tag = self.soup.find(self.tag_to_process, {"property":property_name})
+            tag = self._soup.find(self._tag_to_process, {"property":property_name})
             return tag['content']
         except:
             return ''

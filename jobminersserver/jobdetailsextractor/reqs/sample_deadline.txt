@@ -1,0 +1,224 @@
+div class="container my-3" itemscope itemtype="http://schema.org/JobPosting">
+<div class="row my-3">
+<div class="col-md-8">
+<div class="card border-bottom-0">
+<a class="ui right  corner  badge">
+<i class="icon-top-job icon text-success"></i>
+</a>
+<img class="img-fluid banner-image-height" src="/media/uploads/job/banner/new_business_logo_i9CtU56_D1ffAj4_PlSs7TG_KAS9DMQ_e3HaLru_jtGbxpM.jpg" itemprop="image" alt="Intern- Accounts" />
+<div class="card-body card-body-h" itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+<div class="row banner-gradient top-90">
+<div class="col-md-12">
+<div class="media">
+<img class="p-2 z-index-9 align-self-start" width="90px" height="90px" src="/media/uploads/job_logo/7c043d87-1414-4f40-b166-aa9ba33d7575.jpg" alt="New Business Age" itemprop="image" />
+<div class="media-body mt-4">
+<h2 class="h5 my-0">
+<a class="text-white" href="/employer/new-business-age/">
+<span itemprop="name">New Business Age </span>
+</a>
+<div class="text-white h6">
+Media / Publication (Newspaper, Magazines)
+</div>
+</h2>
+<div class="float-right">
+<ul class="nav mb-1">
+<li class="nav-item mr-2">
+<a class="text-white twitter-ico" title="http://newbusinessage.com/" itemprop="title" href="http://newbusinessage.com/" rel="nofollow noopener noreferrer" target="_blank">
+<span class="icon-globe"></span>
+</a>
+</li>
+<li class="nav-item mr-2">
+<a itemprop="sameAs" class="text-white" href="https://www.facebook.com/AbhiyanNationalDaily/" title="https://www.facebook.com/AbhiyanNationalDaily/" data-toggle="tooltip" target="_blank">
+<span class="icon-facebook facebook-ico"></span>
+</a>
+</li>
+<li class="nav-item mr-2">
+<a itemprop="sameAs" class="text-white" href="https://twitter.com/aarthik_abhiyan?ref_src=twsrc%5Etfw%7Ctwcamp%5Eembeddedtimeline%7Ctwterm%5E639336260167794689&amp;ref_url=http%3A%2F%2Fnewbusinessage.com%2F" title="https://twitter.com/aarthik_abhiyan?ref_src=twsrc%5Etfw%7Ctwcamp%5Eembeddedtimeline%7Ctwterm%5E639336260167794689&amp;ref_url=http%3A%2F%2Fnewbusinessage.com%2F" data-toggle="tooltip" target="_blank">
+<span class="icon-twitter twitter-ico"></span>
+ </a>
+</li>
+<li class="nav-item ">
+<a itemprop="sameAs" class="text-white" href="https://www.facebook.com/newbizage" title="https://www.facebook.com/newbizage" data-toggle="tooltip" target="_blank">
+<span class="icon-facebook facebook-ico"></span>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<div class="mt-1" itemprop="description">
+<p>New Business Age Pvt. Ltd is a well-established media house of Nepal (set up in year 2001), which has been publishing, since 2001, New Business Age, an English Monthly and since 2005, Aarthik Abhiyan, a Nepali National Business Daily. Their websites are <strong><a href="http://www.newbusinessage.com" rel="nofollow noopener noreferrer">www.newbusinessage.com</a></strong> and <strong><a href="http://www.abhiyandaily.com" rel="nofollow noopener noreferrer">www.abhiyandaily.com</a>.</strong> </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+<span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+<meta itemprop="addressLocality" content="Thapathali,Kathmandu" />
+<meta itemprop="addressRegion" content="Thapathali,Kathmandu" />
+</span>
+</span>
+<div class="card">
+<div class="card-header">
+<div class="float-left">
+<h1 class="h4 mb-0 text-primary" itemprop="title">Intern- Accounts</h1>
+</div>
+<div class="float-right">
+<div class="float-right">
+<meta itemprop="datePosted" content="01/27/2022 4:59 p.m." />
+<meta itemprop="validThrough" content="02/11/2022 11:55 p.m." />
+<p data-toggle="tooltip" data-placement="bottom" title="Feb. 11, 2022" class="mb-0">
+<span class="text-success">Views: 228</span> |
+<span>Apply Before: 2 weeks, 1 day from now</span>
+</p>
+</div>
+</div>
+</div>
+<div class="card-body">
+
+<div class="card-group">
+<div class="card border-0">
+<div class="card-header p-2"><h3 class="mb-1 h6"><strong>Basic Job Information</strong></h3></div>
+<div class="card-body p-0 table-responsive">
+<table class="table table-hover m-0">
+<tr>
+<td width="33%">Job Category</td>
+<td width="3%">:</td>
+<td width="64%">
+<a href="/category/accounting-finance/">Accounting / Finance</a>
+</td>
+</tr>
+<tr>
+<td>Job Level</td>
+<td>:</td>
+<td><a href="/job-level/entry_level/">
+Entry Level
+ </a></td>
+</tr>
+<tr>
+<td>No. of Vacancy/s</td>
+<td>:</td>
+<td>[ <strong>1</strong> ]</td>
+</tr>
+<tr>
+<td>Employment Type</td>
+<td>:</td>
+<td itemprop="employmentType">
+Full Time
+</td>
+</tr>
+<tr>
+<td>Job Location</td>
+<td>:</td>
+<td>
+<span class="clearfix">Thapathali,Kathmandu</span>
+</td>
+</tr>
+<tr>
+<td>Offered Salary</td>
+<td>:</td>
+<td>
+Negotiable
+</td>
+</tr>
+<tr>
+<td>Apply Before<span class="mx-2">(Deadline)</span></td>
+<td>:</td>
+<td>Feb. 11, 2022 23:55
+(2 weeks, 1 day from now)
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<hr class="mt-0 mb-4">
+
+
+<div class="card-group">
+<div class="card border-0">
+<div class="card-header p-2"><h3 class="mb-1 h6"><strong>Job Specification</strong></h3></div>
+<div class="card-body p-0 table-responsive">
+<table class="table table-hover m-0">
+<tr>
+<td width="33%">Education Level</td>
+<td width="3%">:</td>
+<td width="64%">
+<span itemprop="educationRequirements">Intermediate</span>
+</td>
+</tr>
+<tr>
+<td width="33%">Experience Required</td>
+<td width="3%">:</td>
+<td width="64%">
+<span itemprop="experienceRequirements">Not Required</span>
+</td>
+</tr>
+<tr>
+<td width="33%">Professional Skill Required</td>
+ <td width="3%">:</td>
+<td width="64%">
+<span itemprop="skills">
+<span class="badge badge-secondary">Communication</span>
+<span class="badge badge-secondary">Teamwork</span>
+<span class="badge badge-secondary">Time Management</span>
+<span class="badge badge-secondary">Ms-Office</span>
+</span>
+</td>
+</tr>
+</table>
+<div class="card-group">
+<div class="card border-0">
+<div class="card-body p-2"><h6 class="mb-1">Other Specification
+</h6></div>
+<div class="card-text p-2">
+<ul><li>Currently enrolled undergraduate student</li><li>Computer skills and proficient in MS -Office applications( Word, Excel, Power point ) </li><li>Attention to detail</li><li>Communication skill</li><li>Computer data entry skills<br></li><li>Active team player</li></ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr class="mt-0 mb-4">
+
+
+<div class="card-group">
+<div class="card border-0">
+<div class="card-body p-2"><h3 class="mb-1 h6"><strong>Job Description</strong></h3></div>
+<div class="card-text p-2" itemprop="description">
+<ul><li>Support month- end and year-end close process</li><li>Organize office files and information for proper retrieval or disposal </li><li>Follow up on incoming payments from accounts receivable</li></ul>
+</div>
+</div>
+</div>
+<hr class="mt-0 mb-4">
+
+
+<div class="mt-3">
+<button type="button" class="btn btn-success text-white" data-toggle="modal" data-target="#generic-modal-box" data-remote="/jobseeker/modal/login/?next=/intern-accounts-3/">
+<span class="icon-circle-add mr-2"></span>APPLY NOW
+</button>
+</div>
+</div>
+<div class="card-footer">
+<a id="login" href="/jobseeker/login/?next=/intern-accounts-3/" onclick="message()" class="d-inline ">
+<span class="icon-star mr-1"></span>Save</a>&nbsp;
+<div class="float-right">
+
+<div class="addthis_sharing_toolbox"></div>
+</div>
+<div class="clearfix"></div>
+</div>
+
+</div>
+
+<div id='div-gpt-ad-1578474628707-0' class="card text-center mt-3 height-overflow-x">
+<script>
+    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1578474628707-0'); });
+  </script>
+</div>
+</div>

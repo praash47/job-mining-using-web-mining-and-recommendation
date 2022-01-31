@@ -5,8 +5,9 @@ There are three main functions here:
 1. check_deadline_existing_job()
 2. check_for_new_job_website_urls()
 """
-from datetime import datetime
 import logging
+
+from django.utils import timezone
 
 from interactor.titleextractor import TitleExtractor
 
@@ -24,7 +25,7 @@ def check_deadline_existing_job():
     """
     for job in Job.objects.all():
         if job.deadline:
-            if datetime.strptime(job.deadline) < datetime.now():
+            if job.deadline < timezone.now():
                 job.delete()
 
 
@@ -73,22 +74,28 @@ def check_for_new_job_website_urls():
             if titleextractor:
                 titleextractor.store_into_database()
 
-    check_new_job_urls_in_existing_websites()
+    check_new_job_urls_in_existing_websites(job_websites)
 
 
-def check_new_job_urls_in_existing_websites():
+def check_new_job_urls_in_existing_websites(job_websites):
     """
     Checks for new job URLs in existing job websites.
+
+    Parameters
+    ----------
+    job_websites: list of new job website URLs
+        new job websites obtained in this iteration.
     """
+    mainlogger.info('Checking for new Job URLs in existing job websites.')
     for job_website in JobWebsite.objects.all():
-        titleextractor = TitleExtractor(job_website)
+        # If this is not new job website
+        if not job_website.url in job_websites:
+            try:
+                titleextractor = TitleExtractor(job_website.search_url)
+                titleextractor.extract_jobs_from_title_xpath(
+                    job_website.job_title_xpath
+                )
+                titleextractor.store_into_database()
 
-        from jobdetailsextractor.exceptions import JobTitleXpathNotFound
-        try:
-            titleextractor.extract_jobs_from_title_xpath(
-                job_website.job_title_xpath
-            )
-            titleextractor.store_into_database()
-
-        except JobTitleXpathNotFound as e:
-            mainlogger.error(e)
+            except Exception as e:
+                mainlogger.error(e)

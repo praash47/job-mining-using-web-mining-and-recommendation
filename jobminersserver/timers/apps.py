@@ -1,3 +1,6 @@
+"""
+Django configuration for timers file.
+"""
 from django.apps import AppConfig
 
 

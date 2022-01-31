@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>backend package &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="checkers package" href="checkers.html" />
+    <link rel="prev" title="jobminersserver" href="modules.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="checkers.html" title="checkers package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="jobminersserver"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">jobminersserver</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">backend package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="backend-package">
+<h1>backend package<a class="headerlink" href="#backend-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="backend-asgi-module">
+<h2>backend.asgi module<a class="headerlink" href="#backend-asgi-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-backend.baseexceptions">
+<span id="backend-baseexceptions-module"></span><h2>backend.baseexceptions module<a class="headerlink" href="#module-backend.baseexceptions" title="Permalink to this headline">¶</a></h2>
+<p>This file consists of base exceptions required around the project.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="backend.baseexceptions.SomeThingNotFound">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.baseexceptions.</span></span><span class="sig-name descname"><span class="pre">SomeThingNotFound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/baseexceptions.html#SomeThingNotFound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.baseexceptions.SomeThingNotFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-backend.main">
+<span id="backend-main-module"></span><h2>backend.main module<a class="headerlink" href="#module-backend.main" title="Permalink to this headline">¶</a></h2>
+<p>This file contains the main tasks of the backend server.</p>
+<p>There are three main functions here:
+1. check_deadline_existing_job()
+2. check_for_new_job_website_urls()</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.main.check_deadline_existing_job">
+<span class="sig-prename descclassname"><span class="pre">backend.main.</span></span><span class="sig-name descname"><span class="pre">check_deadline_existing_job</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/main.html#check_deadline_existing_job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.main.check_deadline_existing_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks for deadline in existing job websites. Deletes the 
+job website from database upon expired deadline.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.main.check_for_new_job_website_urls">
+<span class="sig-prename descclassname"><span class="pre">backend.main.</span></span><span class="sig-name descname"><span class="pre">check_for_new_job_website_urls</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/main.html#check_for_new_job_website_urls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.main.check_for_new_job_website_urls" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function checks for job URLs in new job websites as well as in
+new job URLs in existing job websites.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.main.check_new_job_urls_in_existing_websites">
+<span class="sig-prename descclassname"><span class="pre">backend.main.</span></span><span class="sig-name descname"><span class="pre">check_new_job_urls_in_existing_websites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_websites</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/main.html#check_new_job_urls_in_existing_websites"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.main.check_new_job_urls_in_existing_websites" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks for new job URLs in existing job websites.</p>
+<dl class="simple">
+<dt>job_websites: list of new job website URLs</dt><dd><p>new job websites obtained in this iteration.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-backend.misc">
+<span id="backend-misc-module"></span><h2>backend.misc module<a class="headerlink" href="#module-backend.misc" title="Permalink to this headline">¶</a></h2>
+<p>This file consists of miscellaneous functions used in the project. The functions may be used either once or many times.</p>
+<p>Consists:
+* common_start(sa, sb): find the common starting substrings in strings
+* read_config(config_path): reads and returns the ConfigParser file
+* (decorator) try_and_pass: tries and passes if exception arises.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.misc.common_start">
+<span class="sig-prename descclassname"><span class="pre">backend.misc.</span></span><span class="sig-name descname"><span class="pre">common_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/misc.html#common_start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.misc.common_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the longest common substring from the beginning of sa and sb</p>
+<dl class="simple">
+<dt>sa: string</dt><dd><p>string ‘a’ to compare</p>
+</dd>
+<dt>sb: string</dt><dd><p>string ‘b’ to compare</p>
+</dd>
+</dl>
+<p># ref: <a class="reference external" href="https://stackoverflow.com/questions/18715688/find-common-substring-between-two-strings">https://stackoverflow.com/questions/18715688/find-common-substring-between-two-strings</a></p>
+<dl class="simple">
+<dt>string</dt><dd><p>common part between sa and sb.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.misc.read_config">
+<span class="sig-prename descclassname"><span class="pre">backend.misc.</span></span><span class="sig-name descname"><span class="pre">read_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/misc.html#read_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.misc.read_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the config parser object from where the sections of config can be read.</p>
+<dl class="simple">
+<dt>config_path</dt><dd><p>relative path to config file respect to the root folder of the server</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>ConfigParser</dt><dd><p>ConfigParser object of the config file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.misc.try_and_pass">
+<span class="sig-prename descclassname"><span class="pre">backend.misc.</span></span><span class="sig-name descname"><span class="pre">try_and_pass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/misc.html#try_and_pass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.misc.try_and_pass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries and something and passes if the function raises exception</p>
+</dd></dl>
+
+</section>
+<section id="module-backend.settings">
+<span id="backend-settings-module"></span><h2>backend.settings module<a class="headerlink" href="#module-backend.settings" title="Permalink to this headline">¶</a></h2>
+<p>Django settings for backend project.</p>
+</section>
+<section id="module-backend.tests">
+<span id="backend-tests-module"></span><h2>backend.tests module<a class="headerlink" href="#module-backend.tests" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.tests.test_check_deadline_existing_job">
+<span class="sig-prename descclassname"><span class="pre">backend.tests.</span></span><span class="sig-name descname"><span class="pre">test_check_deadline_existing_job</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/tests.html#test_check_deadline_existing_job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.tests.test_check_deadline_existing_job" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="backend.tests.test_check_new_job_urls_in_existing_websites">
+<span class="sig-prename descclassname"><span class="pre">backend.tests.</span></span><span class="sig-name descname"><span class="pre">test_check_new_job_urls_in_existing_websites</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/tests.html#test_check_new_job_urls_in_existing_websites"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.tests.test_check_new_job_urls_in_existing_websites" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-backend.urls">
+<span id="backend-urls-module"></span><h2>backend.urls module<a class="headerlink" href="#module-backend.urls" title="Permalink to this headline">¶</a></h2>
+<p>backend URL Configuration
+— 
+Handles admin site for us, so that we can view data in PostGreSQL easily.</p>
+</section>
+<section id="backend-wsgi-module">
+<h2>backend.wsgi module<a class="headerlink" href="#backend-wsgi-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-backend">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-backend" title="Permalink to this headline">¶</a></h2>
+<p>The django’s server configurations for the server. It handles sse connections and
+manages the server and is responsible for handling the general flow of the application.</p>
+<p>It consists of some miscellaneous functions as well as frontend points and consists of the
+base exceptions which other app exceptions inherit from.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">backend package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#backend-asgi-module">backend.asgi module</a></li>
+<li><a class="reference internal" href="#module-backend.baseexceptions">backend.baseexceptions module</a></li>
+<li><a class="reference internal" href="#module-backend.main">backend.main module</a></li>
+<li><a class="reference internal" href="#module-backend.misc">backend.misc module</a></li>
+<li><a class="reference internal" href="#module-backend.settings">backend.settings module</a></li>
+<li><a class="reference internal" href="#module-backend.tests">backend.tests module</a></li>
+<li><a class="reference internal" href="#module-backend.urls">backend.urls module</a></li>
+<li><a class="reference internal" href="#backend-wsgi-module">backend.wsgi module</a></li>
+<li><a class="reference internal" href="#module-backend">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="modules.html"
+                          title="previous chapter">jobminersserver</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="checkers.html"
+                          title="next chapter">checkers package</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/backend.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="checkers.html" title="checkers package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="jobminersserver"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >jobminersserver</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">backend package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

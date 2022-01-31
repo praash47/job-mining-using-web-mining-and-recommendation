@@ -155,7 +155,7 @@ LOGGING = {
         },
         'jobdetailsextractor': {
             'handlers': ['jobdetailsextractor'],
-            'level': 'ERROR',
+            'level': 'INFO',
         }
     },
     'formatters': {
@@ -171,22 +171,22 @@ LOGGING = {
         },
         'requestinggoogle': {
             'class': 'logging.FileHandler',
-            'filename': './requestutils/requestgooglemodule/requestinggoogle.log',
+            'filename': 'requestutils/requestgooglemodule/requestinggoogle.log',
             'formatter': 'default',
         },
         'checkjobs': {
             'class': 'logging.FileHandler',
-            'filename': './checkers/checkjobs.log',
+            'filename': 'checkers/checkjobs.log',
             'formatter': 'default',
         },
         'interactor': {
             'class': 'logging.FileHandler',
-            'filename': './interactor/interactor.log',
+            'filename': 'interactor/interactor.log',
             'formatter': 'default',
         },
         'jobdetailsextractor': {
             'class': 'logging.FileHandler',
-            'filename': './jobdetailsextractor/jobdetailsextractor.log',
+            'filename': 'jobdetailsextractor/jobdetailsextractor.log',
             'formatter': 'default',
         }
     },
