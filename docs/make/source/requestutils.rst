@@ -8,6 +8,7 @@ Subpackages
    :maxdepth: 4
 
    requestutils.migrations
+   requestutils.requestgooglemodule
 
 Submodules
 ----------

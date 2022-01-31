@@ -12,12 +12,12 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../'))
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
-os.chdir('/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/')
-# Setup Django
 import django
+sys.path.insert(0, os.path.abspath('../../../jobminersserver'))
+
+
+os.chdir('/home/aasis/Documents/GitHub/job-mining-using-web-mining-and-recommendation/jobminersserver/')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 django.setup()
 
 # -- Project information -----------------------------------------------------
@@ -35,7 +35,9 @@ release = '0.0.1'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.todo', 'sphinx.ext.viewcode', 'sphinx.ext.autodoc']
+extensions = ['sphinx.ext.todo', 'sphinx.ext.viewcode', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon']
+
+napoleon_numpy_docstring = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

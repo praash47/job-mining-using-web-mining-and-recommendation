@@ -73,7 +73,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="backend.main.check_deadline_existing_job">
 <span class="sig-prename descclassname"><span class="pre">backend.main.</span></span><span class="sig-name descname"><span class="pre">check_deadline_existing_job</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/main.html#check_deadline_existing_job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.main.check_deadline_existing_job" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks for deadline in existing job websites. Deletes the 
+<dd><p>Checks for deadline in existing job websites. Deletes the
 job website from database upon expired deadline.</p>
 </dd></dl>
 
@@ -88,8 +88,9 @@ new job URLs in existing job websites.</p>
 <dt class="sig sig-object py" id="backend.main.check_new_job_urls_in_existing_websites">
 <span class="sig-prename descclassname"><span class="pre">backend.main.</span></span><span class="sig-name descname"><span class="pre">check_new_job_urls_in_existing_websites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_websites</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/main.html#check_new_job_urls_in_existing_websites"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.main.check_new_job_urls_in_existing_websites" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks for new job URLs in existing job websites.</p>
-<dl class="simple">
-<dt>job_websites: list of new job website URLs</dt><dd><p>new job websites obtained in this iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_websites</strong> (<em>list of new job website URLs</em>) – new job websites obtained in this iteration.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -106,15 +107,19 @@ new job URLs in existing job websites.</p>
 <dt class="sig sig-object py" id="backend.misc.common_start">
 <span class="sig-prename descclassname"><span class="pre">backend.misc.</span></span><span class="sig-name descname"><span class="pre">common_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/misc.html#common_start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.misc.common_start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the longest common substring from the beginning of sa and sb</p>
-<dl class="simple">
-<dt>sa: string</dt><dd><p>string ‘a’ to compare</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sa</strong> (<em>string</em>) – string ‘a’ to compare</p></li>
+<li><p><strong>sb</strong> (<em>string</em>) – string ‘b’ to compare</p></li>
+<li><p><strong>ref</strong> (<em>#</em>) – </p></li>
+</ul>
 </dd>
-<dt>sb: string</dt><dd><p>string ‘b’ to compare</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>common part between sa and sb.</p>
 </dd>
-</dl>
-<p># ref: <a class="reference external" href="https://stackoverflow.com/questions/18715688/find-common-substring-between-two-strings">https://stackoverflow.com/questions/18715688/find-common-substring-between-two-strings</a></p>
-<dl class="simple">
-<dt>string</dt><dd><p>common part between sa and sb.</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
 </dd>
 </dl>
 </dd></dl>
@@ -123,12 +128,15 @@ new job URLs in existing job websites.</p>
 <dt class="sig sig-object py" id="backend.misc.read_config">
 <span class="sig-prename descclassname"><span class="pre">backend.misc.</span></span><span class="sig-name descname"><span class="pre">read_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/misc.html#read_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.misc.read_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the config parser object from where the sections of config can be read.</p>
-<dl class="simple">
-<dt>config_path</dt><dd><p>relative path to config file respect to the root folder of the server</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config_path</strong> – relative path to config file respect to the root folder of the server</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>ConfigParser</dt><dd><p>ConfigParser object of the config file</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>ConfigParser object of the config file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ConfigParser</p>
 </dd>
 </dl>
 </dd></dl>
@@ -160,7 +168,7 @@ new job URLs in existing job websites.</p>
 <section id="module-backend.urls">
 <span id="backend-urls-module"></span><h2>backend.urls module<a class="headerlink" href="#module-backend.urls" title="Permalink to this headline">¶</a></h2>
 <p>backend URL Configuration
-— 
+—
 Handles admin site for us, so that we can view data in PostGreSQL easily.</p>
 </section>
 <section id="backend-wsgi-module">

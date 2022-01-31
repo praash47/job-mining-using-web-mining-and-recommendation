@@ -59,6 +59,15 @@
 <li class="toctree-l2"><a class="reference internal" href="requestutils.migrations.html#module-requestutils.migrations">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="requestutils.requestgooglemodule.html">requestutils.requestgooglemodule package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="requestutils.requestgooglemodule.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="requestutils.requestgooglemodule.html#requestutils-requestgooglemodule-requestgoogle">requestutils.requestgooglemodule.requestgoogle</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="requestutils.requestgooglemodule.html#request-google">Request Google</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="requestutils.requestgooglemodule.html#module-requestutils.requestgooglemodule">Module contents</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -167,28 +176,49 @@ object the first time, the query is executed.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class to request html of webpage from urls
 and convert to text</p>
-<dl class="simple">
-<dt>request_html(url)</dt><dd><p>returns html in string from the url passed</p>
-</dd>
-<dt>check_homepage(url)</dt><dd><p>returns true if url passed is homepage and has no subdomain</p>
-</dd>
-<dt>get_only_homepage_based(urls)</dt><dd><p>returns only the homepage based in urls list</p>
-</dd>
-<dt>get_html_tree()</dt><dd><p>returns the html tree</p>
-</dd>
-<dt>filter_script_tags()</dt><dd><p>filters the script tags from the html.</p>
-</dd>
-</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="requestutils.request.Request.request_html">
+<span class="sig-name descname"><span class="pre">request_html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/requestutils/request.html#Request.request_html"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#requestutils.request.Request.request_html" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns html in string from the url passed</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="requestutils.request.Request.check_homepage">
-<span class="sig-name descname"><span class="pre">check_homepage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/requestutils/request.html#Request.check_homepage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#requestutils.request.Request.check_homepage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">check_homepage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/requestutils/request.html#Request.check_homepage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#requestutils.request.Request.check_homepage" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns true if url passed is homepage and has no subdomain</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="requestutils.request.Request.get_only_homepage_based">
+<span class="sig-name descname"><span class="pre">get_only_homepage_based</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">urls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/requestutils/request.html#Request.get_only_homepage_based"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#requestutils.request.Request.get_only_homepage_based" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns only the homepage based in urls list</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="requestutils.request.Request.get_html_tree">
+<span class="sig-name descname"><span class="pre">get_html_tree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/requestutils/request.html#Request.get_html_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#requestutils.request.Request.get_html_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the html tree</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="requestutils.request.Request.filter_script_tags">
+<span class="sig-name descname"><span class="pre">filter_script_tags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#requestutils.request.Request.filter_script_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>filters the script tags from the html.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">check_homepage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/requestutils/request.html#Request.check_homepage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns true if url is the homepage of the site
 returns false otherwise</p>
-<dl class="simple">
-<dt>home_page: str</dt><dd><p>home page of the url</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>home_page</strong> (<em>str</em>) – home page of the url</p></li>
+<li><p><strong>format</strong> (<a class="reference external" href="https://merojob.com">https://merojob.com</a>) – </p></li>
+</ul>
 </dd>
 </dl>
-<p>format: <a class="reference external" href="https://merojob.com">https://merojob.com</a></p>
 </dd></dl>
 
 <dl class="py method">
@@ -199,31 +229,36 @@ request html.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="requestutils.request.Request.get_html_tree">
-<span class="sig-name descname"><span class="pre">get_html_tree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/requestutils/request.html#Request.get_html_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#requestutils.request.Request.get_html_tree" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">get_html_tree</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/requestutils/request.html#Request.get_html_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a html tree using lxml out of the current
 object’s HTML document and Returns the HTML tree.</p>
 <p>Requirement: HTML document present in html variable.</p>
-<dl class="simple">
-<dt>tree: lxml.etree</dt><dd><p>tree that is computed from the html dom.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>tree</strong> – tree that is computed from the html dom.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>lxml.etree</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="requestutils.request.Request.get_only_homepage_based">
-<span class="sig-name descname"><span class="pre">get_only_homepage_based</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">urls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/requestutils/request.html#Request.get_only_homepage_based"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#requestutils.request.Request.get_only_homepage_based" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">get_only_homepage_based</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">urls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/requestutils/request.html#Request.get_only_homepage_based"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns homepage from the extracted url</p>
 <p>eg:- <a class="reference external" href="https://unjobs.org">https://unjobs.org</a> from <a class="reference external" href="https://unjobs.org/duty_stations/nepal">https://unjobs.org/duty_stations/nepal</a></p>
-<dl class="simple">
-<dt>home_page: list</dt><dd><p>homepage of the urls in the format <a class="reference external" href="https://unjobs.org">https://unjobs.org</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>home_page</strong> (<em>list</em>) – homepage of the urls in the format <a class="reference external" href="https://unjobs.org">https://unjobs.org</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="requestutils.request.Request.request_html">
-<span class="sig-name descname"><span class="pre">request_html</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/requestutils/request.html#Request.request_html"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#requestutils.request.Request.request_html" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">request_html</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/requestutils/request.html#Request.request_html"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns html from the url of the webpages.</p>
 <p>If webpage is not accessible print error message</p>
 </dd></dl>

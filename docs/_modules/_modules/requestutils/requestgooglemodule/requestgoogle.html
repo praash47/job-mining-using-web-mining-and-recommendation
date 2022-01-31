@@ -1,0 +1,335 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>requestutils.requestgooglemodule.requestgoogle &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">requestutils.requestgooglemodule.requestgoogle</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for requestutils.requestgooglemodule.requestgoogle</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Request Google</span>
+<span class="sd">--------------</span>
+<span class="sd">This file requests google and gets 100 urls.</span>
+
+<span class="sd">This file returns 100 urls as a list.</span>
+
+<span class="sd">This file requires googleapiclient to be installed.</span>
+
+<span class="sd">This file consists of two classes:</span>
+<span class="sd">    * RequestGoogle: used for requesting 100 urls from</span>
+<span class="sd">    google from API.</span>
+<span class="sd">    * GoogleAPI: Google API object used for making request.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">googleapiclient.discovery</span> <span class="k">import</span> <span class="n">build</span>
+<span class="kn">from</span> <span class="nn">googleapiclient.errors</span> <span class="k">import</span> <span class="n">HttpError</span>
+
+<span class="kn">from</span> <span class="nn">django.utils.timezone</span> <span class="k">import</span> <span class="n">now</span>
+
+<span class="kn">from</span> <span class="nn">backend.misc</span> <span class="k">import</span> <span class="n">read_config</span>
+
+<span class="kn">from</span> <span class="nn">requestutils.models</span> <span class="k">import</span> <span class="n">API</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;requestinggoogle&#39;</span><span class="p">)</span>
+<span class="n">mainlogger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;main&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RequestGoogle"><a class="viewcode-back" href="../../../requestutils.requestgooglemodule.html#requestutils.requestgooglemodule.requestgoogle.RequestGoogle">[docs]</a><span class="k">class</span> <span class="nc">RequestGoogle</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class used to request google for 100 urls from api. Manages the api</span>
+<span class="sd">    such that you don&#39;t reach API limit for each api</span>
+<span class="sd">    ...</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _100urls : list</span>
+<span class="sd">        100 urls list of google returned seach results</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    get_100_urls()</span>
+<span class="sd">        Returns list of 100 urls from Google Custom Search API.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        * Read configuration files.</span>
+<span class="sd">        * Initialize all api objects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Created the request google object&#39;</span><span class="p">)</span>
+        <span class="n">mainlogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Created the request google object&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_100urls</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Parser</span>
+        <span class="c1"># Google API settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span> <span class="o">=</span> <span class="n">read_config</span><span class="p">(</span><span class="s1">&#39;requestutils/requestgooglemodule/googleapis.ini&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Multiple google apis for switching between apis after limit reached</span>
+        <span class="c1"># for each api.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_google_apis</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_all_apis</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="RequestGoogle.get_100_urls"><a class="viewcode-back" href="../../../requestutils.requestgooglemodule.html#requestutils.requestgooglemodule.requestgoogle.RequestGoogle.get_100_urls">[docs]</a>    <span class="k">def</span> <span class="nf">get_100_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets 100 urls from first 10 pages of google search results.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list of strings:</span>
+<span class="sd">            a list of 100 urls of first 10 pages of search result links</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: handle logic such that 100 urls are got using different apis.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_100urls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_from_api</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Got 100 search URLs&#39;</span><span class="p">)</span>
+        <span class="n">mainlogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Got 100 search URLs&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_100urls</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_all_apis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse out all the configuration for apis listed in format:</span>
+<span class="sd">            API&lt;N&gt;</span>
+<span class="sd">            api_key = &quot;&quot;</span>
+<span class="sd">            search_engine_id = &quot;&quot;</span>
+<span class="sd">        and creates a Google API object and appends it to self.google_a</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First three letters API</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Getting saved APIs&#39;</span><span class="p">)</span>
+        <span class="n">apis</span> <span class="o">=</span> <span class="p">[</span><span class="n">api</span> <span class="k">for</span> <span class="n">api</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span> <span class="k">if</span> <span class="n">api</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;API&#39;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">api</span> <span class="ow">in</span> <span class="n">apis</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_google_apis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GoogleAPI</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="s2">&quot;api_key&quot;</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="s2">&quot;search_engine_id&quot;</span><span class="p">)</span>
+            <span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_get_from_api</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if API is available and if it is available, recursively gets 100 urls in</span>
+<span class="sd">        10 iterations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If available, take the first one available.</span>
+        <span class="n">apis</span> <span class="o">=</span> <span class="p">[</span><span class="n">curr_api</span> <span class="k">for</span> <span class="n">curr_api</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_google_apis</span> <span class="k">if</span> <span class="n">curr_api</span><span class="o">.</span><span class="n">_is_available</span><span class="p">()]</span>
+        <span class="n">api</span> <span class="o">=</span> <span class="n">apis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Using </span><span class="si">{api.API_KEY}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">search_results</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># 11, 21, 31, ..., 91</span>
+        <span class="n">SEARCH_INDEX_STEP</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;global&#39;</span><span class="p">,</span> <span class="s1">&#39;num_links&#39;</span><span class="p">),</span><span class="n">SEARCH_INDEX_STEP</span><span class="p">):</span> 
+            <span class="n">search_result</span><span class="p">,</span> <span class="n">api</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="n">search_query</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;global&#39;</span><span class="p">,</span> <span class="s1">&#39;search_query&#39;</span><span class="p">),</span>
+                <span class="n">start_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>  <span class="c1"># search index for getting from paged search result.</span>
+                <span class="n">api</span><span class="o">=</span><span class="n">api</span><span class="p">,</span> <span class="c1"># if api is invalid, to return the api</span>
+                <span class="n">apis</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_google_apis</span>
+            <span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># {items: {link: &#39;www.example.com&#39;}} for all pages.</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">search_result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
+                    <span class="n">search_results</span> <span class="o">+=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;link&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">search_result</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">]]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">-=</span> <span class="mi">10</span>  <span class="c1"># if no search result, then don&#39;t proceed the loop</span>
+
+        <span class="k">return</span> <span class="n">search_results</span></div>
+
+<div class="viewcode-block" id="GoogleAPI"><a class="viewcode-back" href="../../../requestutils.requestgooglemodule.html#requestutils.requestgooglemodule.requestgoogle.GoogleAPI">[docs]</a><span class="k">class</span> <span class="nc">GoogleAPI</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creating and searching using a Google API.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    usage_count : int</span>
+<span class="sd">        number of time the API is used in a day.</span>
+<span class="sd">    last_used_time : time object (current time in ms)</span>
+<span class="sd">        last time instance that API was created or used to</span>
+<span class="sd">        fetch a search result. </span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    search(sound=None)</span>
+<span class="sd">        Search using a search query to google search api with optional parameters</span>
+<span class="sd">        num_results and start_index for specifying the page.</span>
+<span class="sd">    is_available()</span>
+<span class="sd">        Checks elapsed time from last used time and checks if one day has elapsed</span>
+<span class="sd">        and API limit has been crossed for today.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">search_engine_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        api_key : str</span>
+<span class="sd">            unique key for google API</span>
+<span class="sd">        search_engine_id : str</span>
+<span class="sd">            unique key for search engine id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">API_KEY</span> <span class="o">=</span> <span class="n">api_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ONE_DAY</span> <span class="o">=</span> <span class="mi">86400</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_SEARCH_ENGINE_ID</span> <span class="o">=</span> <span class="n">search_engine_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db_ref</span><span class="p">,</span> <span class="n">_created</span> <span class="o">=</span> <span class="n">API</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
+            <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span>
+            <span class="n">search_engine_id</span><span class="o">=</span><span class="n">search_engine_id</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_created</span><span class="p">:</span>
+            <span class="c1"># Reset the usage count to 0 on next day</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time_elapsed</span> <span class="o">=</span> <span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db_ref</span><span class="o">.</span><span class="n">last_access</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_elapsed</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ONE_DAY</span><span class="p">:</span>                
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;API usage of </span><span class="si">{self.API_KEY}</span><span class="s1"> reset&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_db_ref</span><span class="o">.</span><span class="n">usage_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        
+
+<div class="viewcode-block" id="GoogleAPI.search"><a class="viewcode-back" href="../../../requestutils.requestgooglemodule.html#requestutils.requestgooglemodule.requestgoogle.GoogleAPI.search">[docs]</a>    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_query</span><span class="p">,</span> <span class="n">num_results</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">start_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">api</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Uses google search api to &quot;search&quot; (fetch) the google search results.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        search_query : str</span>
+<span class="sd">            Search query for searching into the API.</span>
+<span class="sd">        num_results : int, optional, valid: 1-10</span>
+<span class="sd">            The number of links to get from the API (default=10)</span>
+<span class="sd">        start_index : int, optional</span>
+<span class="sd">            The offset of search results to start search from (default=1)</span>
+<span class="sd">        api : GoogleAPI</span>
+<span class="sd">            api being currently used</span>
+<span class="sd">        apis : list,</span>
+<span class="sd">            list of Google APIs</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        Exception</span>
+<span class="sd">            If any exception is raised, it is printed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        response, api</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Google API usage syntax, available on google search API documentation.</span>
+            <span class="n">resource</span> <span class="o">=</span> <span class="n">build</span><span class="p">(</span><span class="s2">&quot;customsearch&quot;</span><span class="p">,</span> <span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="n">developerKey</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">API_KEY</span><span class="p">)</span><span class="o">.</span><span class="n">cse</span><span class="p">()</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+                <span class="n">q</span><span class="o">=</span><span class="n">search_query</span><span class="p">,</span>
+                <span class="n">cx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_SEARCH_ENGINE_ID</span><span class="p">,</span>
+                <span class="n">num</span><span class="o">=</span><span class="n">num_results</span><span class="p">,</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">start_index</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+            
+            <span class="k">if</span> <span class="n">response</span><span class="p">:</span>
+                <span class="c1"># Increment usage count and set last access time to now</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_db_ref</span><span class="o">.</span><span class="n">usage_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_db_ref</span><span class="o">.</span><span class="n">last_access</span> <span class="o">=</span> <span class="n">now</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_db_ref</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+                <span class="k">return</span> <span class="n">response</span><span class="p">,</span> <span class="n">api</span>
+        <span class="k">except</span> <span class="n">HttpError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{e}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">mainlogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{e}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">apis</span> <span class="o">=</span> <span class="p">[</span><span class="n">curr_api</span> <span class="k">for</span> <span class="n">curr_api</span> <span class="ow">in</span> <span class="n">apis</span> <span class="k">if</span> <span class="n">curr_api</span><span class="o">.</span><span class="n">_is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="n">curr_api</span><span class="o">.</span><span class="n">_SEARCH_ENGINE_ID</span> <span class="o">!=</span> <span class="n">api</span><span class="o">.</span><span class="n">_SEARCH_ENGINE_ID</span><span class="p">]</span>
+            <span class="n">api</span> <span class="o">=</span> <span class="n">apis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;So using </span><span class="si">{api.API_KEY}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">mainlogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;So using </span><span class="si">{api.API_KEY}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">api</span>            
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{e}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">mainlogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{e}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">api</span></div>
+
+    <span class="k">def</span> <span class="nf">_is_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if an api is available.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Boolean</span>
+<span class="sd">            True if an API usage limit for the day hasn&#39;t exceeded.</span>
+<span class="sd">            False else.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">API_DAY_LIMIT</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_elapsed</span> <span class="o">=</span> <span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db_ref</span><span class="o">.</span><span class="n">last_access</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db_ref</span><span class="o">.</span><span class="n">usage_count</span> <span class="o">&gt;=</span> <span class="n">API_DAY_LIMIT</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_elapsed</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ONE_DAY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">google_request</span> <span class="o">=</span> <span class="n">RequestGoogle</span><span class="p">()</span> 
+    <span class="n">urls</span> <span class="o">=</span> <span class="n">google_request</span><span class="o">.</span><span class="n">get_100_urls</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">requestutils.requestgooglemodule.requestgoogle</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

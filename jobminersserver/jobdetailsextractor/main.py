@@ -66,17 +66,23 @@ class JobDetails:
         self.html_page = request.html
         self.tree = request.get_html_tree()
 
-    def get_details(self):
+    def get_details(self, nlp):
         """
         ** Call this after calling fetch()
-        Extracts out job details from the HTML page including the skill-set of the job. 
+        Extracts out job details from the HTML page including the skill-set of the job.
+        
+        Parameters
+        ----------
+        nlp: spacy
+            Spacy object with nlp
         """
         self.deadline._tree = self.tree
         self.parameters = \
             Parameters(
                 self.get_job_block_xpath(),
                 self.tree,
-                self.website
+                nlp,
+                self.website,
             )
 
         self.parameters.get_core_parameters()
@@ -127,21 +133,22 @@ class JobDetails:
         name_xpath
             xpath of the name in the HTML document
         """
-        name_xpaths = self.tree.xpath(
-            f'//*[normalize-space(text()= \'"{self.name}"\')]')
-        title_xpaths = []
-        # If one found, just accept directly.
-        if len(name_xpaths) == 1:
-            title_xpaths.append(self.tree.getpath(name_xpaths[0]))
-        else:
-            # If more than one, just search for the h1 - h6, because the name xpath we are interested in most is in the header tags.
-            for xpath in name_xpaths:
-                if re.search('^h[1-6]$', xpath.tag):
-                    element = self.tree.xpath(
-                        f"//{xpath.tag}[normalize-space(text()= \"'{str(xpath.text_content())}'\")]")[0]
-                    title_xpaths.append(self.tree.getpath(element))
+        try:
+            name_xpaths = self.tree.xpath(
+                f'//*[normalize-space(text()= \'"{self.name}"\')]')
+            title_xpaths = []
+            # If one found, just accept directly.
+            if len(name_xpaths) == 1:
+                title_xpaths.append(self.tree.getpath(name_xpaths[0]))
+            else:
+                # If more than one, just search for the h1 - h6, because the name xpath we are interested in most is in the header tags.
+                for xpath in name_xpaths:
+                    if re.search('^h[1-6]$', xpath.tag):
+                        element = self.tree.xpath(
+                            f"//{xpath.tag}[normalize-space(text()= \"'{str(xpath.text_content())}'\")]")[0]
+                        title_xpaths.append(self.tree.getpath(element))
 
-        try: return title_xpaths[0]
+                return title_xpaths[0]
         except: raise NameXpathNotFound
 
     def store_into_database(self):

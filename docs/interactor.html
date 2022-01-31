@@ -122,10 +122,12 @@ usually greater than 1.</p>
 <p>It exists due to the fact that some websites paginated not on the basis
 of serial page numbers but with the total number of job adverts present
 in a page.</p>
-<dl class="simple">
-<dt>site: Site object</dt><dd><p>site object of the website whose search step is being checked</p>
-</dd>
-<dt>links: list of scrapy.Link</dt><dd><p>scrapy’s link object that stores information abou the link.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>site</strong> (<em>Site object</em>) – site object of the website whose search step is being checked</p></li>
+<li><p><strong>links</strong> (<em>list of scrapy.Link</em>) – scrapy’s link object that stores information abou the link.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -137,8 +139,9 @@ in a page.</p>
 last page extracting function that only works when there is no any search step
 present in the page.</p>
 <p>This function applies the concept of getting out the maximum number.</p>
-<dl class="simple">
-<dt>links: list of scrapy.Link</dt><dd><p>scrapy’s link object that stores information abou the link.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>links</strong> (<em>list of scrapy.Link</em>) – scrapy’s link object that stores information abou the link.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -147,12 +150,15 @@ present in the page.</p>
 <dt class="sig sig-object py" id="interactor.paginator.Paginator.has_pages">
 <span class="sig-name descname"><span class="pre">has_pages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">links</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/paginator.html#Paginator.has_pages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.paginator.Paginator.has_pages" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns true if the site has Non AJAX based paginations.</p>
-<dl class="simple">
-<dt>links: list of scrapy.Link</dt><dd><p>scrapy’s link object that stores information abou the link.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>links</strong> (<em>list of scrapy.Link</em>) – scrapy’s link object that stores information abou the link.</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>boolean</dt><dd><p>True if there is a number link present in the site’s links.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if there is a number link present in the site’s links.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
 </dd>
 </dl>
 </dd></dl>
@@ -162,7 +168,11 @@ present in the page.</p>
 <span class="sig-name descname"><span class="pre">move_to_next_page</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/paginator.html#Paginator.move_to_next_page"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.paginator.Paginator.move_to_next_page" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use to move to the next page in a serial order. Moving to the next page
 implies increasing the current page by one or by the search page.</p>
-<p>self.curr_page if the next page exists, otherwise False</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>self.curr_page if the next page exists, otherwise False</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -184,23 +194,28 @@ implies increasing the current page by one or by the search page.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class to find the search box in the webpage and
 perform search with no character or single space.</p>
-<dl class="simple">
-<dt>get_search_url(search, self._url)</dt><dd><p>Gets search URL from the page and returns it.</p>
-</dd>
-</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="interactor.searcher.Search.get_search_url">
-<span class="sig-name descname"><span class="pre">get_search_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/searcher.html#Search.get_search_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.searcher.Search.get_search_url" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_search_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">self._url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/searcher.html#Search.get_search_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.searcher.Search.get_search_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets search URL from the page and returns it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">get_search_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/searcher.html#Search.get_search_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>xpath_of_textbox(self._url) checks the xpath of</dt><dd><p>input &#64; type = “text”[1][2][3] and “search”[1][2]</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>search_url</dt><dd><p>url of the search page</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>url of the search page</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>SearchURLNotFound</dt><dd><p>Search URL of the URL not able to be found.</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>search_url</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#interactor.exceptions.SearchURLNotFound" title="interactor.exceptions.SearchURLNotFound"><strong>SearchURLNotFound</strong></a> – Search URL of the URL not able to be found.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -231,10 +246,12 @@ perform search with no character or single space.</p>
 works on the basis of principle that there is a varying same structured div in the
 page that has the same structure as others that holds the job related information
 and job url.</p>
-<dl class="simple">
-<dt>xpaths: list of str</dt><dd><p>list of xpaths of the two jobs in the page</p>
-</dd>
-<dt>response: str</dt><dd><p>html response of the site</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xpaths</strong> (<em>list of str</em>) – list of xpaths of the two jobs in the page</p></li>
+<li><p><strong>response</strong> (<em>str</em>) – html response of the site</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -243,12 +260,15 @@ and job url.</p>
 <dt class="sig sig-object py" id="interactor.site.NonAJAX.is_crawlable">
 <span class="sig-name descname"><span class="pre">is_crawlable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/site.html#NonAJAX.is_crawlable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.site.NonAJAX.is_crawlable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns true if xpaths can be got from the links of the first page.</p>
-<dl class="simple">
-<dt>boolean</dt><dd><p>True if crawlable else raises Exceptions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if crawlable else raises Exceptions</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>NoTwoMatchingTitles</dt><dd><p>No two matching titles found</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>boolean</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#interactor.exceptions.NoTwoMatchingTitles" title="interactor.exceptions.NoTwoMatchingTitles"><strong>NoTwoMatchingTitles</strong></a> – No two matching titles found</p>
 </dd>
 </dl>
 </dd></dl>
@@ -316,16 +336,15 @@ and job url.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.titleextractor.</span></span><span class="sig-name descname"><span class="pre">MockResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/titleextractor.html#MockResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.titleextractor.MockResponse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Mock Response (fake) Response of the scrapy.Response object in order to use scrapy.link_extractor(). This only consists of the response attributes required for the link_extractor. This maybe only a partial copy of the response. But it works!</p>
-<dl class="simple">
-<dt>url: str</dt><dd><p>URL of which response needed</p>
-</dd>
-<dt>encoding: str</dt><dd><p>encoding of the page whose response is in, default=’utf-8’</p>
-</dd>
-<dt>text: str</dt><dd><p>html response of the page</p>
-</dd>
-<dt>tree: lxml.etree</dt><dd><p>lxml etree of the html response</p>
-</dd>
-<dt>selector: MockSelector</dt><dd><p>Mock (fake) selector object of the scrapy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – URL of which response needed</p></li>
+<li><p><strong>encoding</strong> (<em>str</em>) – encoding of the page whose response is in, default=’utf-8’</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – html response of the page</p></li>
+<li><p><strong>tree</strong> (<em>lxml.etree</em>) – lxml etree of the html response</p></li>
+<li><p><strong>selector</strong> (<a class="reference internal" href="#interactor.titleextractor.MockSelector" title="interactor.titleextractor.MockSelector"><em>MockSelector</em></a>) – Mock (fake) selector object of the scrapy</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -335,8 +354,9 @@ and job url.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.titleextractor.</span></span><span class="sig-name descname"><span class="pre">MockSelector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/titleextractor.html#MockSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.titleextractor.MockSelector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Fake (Mock) scrapy selector required by the MockResponse object. This is also only a partial copy of the scrapy.Selector object with only root parameter</p>
-<dl class="simple">
-<dt>root: lxml.HtmlElement</dt><dd><p>root lxml HtmlElement of the current lxml.etree of the html response strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>root</strong> (<em>lxml.HtmlElement</em>) – root lxml HtmlElement of the current lxml.etree of the html response strings.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -349,16 +369,16 @@ and job url.</p>
 <dt class="sig sig-object py" id="interactor.titleextractor.TitleExtractor.extract_jobs_from_title_xpath">
 <span class="sig-name descname"><span class="pre">extract_jobs_from_title_xpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title_xpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/titleextractor.html#TitleExtractor.extract_jobs_from_title_xpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.titleextractor.TitleExtractor.extract_jobs_from_title_xpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts job in the page if only one page and in all pages if a paginated website.</p>
-<dl class="simple">
-<dt>title_xpath: str</dt><dd><p>The template title_xpath from which to extract jobs from.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title_xpath</strong> (<em>str</em>) – The template title_xpath from which to extract jobs from.</p></li>
+<li><p><strong>Raises</strong> – </p></li>
+<li><p><strong>------Request</strong> – </p></li>
+<li><p><strong>JobTitleXpathNotFound</strong> – If Job title xpath is not supplied in.</p></li>
+</ul>
 </dd>
 </dl>
-<p>Raises
-——Request
-JobTitleXpathNotFound</p>
-<blockquote>
-<div><p>If Job title xpath is not supplied in.</p>
-</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
@@ -366,8 +386,12 @@ JobTitleXpathNotFound</p>
 <span class="sig-name descname"><span class="pre">extract_title_xpath</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/titleextractor.html#TitleExtractor.extract_title_xpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.titleextractor.TitleExtractor.extract_title_xpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts title xpath and returns it.</p>
 <p>Title xpath is the xpath of the job title inside a search page.</p>
-<dl class="simple">
-<dt>str</dt><dd><p>title_xpath: title xpath thus extracted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>title_xpath: title xpath thus extracted.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -393,12 +417,15 @@ Response:</p>
 <li><p>tree</p></li>
 </ul>
 </div></blockquote>
-<dl class="simple">
-<dt>search_url: str</dt><dd><p>search URL of URL from which Scrapy mock response to create</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>search_url</strong> (<em>str</em>) – search URL of URL from which Scrapy mock response to create</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>MockResponse</dt><dd><p>our custom mock (fake) Scrapy Response</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>our custom mock (fake) Scrapy Response</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#interactor.titleextractor.MockResponse" title="interactor.titleextractor.MockResponse">MockResponse</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -458,16 +485,18 @@ of the xpaths.</p>
 <dd><p>Gets xpaths from paginated and non paginated websites. It is a thin wrapper from
 around the _find_xpaths(). It basically handles pagination and calls it on the basis
 of pagination present or not.</p>
-<dl class="simple">
-<dt>links: list of scrapy.Link</dt><dd><p>scrapy’s link object that stores information abou the link.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>links</strong> (<em>list of scrapy.Link</em>) – scrapy’s link object that stores information abou the link.</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>xpath: str</dt><dd><p>title_xpath</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>xpath</strong> – title_xpath</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>NoTwoMatchingTitles</dt><dd><p>No Two Matching Titles were found.</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#interactor.exceptions.NoTwoMatchingTitles" title="interactor.exceptions.NoTwoMatchingTitles"><strong>NoTwoMatchingTitles</strong></a> – No Two Matching Titles were found.</p>
 </dd>
 </dl>
 </dd></dl>

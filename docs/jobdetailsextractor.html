@@ -104,33 +104,54 @@ process deadlines.</p>
 pass in a html document while calling get_deadline_date() function to get
 the deadline inside self.deadline and it’s respective xpath inside the self.
 xpath variable.</p>
-<dl class="simple">
-<dt>get_deadline_date(html): </dt><dd><p>finds the deadline date in an html document and stores into deadline
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_deadline_date(html):</span></span></dt>
+<dd><p>finds the deadline date in an html document and stores into deadline
 variable as a date string which can be parsed to obtain a python datetime
 object.</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>check_if_future_date(date):</dt><dd><p>checks if a date if a future date or a past date.</p>
-</dd>
-<dt>is_interested_date(date):</dt><dd><p>interested date refers to the date from which 90 days
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Static</span> <span class="pre">Methods</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">--------------</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">check_if_future_date(date):</span></span></dt>
+<dd><p>checks if a date if a future date or a past date.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">is_interested_date(date):</span></span></dt>
+<dd><p>interested date refers to the date from which 90 days
 haven’t been passed. checks if a date passed is within
 90 days.</p>
-</dd>
-</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="jobdetailsextractor.deadline.Deadline.check_deadline_word_present">
 <span class="sig-name descname"><span class="pre">check_deadline_word_present</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/deadline.html#Deadline.check_deadline_word_present"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.deadline.Deadline.check_deadline_word_present" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes in a words_list and checks if any of the common deadline words
 are present in the words_list.</p>
-<dl class="simple">
-<dt>words_list: list of strings</dt><dd><p>words_list is a collection of sentences like collection of group
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>words_list</strong> (<em>list of strings</em>) – words_list is a collection of sentences like collection of group
 of words termed as words_collections here.</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>boolean</dt><dd><p>True if the deadline word is present in common_deadline_words else
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the deadline word is present in common_deadline_words else
 False.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
 </dd>
 </dl>
 </dd></dl>
@@ -140,16 +161,20 @@ False.</p>
 <span class="sig-name descname"><span class="pre">check_for_nested_tag_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_to_check</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/deadline.html#Deadline.check_for_nested_tag_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.deadline.Deadline.check_for_nested_tag_label" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks for a date in a nested tag label.</p>
 <p>Eg.: &lt;p&gt;&lt;strong&gt;Apply Before: &lt;/strong&gt; 2021-12-23&lt;/p&gt;</p>
-<dl class="simple">
-<dt>tag: bs4.element.Tag</dt><dd><p>tag to check sub contents of, in example &lt;p&gt;</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tag</strong> (<em>bs4.element.Tag</em>) – tag to check sub contents of, in example &lt;p&gt;</p></li>
+<li><p><strong>date_to_check</strong> (<em>datetime object</em>) – convert your string into python datetime object and put
+here.</p></li>
+</ul>
 </dd>
-<dt>date_to_check: datetime object</dt><dd><p>convert your string into python datetime object and put
-here.</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>boolean:</dt><dd><p>True if a deadline word is present in the nested tag label and
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if a deadline word is present in the nested tag label and
 there is date_to_check besides that label otherwise False.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
 </dd>
 </dl>
 </dd></dl>
@@ -159,12 +184,15 @@ there is date_to_check besides that label otherwise False.</p>
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_if_future_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/deadline.html#Deadline.check_if_future_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.deadline.Deadline.check_if_future_date" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes in a datetime object date and checks whether the date is a future
 date or not.</p>
-<dl class="simple">
-<dt>date: datetime</dt><dd><p>python datetime object to check</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>date</strong> (<em>datetime</em>) – python datetime object to check</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>boolean</dt><dd><p>True if future date, False otherwise.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if future date, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
 </dd>
 </dl>
 </dd></dl>
@@ -174,8 +202,9 @@ date or not.</p>
 <span class="sig-name descname"><span class="pre">get_deadline_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/deadline.html#Deadline.get_deadline_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.deadline.Deadline.get_deadline_date" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stores deadline date and xpath in the object variables after it’s
 extraction from the document.</p>
-<dl class="simple">
-<dt>html: string</dt><dd><p>String in which an HTML document is present.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>html</strong> (<em>string</em>) – String in which an HTML document is present.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -186,12 +215,15 @@ extraction from the document.</p>
 <dd><p>Checks whether the date or the datetime object passed is interested date
 or not. Interested date refers to the date within 90 days from today’s
 date.</p>
-<dl class="simple">
-<dt>date: datetime</dt><dd><p>python datetime object to check</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>date</strong> (<em>datetime</em>) – python datetime object to check</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>boolean</dt><dd><p>True if within 90 days (interested date), False otherwise.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if within 90 days (interested date), False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
 </dd>
 </dl>
 </dd></dl>
@@ -241,10 +273,12 @@ date.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.main.</span></span><span class="sig-name descname"><span class="pre">JobDetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/main.html#JobDetails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.main.JobDetails" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Job Details object with parameters and skills which facilitates it’s extractions and storing into the database.</p>
-<dl class="simple">
-<dt>url: str</dt><dd><p>url of the job to extract details from</p>
-</dd>
-<dt>name: str</dt><dd><p>name of the job to extract details from</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – url of the job to extract details from</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – name of the job to extract details from</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="py method">
@@ -272,8 +306,12 @@ Extracts out job details from the HTML page including the skill-set of the job.<
 <dt class="sig sig-object py" id="jobdetailsextractor.main.JobDetails.get_name_xpath">
 <span class="sig-name descname"><span class="pre">get_name_xpath</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/main.html#JobDetails.get_name_xpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.main.JobDetails.get_name_xpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts out and returns the name xpath using job name from the HTML document.</p>
-<dl class="simple">
-<dt>name_xpath</dt><dd><p>xpath of the name in the HTML document</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>xpath of the name in the HTML document</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>name_xpath</p>
 </dd>
 </dl>
 </dd></dl>
@@ -477,10 +515,12 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dt class="sig sig-object py" id="jobdetailsextractor.parameters.Parameters.assign_misc_parameters_value">
 <span class="sig-name descname"><span class="pre">assign_misc_parameters_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/parameters.html#Parameters.assign_misc_parameters_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.parameters.Parameters.assign_misc_parameters_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assigns the value of the misc parameters.</p>
-<dl class="simple">
-<dt>node: lxml.HtmlElement</dt><dd><p>node to assign misc parameters values from</p>
-</dd>
-<dt>node_text: str</dt><dd><p>node text of the node to assign misc parameters values from</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> (<em>lxml.HtmlElement</em>) – node to assign misc parameters values from</p></li>
+<li><p><strong>node_text</strong> (<em>str</em>) – node text of the node to assign misc parameters values from</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -489,10 +529,12 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dt class="sig sig-object py" id="jobdetailsextractor.parameters.Parameters.detect_and_assign_xpath">
 <span class="sig-name descname"><span class="pre">detect_and_assign_xpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/parameters.html#Parameters.detect_and_assign_xpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.parameters.Parameters.detect_and_assign_xpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Detects the xpath of the parameter and assign its xpath inside the self.parameters_xpath_dict.</p>
-<dl class="simple">
-<dt>node: lxml.HtmlElement</dt><dd><p>node to find xpath of</p>
-</dd>
-<dt>node_text: str</dt><dd><p>node text of the node to find xpath of</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> (<em>lxml.HtmlElement</em>) – node to find xpath of</p></li>
+<li><p><strong>node_text</strong> (<em>str</em>) – node text of the node to find xpath of</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -507,12 +549,15 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dt class="sig sig-object py" id="jobdetailsextractor.parameters.Parameters.get_paragraph_values">
 <span class="sig-name descname"><span class="pre">get_paragraph_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keywords</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/parameters.html#Parameters.get_paragraph_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.parameters.Parameters.get_paragraph_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the paragraph values of the nodes with keywords inside the text.</p>
-<dl class="simple">
-<dt>keywords</dt><dd><p>keywords of which to extract paragraph values of</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>keywords</strong> – keywords of which to extract paragraph values of</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>str</dt><dd><p>string of the paragraph values thus extracted</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string of the paragraph values thus extracted</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -521,12 +566,15 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dt class="sig sig-object py" id="jobdetailsextractor.parameters.Parameters.get_parameters_from_node">
 <span class="sig-name descname"><span class="pre">get_parameters_from_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/parameters.html#Parameters.get_parameters_from_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.parameters.Parameters.get_parameters_from_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the parameters discovered from the HTML document and assigns its xpaths into the self.parameters_xpath_dict. Applies some special techniques for company name and company email.</p>
-<dl class="simple">
-<dt>root: lxml.HtmlElement</dt><dd><p>root node to iterate in the child (leaf) nodes on</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>root</strong> (<em>lxml.HtmlElement</em>) – root node to iterate in the child (leaf) nodes on</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>set</dt><dd><p>set of parameters discovered under the root node</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>set of parameters discovered under the root node</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>set</p>
 </dd>
 </dl>
 </dd></dl>
@@ -535,12 +583,15 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dt class="sig sig-object py" id="jobdetailsextractor.parameters.Parameters.get_parent">
 <span class="sig-name descname"><span class="pre">get_parent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/parameters.html#Parameters.get_parent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.parameters.Parameters.get_parent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns parent of a node.</p>
-<dl class="simple">
-<dt>node: lxml.HtmlElement</dt><dd><p>node to get parent of</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>node</strong> (<em>lxml.HtmlElement</em>) – node to get parent of</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>lxml.HtmlElement</dt><dd><p>parent of the node.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>parent of the node.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>lxml.HtmlElement</p>
 </dd>
 </dl>
 </dd></dl>
@@ -549,16 +600,19 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dt class="sig sig-object py" id="jobdetailsextractor.parameters.Parameters.get_xpath">
 <span class="sig-name descname"><span class="pre">get_xpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/parameters.html#Parameters.get_xpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.parameters.Parameters.get_xpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the xpath of node by checking the node_text if it is inside the alternative keywords.</p>
-<dl class="simple">
-<dt>node</dt><dd><p>node to get xpath of</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> – node to get xpath of</p></li>
+<li><p><strong>node_text</strong> – node text to get xpath of</p></li>
+<li><p><strong>parameter</strong> – parameter to get alternative text and consecutively get xpath of</p></li>
+</ul>
 </dd>
-<dt>node_text</dt><dd><p>node text to get xpath of</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>xpath of the node</p>
 </dd>
-<dt>parameter</dt><dd><p>parameter to get alternative text and consecutively get xpath of</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>str</dt><dd><p>xpath of the node</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -567,12 +621,15 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dt class="sig sig-object py" id="jobdetailsextractor.parameters.Parameters.match_company_email">
 <span class="sig-name descname"><span class="pre">match_company_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/parameters.html#Parameters.match_company_email"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.parameters.Parameters.match_company_email" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tries to match the company email if the company email is in the text.</p>
-<dl class="simple">
-<dt>text: str</dt><dd><p>text to match company email on</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – text to match company email on</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>str or None</dt><dd><p>str of the email if found else None</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>str of the email if found else None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str or None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -581,14 +638,18 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dt class="sig sig-object py" id="jobdetailsextractor.parameters.Parameters.match_company_name">
 <span class="sig-name descname"><span class="pre">match_company_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/parameters.html#Parameters.match_company_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.parameters.Parameters.match_company_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tries to match the company name if the company name is in the text.</p>
-<dl class="simple">
-<dt>text: str</dt><dd><p>text to match company name on</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – text to match company name on</p></li>
+<li><p><strong>node</strong> (<em>lxml.HtmlElement</em>) – node to check for if it is not a title, to exclude &lt;title&gt;</p></li>
+</ul>
 </dd>
-<dt>node: lxml.HtmlElement</dt><dd><p>node to check for if it is not a title, to exclude &lt;title&gt;</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>str of the name if found else None</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>str or None</dt><dd><p>str of the name if found else None</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str or None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -597,12 +658,15 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dt class="sig sig-object py" id="jobdetailsextractor.parameters.Parameters.search_word_in_tag">
 <span class="sig-name descname"><span class="pre">search_word_in_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/parameters.html#Parameters.search_word_in_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.parameters.Parameters.search_word_in_tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of words in tag and returns the word and last index value of the word list, if the word is present in the tag.</p>
-<dl class="simple">
-<dt>words: list</dt><dd><p>list of words to search the parameters on</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>words</strong> (<em>list</em>) – list of words to search the parameters on</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>tuple</dt><dd><p>word and it’s value (last index of the words list) if word present else None, None</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>word and it’s value (last index of the words list) if word present else None, None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
@@ -631,12 +695,18 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.skills.</span></span><span class="sig-name descname"><span class="pre">SkillSet</span></span><a class="reference internal" href="_modules/jobdetailsextractor/skills.html#SkillSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.skills.SkillSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Skill set of a user or job</p>
-<dl class="simple">
-<dt>get_skills(skills_text)</dt><dd><p>Get skills from giver skills_text</p>
-</dd>
-<dt>iter(skills_object): Eg. set(skills_object)</dt><dd><p>Get the skills as the desired iterable. set in the case of example</p>
-</dd>
-</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="jobdetailsextractor.skills.SkillSet.get_skills">
+<span class="sig-name descname"><span class="pre">get_skills</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skills_text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/skills.html#SkillSet.get_skills"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.skills.SkillSet.get_skills" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get skills from giver skills_text</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jobdetailsextractor.skills.SkillSet.iter">
+<span class="sig-name descname"><span class="pre">iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skills_object):</span> <span class="pre">Eg.</span> <span class="pre">set(skills_object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jobdetailsextractor.skills.SkillSet.iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the skills as the desired iterable. set in the case of example</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="jobdetailsextractor.skills.SkillSet.filter_lower_grams">
 <span class="sig-name descname"><span class="pre">filter_lower_grams</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/skills.html#SkillSet.filter_lower_grams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.skills.SkillSet.filter_lower_grams" title="Permalink to this definition">¶</a></dt>
@@ -644,8 +714,8 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="jobdetailsextractor.skills.SkillSet.get_skills">
-<span class="sig-name descname"><span class="pre">get_skills</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skills_text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/skills.html#SkillSet.get_skills"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.skills.SkillSet.get_skills" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">get_skills</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skills_text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/skills.html#SkillSet.get_skills"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets skills from the skills_text and store it into 1-5 grams internal variable.</p>
 </dd></dl>
 

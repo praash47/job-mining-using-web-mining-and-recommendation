@@ -2,6 +2,7 @@
 This submodule handles the extraction of all job details
 """
 import datetime
+import spacy
 import time
 
 from django_eventstream import send_event
@@ -22,6 +23,9 @@ def extract_jobs(pending_jobs):
     from checkers.models import JobWebsite
     job_websites = JobWebsite.objects.all()
 
+    # Loading of the NLP module for company name extraction
+    nlp = spacy.load("en_core_web_lg")
+
     # Cycle through the job websites so that no server gets request often.
     from itertools import cycle
     for job_website in cycle(job_websites):
@@ -37,8 +41,10 @@ def extract_jobs(pending_jobs):
                 # Get job details
                 job_details = JobDetails(job.url, job.title)
                 job_details.fetch()
-                job_details.get_details()
+                job_details.get_details(nlp)
                 job_details.store_into_database()
+                del job_details  # free up memory
+                
                 # Update pending jobs
                 pending_jobs = Job.objects.filter(extracted=False)
                 if not pending_jobs:

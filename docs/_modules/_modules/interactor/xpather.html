@@ -1,0 +1,370 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>interactor.xpather &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor.xpather</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for interactor.xpather</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This submodule is responsibe for locating thus named locators. This file handles the location</span>
+<span class="sd">within the websites i.e. pages through the paginator object and also handles the locations</span>
+<span class="sd">that are within the page with the help of xpather object that is responsible for processing</span>
+<span class="sd">of the xpaths.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">-------</span>
+<span class="sd">Xpather()</span>
+<span class="sd">    Responsible for the extraction of the title xpath and handle all it&#39;s complexities.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">NoTwoMatchingTitles</span>
+
+<span class="kn">from</span> <span class="nn">backend.misc</span> <span class="k">import</span> <span class="n">common_start</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;interactor&#39;</span><span class="p">)</span>
+<span class="n">mainlogger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;main&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Xpather"><a class="viewcode-back" href="../../interactor.html#interactor.xpather.Xpather">[docs]</a><span class="k">class</span> <span class="nc">Xpather</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">paginated</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This class is responsible for handling and computing the xpaths. It is</span>
+<span class="sd">        extracting the xpaths from the site and abstracts the complexities of</span>
+<span class="sd">        handling the xpaths.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        response: str</span>
+<span class="sd">            HTML response of the site</span>
+<span class="sd">        site: Site</span>
+<span class="sd">            site object of the website</span>
+<span class="sd">        paginated: boolean</span>
+<span class="sd">            True if pagination is there</span>
+
+<span class="sd">        Methods</span>
+<span class="sd">        -------</span>
+<span class="sd">        get_xpath: Use to extract xpaths from the website.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Xpath #1 and #2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_first</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_second</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Matching texts and urls of job titles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_job_titles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Reading 70,000 titles.&#39;</span><span class="p">)</span>
+        <span class="n">mainlogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Reading 70,000 titles.&#39;</span><span class="p">)</span>
+        <span class="c1"># titles_combined.txt: 70,000 titles to match xpaths from.</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;interactor/reqs/titles_combined.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">titles</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_job_titles</span> <span class="o">=</span> <span class="p">[</span><span class="n">title</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                               <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">titles</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
+
+        <span class="c1"># Link Text and URLs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_link_texts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_link_urls</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># HTML tree for getting xpaths of the links</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">tree</span>
+
+        <span class="c1"># Site object and Paginated, that is pagination is present in website.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_site</span> <span class="o">=</span> <span class="n">site</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_paginated</span> <span class="o">=</span> <span class="n">paginated</span>
+
+<div class="viewcode-block" id="Xpather.get_xpath"><a class="viewcode-back" href="../../interactor.html#interactor.xpather.Xpather.get_xpath">[docs]</a>    <span class="k">def</span> <span class="nf">get_xpath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">links</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets xpaths from paginated and non paginated websites. It is a thin wrapper from</span>
+<span class="sd">        around the _find_xpaths(). It basically handles pagination and calls it on the basis</span>
+<span class="sd">        of pagination present or not.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        links: list of scrapy.Link</span>
+<span class="sd">            scrapy&#39;s link object that stores information abou the link.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        xpath: str</span>
+<span class="sd">            title_xpath</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        NoTwoMatchingTitles</span>
+<span class="sd">            No Two Matching Titles were found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Extract out link texts of job titles present in site and the job titles file.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_link_texts</span> <span class="o">=</span> <span class="p">[</span><span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span> <span class="k">if</span> <span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_titles</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_link_texts</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NoTwoMatchingTitles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_site</span><span class="o">.</span><span class="n">search_page_url</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Found matching titles: </span><span class="si">{self._link_texts}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">mainlogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Found matching titles: </span><span class="si">{self._link_texts}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">mainlogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Finding xpaths&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginated</span><span class="p">:</span>
+            <span class="c1"># Check last page and checking and assigning the search step.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_site</span><span class="o">.</span><span class="n">pages</span><span class="o">.</span><span class="n">get_last_page</span><span class="p">(</span><span class="n">links</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_site</span><span class="o">.</span><span class="n">pages</span><span class="o">.</span><span class="n">check_search_step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_site</span><span class="p">,</span> <span class="n">links</span><span class="p">)</span>
+
+            <span class="n">xpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_xpath</span><span class="p">(</span><span class="n">links</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">xpath</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">xpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_xpath</span><span class="p">(</span><span class="n">links</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">xpath</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">xpath</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Couldn&#39;t find the xpath.&quot;</span><span class="p">)</span>
+
+            <span class="k">raise</span> <span class="n">NoTwoMatchingTitles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_site</span><span class="o">.</span><span class="n">search_page_url</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_find_xpath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">links</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Finds the xpaths from the links. Also, it handles the nested links as well</span>
+<span class="sd">        as the situations where the xpaths are not present.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        links: list of scrapy.Link</span>
+<span class="sd">            scrapy&#39;s link object that stores information abou the link.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        xpaths: list of str</span>
+<span class="sd">            list of xpath</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Finding the xpath...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_first</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_nth_xpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_link_texts</span><span class="p">,</span> <span class="n">link_texts_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_second</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_nth_xpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_link_texts</span><span class="p">,</span> <span class="n">link_texts_index</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">xpaths</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_second</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;One of the xpath not found, trying to find nested&quot;</span><span class="p">)</span>
+            <span class="c1"># Both xpaths are not present, then it should be nested.</span>
+            <span class="n">xpaths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_xpath_from_nested</span><span class="p">(</span><span class="n">links</span><span class="p">)</span>
+            <span class="c1"># If also not present from nested, then it is not present.</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">xpaths</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;not even nested xpath found&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># If xpaths is not already found from nested.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">xpaths</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">xpath</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first</span><span class="p">:</span>
+                <span class="n">xpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">getpath</span><span class="p">(</span><span class="n">xpath</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">xpath</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_second</span><span class="p">:</span>
+                <span class="n">xpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">getpath</span><span class="p">(</span><span class="n">xpath</span><span class="p">))</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Got xpaths: </span><span class="si">{xpaths}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="c1"># Filter out the xpaths because of the case that useless xpaths or false xpaths</span>
+        <span class="c1"># from the divs that have the job title but still not legitimate job box are the</span>
+        <span class="c1"># types. For example, recommended jobs, featured jobs etc.</span>
+        <span class="n">xpaths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_eligible_xpaths</span><span class="p">(</span><span class="n">xpaths</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Eligible xpaths: </span><span class="si">{xpaths}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Creating the title xpath by finding the common start</span>
+        <span class="n">xpath_init</span> <span class="o">=</span> <span class="n">common_start</span><span class="p">(</span><span class="n">xpaths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xpaths</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">xpath_end</span> <span class="o">=</span> <span class="n">common_start</span><span class="p">(</span>
+            <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">xpaths</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">xpaths</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+
+        <span class="n">xpath</span> <span class="o">=</span> <span class="n">xpath_init</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">xpath_end</span><span class="p">))</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Title xpath: </span><span class="si">{xpath}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">xpath</span>
+
+    <span class="k">def</span> <span class="nf">_get_xpath_from_nested</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">links</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        In some websites, the urls are listed one level deep. The xpath is got from link-text.</span>
+<span class="sd">        in nested situations like this.</span>
+
+<span class="sd">        For eg: &lt;a href=&quot;job.url&quot;&gt;&lt;h3&gt;Job Title Text&lt;/h3&gt;&lt;/a&gt;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        links: list of scrapy.Link</span>
+<span class="sd">            scrapy&#39;s link object that stores information abou the link.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        xpaths: list of str</span>
+<span class="sd">            list of xpath</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Extract out link urls of job titles present in site and the job titles file.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_link_urls</span> <span class="o">=</span> <span class="p">[</span><span class="n">link</span><span class="o">.</span><span class="n">url</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span> <span class="k">if</span> <span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span>
+            <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_titles</span><span class="p">]</span>
+
+        <span class="c1"># Find a with urls of link urls. Grab the node inside it. For eg.: &lt;h3&gt; of the above example</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">nested_elements1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;//a[contains(@href,&#39;</span><span class="si">{self._link_urls[0]}</span><span class="s2">&#39;)]/node()&quot;</span><span class="p">)</span>
+            <span class="n">nested_elements2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;//a[contains(@href,&#39;</span><span class="si">{self._link_urls[1]}</span><span class="s2">&#39;)]/node()&quot;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># If an element object is found inside those a tags and inside of it a tag</span>
+        <span class="c1"># is present and contains the link_text, then place that intermediate tag in</span>
+        <span class="c1"># the path list.</span>
+        <span class="n">xpath_one</span><span class="p">,</span> <span class="n">xpath_two</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">nested_elements1</span><span class="p">:</span>
+            <span class="c1"># text inside tag is also regarded as a &#39;node&#39;, to ignore it only element type, not str</span>
+            <span class="c1"># type are taken here.</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># Normally, it is of str type.</span>
+                <span class="n">xpath_one</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s2">&quot;//a//</span><span class="si">{element.tag}</span><span class="s2">[contains(text(), </span><span class="se">\&quot;</span><span class="s2">&#39;</span><span class="si">{self._link_texts[0]}</span><span class="s2">&#39;</span><span class="se">\&quot;</span><span class="s2">)]&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">nested_elements2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">xpath_two</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s2">&quot;//a//</span><span class="si">{element.tag}</span><span class="s2">[contains(text(), </span><span class="se">\&quot;</span><span class="s2">&#39;</span><span class="si">{self._link_texts[1]}</span><span class="s2">&#39;</span><span class="se">\&quot;</span><span class="s2">)]&quot;</span><span class="p">)</span>
+        <span class="c1"># Issue is not having nested elements</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">xpath_one</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">xpath_two</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># Extraction of xpaths from tree</span>
+        <span class="n">xpaths</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">xpath</span> <span class="ow">in</span> <span class="n">xpath_one</span><span class="p">:</span>
+            <span class="n">xpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">getpath</span><span class="p">(</span><span class="n">xpath</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">xpath</span> <span class="ow">in</span> <span class="n">xpath_two</span><span class="p">:</span>
+            <span class="n">xpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">getpath</span><span class="p">(</span><span class="n">xpath</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">xpaths</span>
+
+    <span class="k">def</span> <span class="nf">_find_nth_xpath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">link_texts</span><span class="p">,</span> <span class="n">link_texts_index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to find the non-nested xpath from the link-text. If not found, then simply</span>
+<span class="sd">        passes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        link_texts: list of str</span>
+<span class="sd">            list of link text that were matched from above</span>
+<span class="sd">        link_texts_index: int, default=0</span>
+<span class="sd">            the index of link text that we are currently working on.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        xpath if found, otherwise None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Finding the n = </span><span class="si">{link_texts_index}</span><span class="s2"> xpath...&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Get two matching xpaths to compute out the difference</span>
+            <span class="n">xpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+                <span class="n">f</span><span class="s1">&#39;//a[contains(text(), &quot;</span><span class="si">{link_texts[link_texts_index]}</span><span class="s1">&quot;)]&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">xpath</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Couldn&#39;t find the xpath.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_eligible_xpaths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xpaths</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        There are many non eligible or false xpaths that are present in the page</span>
+<span class="sd">        that have the job title but still not legitimate job box are the types.</span>
+<span class="sd">        For example, recommended jobs, featured jobs etc.</span>
+
+<span class="sd">        This function prepares and returns the eligible xpaths. This function is</span>
+<span class="sd">        imagined to be accurately enough and assumes that not more than one job</span>
+<span class="sd">        is detected from the false jobs boxes or example featured boxes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xpaths: list of str</span>
+<span class="sd">            list of xpath strings</span>
+
+<span class="sd">        Returns </span>
+<span class="sd">        -------</span>
+<span class="sd">        eligible_xpaths: list of str</span>
+<span class="sd">            list of xpaths that are eligible for finding xpaths from within the job.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Filtering out non eligible xpaths&#39;</span><span class="p">)</span>
+        <span class="c1"># compute the length of all the n xpaths in the xpaths.</span>
+        <span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">xpath</span><span class="p">)</span> <span class="k">for</span> <span class="n">xpath</span> <span class="ow">in</span> <span class="n">xpaths</span><span class="p">]</span>
+
+        <span class="c1"># find the length of the xpath of which two instances are present in the</span>
+        <span class="c1"># xpaths list.</span>
+        <span class="n">similar_xpaths_length</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">length</span> <span class="ow">in</span> <span class="n">lengths</span><span class="p">:</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">lengths</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">length</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">similar_xpaths_length</span> <span class="o">=</span> <span class="n">length</span>
+
+        <span class="c1"># Get the eligible xpaths that have only similar xpaths length.</span>
+        <span class="n">eligible_xpaths</span> <span class="o">=</span> <span class="p">[</span><span class="n">xpath</span> <span class="k">for</span> <span class="n">xpath</span> <span class="ow">in</span> <span class="n">xpaths</span>
+                           <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">xpath</span><span class="p">)</span> <span class="o">==</span> <span class="n">similar_xpaths_length</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">xpath</span><span class="p">)</span> <span class="o">==</span> <span class="n">similar_xpaths_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># + 1 because [1] or [26] may be equal if there are many job ads in same page.</span>
+
+        <span class="k">return</span> <span class="n">eligible_xpaths</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor.xpather</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>timers.jobextractor &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">timers.jobextractor</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for timers.jobextractor</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This submodule handles the extraction of all job details</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">django_eventstream</span> <span class="k">import</span> <span class="n">send_event</span>
+
+<span class="kn">from</span> <span class="nn">jobdetailsextractor.models</span> <span class="k">import</span> <span class="n">Job</span>
+<span class="kn">from</span> <span class="nn">jobdetailsextractor.main</span> <span class="k">import</span> <span class="n">JobDetails</span>
+
+
+<div class="viewcode-block" id="extract_jobs"><a class="viewcode-back" href="../../timers.html#timers.jobextractor.extract_jobs">[docs]</a><span class="k">def</span> <span class="nf">extract_jobs</span><span class="p">(</span><span class="n">pending_jobs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extracts job parameters from the pending jobs in a cyclic fashion. Cyclic fashion means each job website gets once per cycle for it&#39;s single job extraction.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pending_jobs: QuerySet</span>
+<span class="sd">        Django QuerySet containing the iterable of pending jobs (extracted=False).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">checkers.models</span> <span class="k">import</span> <span class="n">JobWebsite</span>
+    <span class="n">job_websites</span> <span class="o">=</span> <span class="n">JobWebsite</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="c1"># Cycle through the job websites so that no server gets request often.</span>
+    <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">cycle</span>
+    <span class="k">for</span> <span class="n">job_website</span> <span class="ow">in</span> <span class="n">cycle</span><span class="p">(</span><span class="n">job_websites</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">pending_jobs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">website</span> <span class="o">==</span> <span class="n">job_website</span><span class="p">:</span>
+                <span class="n">send_event</span><span class="p">(</span><span class="s1">&#39;backend_daemon&#39;</span><span class="p">,</span> <span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="p">{</span>
+                    <span class="s1">&#39;currentMessage&#39;</span><span class="p">:</span> <span class="n">f</span><span class="s1">&#39;Extracting For </span><span class="si">{job.website.name}</span><span class="s1">: Job: </span><span class="si">{job.title}</span><span class="s1">&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;messagePriority&#39;</span><span class="p">:</span> <span class="s1">&#39;info&#39;</span>
+                <span class="p">})</span>
+
+                <span class="n">job_start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+                <span class="c1"># Get job details</span>
+                <span class="n">job_details</span> <span class="o">=</span> <span class="n">JobDetails</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+                <span class="n">job_details</span><span class="o">.</span><span class="n">fetch</span><span class="p">()</span>
+                <span class="n">job_details</span><span class="o">.</span><span class="n">get_details</span><span class="p">()</span>
+                <span class="n">job_details</span><span class="o">.</span><span class="n">store_into_database</span><span class="p">()</span>
+                <span class="c1"># Update pending jobs</span>
+                <span class="n">pending_jobs</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">extracted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">pending_jobs</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+                <span class="n">job_end_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+                <span class="n">wait</span><span class="p">(</span><span class="n">job_start_time</span><span class="p">,</span> <span class="n">job_end_time</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="wait"><a class="viewcode-back" href="../../timers.html#timers.jobextractor.wait">[docs]</a><span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="n">job_start_time</span><span class="p">,</span> <span class="n">job_end_time</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sleeps for the time frame mentioned in server wait time excluding the job execution time.</span>
+
+<span class="sd">    Parameters </span>
+<span class="sd">    ----------</span>
+<span class="sd">    job_start_time: datetime</span>
+<span class="sd">        datetime object of the job starting time</span>
+<span class="sd">    job_end_time: datetime</span>
+<span class="sd">        datetime object of the job ending time</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">backend.misc</span> <span class="k">import</span> <span class="n">read_config</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">read_config</span><span class="p">(</span><span class="s1">&#39;timers/timersettings.ini&#39;</span><span class="p">)</span>
+    <span class="n">server_wait_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span>
+        <span class="n">minutes</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;times&#39;</span><span class="p">,</span> <span class="s1">&#39;server_wait_time&#39;</span><span class="p">)))</span>
+
+    <span class="n">time_elapsed</span> <span class="o">=</span> <span class="n">job_end_time</span> <span class="o">-</span> <span class="n">job_start_time</span>
+    <span class="k">if</span> <span class="n">time_elapsed</span> <span class="o">&lt;</span> <span class="n">server_wait_time</span><span class="p">:</span>
+        <span class="n">time_to_sleep</span> <span class="o">=</span> <span class="n">server_wait_time</span> <span class="o">-</span> <span class="n">time_elapsed</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">time_to_sleep</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">())</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">timers.jobextractor</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

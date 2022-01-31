@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>checkers.checkjobwebsite &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">checkers.checkjobwebsite</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for checkers.checkjobwebsite</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file consists of class that is required to check whether a</span>
+<span class="sd">website is a job website or not.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">-------</span>
+<span class="sd">CheckJobWebsite(urls=None)</span>
+<span class="sd">    checks if a website is job website or not.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">urllib</span> <span class="k">import</span> <span class="n">parse</span>
+
+<span class="kn">from</span> <span class="nn">.models</span> <span class="k">import</span> <span class="n">JobWebsite</span>
+
+<span class="kn">from</span> <span class="nn">.misccheckers</span> <span class="k">import</span> <span class="n">is_interested_website</span>
+
+<span class="kn">from</span> <span class="nn">backend.misc</span> <span class="k">import</span> <span class="n">read_config</span>
+<span class="kn">from</span> <span class="nn">requestutils.request</span> <span class="k">import</span> <span class="n">Request</span>
+<span class="kn">from</span> <span class="nn">tagprocessor.tagprocessor</span> <span class="k">import</span> <span class="n">TagProcessor</span>
+<span class="kn">from</span> <span class="nn">tagprocessor.metatagprocessor</span> <span class="k">import</span> <span class="n">MetaTagProcessor</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;checkjobs&#39;</span><span class="p">)</span>
+<span class="n">mainlogger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;main&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CheckJobWebsite"><a class="viewcode-back" href="../../checkers.html#checkers.checkjobwebsite.CheckJobWebsite">[docs]</a><span class="k">class</span> <span class="nc">CheckJobWebsite</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Utilities required to check whether a website is job website or not.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    check_urls()</span>
+<span class="sd">        Returns dictionary of checked urls.</span>
+<span class="sd">    check_single_url(url)</span>
+<span class="sd">        Checks single url is job website url or not.    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">urls</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        urls: list of strings, optional</span>
+<span class="sd">            Strings here are individual urls.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;CheckJobWebsite object created&#39;</span><span class="p">)</span>
+        <span class="n">mainlogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Checking Homepage based websites:&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_urls_to_check</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">urls</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
+                <span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+                <span class="c1"># Only homepage based websites: like https://www.merojob.com not, https://www.facebook.com/jobminers</span>
+                <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">check_homepage</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_urls_to_check</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Only Homepage based websites: </span><span class="si">{self._urls_to_check}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span> <span class="o">=</span> <span class="n">read_config</span><span class="p">(</span><span class="s1">&#39;checkers/checkjobwebsite.ini&#39;</span><span class="p">)</span>
+
+        <span class="c1"># needed for performing _jobandjobs or joborjobs logic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jobandjobs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_joborjobs</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="CheckJobWebsite.check_urls"><a class="viewcode-back" href="../../checkers.html#checkers.checkjobwebsite.CheckJobWebsite.check_urls">[docs]</a>    <span class="k">def</span> <span class="nf">check_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used after the url property of the object has been set.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            dict:</span>
+<span class="sd">                of the following format</span>
+<span class="sd">                Eg:</span>
+<span class="sd">                {</span>
+<span class="sd">                    {</span>
+<span class="sd">                        &quot;url&quot;: www.merojob.com  # url checked.</span>
+<span class="sd">                        &quot;status&quot;: True  # status whether it is job website. True if yes else False</span>
+<span class="sd">                    }</span>
+<span class="sd">                }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">job_websites</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_urls_to_check</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">JobWebsite</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">():</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_single_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Verifying </span><span class="si">{url}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">mainlogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Verifying </span><span class="si">{url}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="c1"># extraction of domain name i.e. merojob from https://merojob.com</span>
+                    <span class="n">domain_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_domain_name</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+                    <span class="n">job_websites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+                    <span class="n">job_website</span> <span class="o">=</span> <span class="n">JobWebsite</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                        <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">domain_name</span>
+                    <span class="p">)</span>
+                    <span class="n">job_website</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Verified </span><span class="si">{job_websites}</span><span class="s2"> to be new job websites.&quot;</span><span class="p">)</span>
+        <span class="n">mainlogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Verified </span><span class="si">{job_websites}</span><span class="s2"> to be new job websites.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">job_websites</span></div>
+
+<div class="viewcode-block" id="CheckJobWebsite.check_single_url"><a class="viewcode-back" href="../../checkers.html#checkers.checkjobwebsite.CheckJobWebsite.check_single_url">[docs]</a>    <span class="k">def</span> <span class="nf">check_single_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks single url and returns True if it is a job website.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        url: str</span>
+<span class="sd">            url to check if it is a job website or not.</span>
+<span class="sd">        job_or_jobs_nepal: boolean, optional</span>
+<span class="sd">            Set if job or jobs nepal keyword is to be checked instead of job</span>
+<span class="sd">            and jobs and nepal.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        boolean</span>
+<span class="sd">            True if self._analyze_keywords() or in general terms, it is a job website.</span>
+<span class="sd">            else False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check if jobs domain present in url or it is not interested website.</span>
+        <span class="k">if</span> <span class="n">parse</span><span class="o">.</span><span class="n">urlsplit</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">netloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;jobs.&#39;</span> \
+                <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_interested_website</span><span class="p">(</span><span class="n">url</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{url}</span><span class="s2"> failed the jobs. test&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Try to get html content from the url.</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">request_html</span><span class="p">()</span>
+
+        <span class="n">meta_info</span> <span class="o">=</span> <span class="n">CheckJobWebsite</span><span class="o">.</span><span class="n">collect_meta_info</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+
+        <span class="c1"># job, jobs and nepal must keywords</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jobandjobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_keywords</span><span class="p">(</span><span class="n">meta_info</span><span class="p">)</span>
+        <span class="c1"># job or jobs and nepal must keywords</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_joborjobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_keywords</span><span class="p">(</span>
+            <span class="n">meta_info</span><span class="p">,</span> <span class="n">job_or_jobs_nepal</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># if both parameters false, return False.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jobandjobs</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_joborjobs</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{url}</span><span class="s2"> failed the andorjob test&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># check if nepali website with abroad based ads.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_if_abroad_based</span><span class="p">(</span><span class="n">meta_info</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;</span><span class="si">{url}</span><span class="s2"> is an abroad based job website. Thus, ignored.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="CheckJobWebsite.collect_meta_info"><a class="viewcode-back" href="../../checkers.html#checkers.checkjobwebsite.CheckJobWebsite.collect_meta_info">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">collect_meta_info</span><span class="p">(</span><span class="n">html</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Collects meta info and returns from the html.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        html: str</span>
+<span class="sd">            html string to collect meta info from</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            list of meta_info keywords</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">meta_info</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Get title tag contents</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">TagProcessor</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
+        <span class="n">title_content</span> <span class="o">=</span> <span class="n">title</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">title_content</span><span class="p">:</span>
+            <span class="n">meta_info</span> <span class="o">+=</span> <span class="n">title_content</span>
+
+        <span class="c1"># Get meta tag keywords, description, og title &amp; description</span>
+        <span class="n">meta_tag</span> <span class="o">=</span> <span class="n">MetaTagProcessor</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+        <span class="n">meta_info</span> <span class="o">+=</span> <span class="n">meta_tag</span><span class="o">.</span><span class="n">get_keywords</span><span class="p">()</span>
+        <span class="n">meta_info</span> <span class="o">+=</span> <span class="n">meta_tag</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
+        <span class="n">meta_info</span> <span class="o">+=</span> <span class="n">meta_tag</span><span class="o">.</span><span class="n">get_og_title</span><span class="p">()</span>
+        <span class="n">meta_info</span> <span class="o">+=</span> <span class="n">meta_tag</span><span class="o">.</span><span class="n">get_og_description</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">meta_info</span></div>
+
+    <span class="k">def</span> <span class="nf">_analyze_keywords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta_info</span><span class="p">,</span> <span class="n">job_or_jobs_nepal</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if a website is job website or not based on meta_info. </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">            meta_info: list of strings</span>
+<span class="sd">                meta_info here refers to all the content present in </span>
+<span class="sd">                the title tag, meta name = description,</span>
+<span class="sd">                title, property = og:title, og: description.</span>
+<span class="sd">            job_or_jobs_nepal: boolean</span>
+<span class="sd">                job or jobs nepal specifies which type of checking we need.        </span>
+<span class="sd">                There are two methods for checking:</span>
+<span class="sd">                1. Default way: job and jobs nepal; here the keywords job, jobs and</span>
+<span class="sd">                nepal is to be present in the urls&#39;s meta info.</span>
+<span class="sd">                2. Job or Jobs Nepal: Here either job or jobs word and nepal word is </span>
+<span class="sd">                to be present in the url&#39;s meta info.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        boolean</span>
+<span class="sd">            True if the parameter specified keywords are present.</span>
+<span class="sd">            False if not present or there are no keywords in the metainfo part.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">            No Exception. Exception gets activated when meta_info is not present.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Job Website Checking Related Info</span>
+
+        <span class="n">must_keywords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;global&#39;</span><span class="p">,</span> <span class="s1">&#39;must_keywords&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">must_keywords</span> <span class="o">=</span> <span class="p">[</span><span class="n">keyword</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">must_keywords</span><span class="p">]</span>
+
+        <span class="c1"># Default conditon_to_use is False because we want to use job and jobs</span>
+        <span class="n">condition_to_use</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># For computing job_or_jobs_nepal results.</span>
+        <span class="n">joborjobs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">job_or_jobs_nepal</span><span class="p">:</span>
+            <span class="c1"># extract job and jobs into a list for checking in meta info or not.</span>
+            <span class="n">joborjobs</span> <span class="o">=</span> <span class="p">[</span><span class="n">must_keywords</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">must_keywords</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)]</span>
+            <span class="n">condition_to_use</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">joborjobs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">meta_info</span> <span class="ow">or</span> <span class="n">joborjobs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">meta_info</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># all keywords present</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">keyword</span> <span class="ow">in</span> <span class="n">meta_info</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">must_keywords</span><span class="p">)</span> \
+                    <span class="ow">or</span> <span class="n">condition_to_use</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="c1"># Exception gets activated when meta_info is not present.</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_check_if_abroad_based</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta_info</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if a website is abroad based or non-abroad </span>
+<span class="sd">        based on analyzing it&#39;s meta_info.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        meta_info: list of strings</span>
+<span class="sd">            meta_info here refers to all the content </span>
+<span class="sd">            present in the title tag, meta name = description,</span>
+<span class="sd">            title, property = og:title, og: description.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        boolean</span>
+<span class="sd">            True if ALL the abroad websites keywords are present.</span>
+<span class="sd">            False if not present or there are no keywords in the metainfo part.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">abroad_website_keywords</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;global&#39;</span><span class="p">,</span> <span class="s1">&#39;abroad_website_keywords&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">abroad_website_keywords</span> <span class="o">=</span> \
+            <span class="p">[</span><span class="n">keyword</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">abroad_website_keywords</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">abroad_website_keywords</span><span class="p">)</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">meta_info</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_domain_name</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the domain name. For instance: https://merojob.com&#39;s domain name is merojob.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        url: str</span>
+<span class="sd">            url string to extract domain name from</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            domain_name of the url</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">domain_name</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">hostname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">domain_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span>
+            <span class="n">domain_name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">domain_name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">and</span> <span class="n">domain_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;www&#39;</span> 
+            <span class="k">else</span> <span class="n">domain_name</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span></div>
+        
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># urls = [</span>
+    <span class="c1">#     &#39;https://www.jobsnepal.com/&#39;,</span>
+    <span class="c1">#     &#39;https://merojob.com/&#39;,</span>
+    <span class="c1">#     &#39;https://www.ramrojob.com/&#39;,</span>
+    <span class="c1">#     &#39;https://www.kumarijob.com/&#39;,</span>
+    <span class="c1">#     &#39;https://www.merorojgari.com/&#39;,</span>
+    <span class="c1">#     &#39;https://getjobnepal.com/&#39;,</span>
+    <span class="c1">#     &#39;https://nepalhealthjob.com/&#39;,</span>
+    <span class="c1">#     &#39;https://jobs.unops.org/&#39;,</span>
+    <span class="c1">#     &#39;https://froxjob.com/&#39;,</span>
+    <span class="c1">#     &#39;https://kantipurjob.com/&#39;,</span>
+    <span class="c1">#     &#39;https://www.jobejee.com/&#39;,</span>
+    <span class="c1">#     &#39;https://jobs.unicef.org/&#39;,</span>
+    <span class="c1">#     &#39;https://www.sajhajobs.com/&#39;,</span>
+    <span class="c1">#     &#39;https://www.cmsjob.com/&#39;,</span>
+    <span class="c1">#     &#39;https://www.globaljob.com.np/&#39;,</span>
+    <span class="c1">#     &#39;https://medjobsnepal.com/&#39;,</span>
+    <span class="c1">#     &#39;httts://youtube.com/&#39;</span>
+    <span class="c1"># ]</span>
+    <span class="n">urls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;https://www.jobsnepal.com/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://merojob.com/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://openknowledge.worldbank.org/handle/10986/33956&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.ramrojob.com/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://pubmed.ncbi.nlm.nih.gov/30771663/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://unjobs.org/duty_stations/nepal&#39;</span><span class="p">,</span> <span class="s1">&#39;https://pubmed.ncbi.nlm.nih.gov/31735939/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://juniperpublishers.com/jojnhc/JOJNHC.MS.ID.555814.php&#39;</span><span class="p">,</span> <span class="s1">&#39;https://np.usembassy.gov/jobs/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://blogs.worldbank.org/jobs/job-quality-nepal-improving-women-lag-behind&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.educatenepal.com/notice_announcements/mobile/list-of-government-jobs-in-nepal&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.colgate.edu/news/stories/anna-kosa-14-brings-international-relations-background-un-job-nepal&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.worldbank.org/en/country/nepal&#39;</span><span class="p">,</span> <span class="s1">&#39;https://us.nepalembassy.gov.np/vacancy-announcement-2/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.reuters.com/article/health-coronavirus-nepal/nearly-a-quarter-of-nepals-workers-lose-jobs-due-to-coronavirus-central-bank-idINKCN2591A8&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.indeed.com/q-Nepal-jobs.html&#39;</span><span class="p">,</span> <span class="s1">&#39;https://app.smartsheet.com/b/form/b78db7f6cdb54d2cb0f91d1ab573aa13&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.naukri.com/jobs-in-nepal&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.business-humanrights.org/en/latest-news/nepal-labour-ministry-records-over-500000-job-losses-both-home-and-abroad-amid-covid-19-pandemic/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://jobs.gecareers.com/healthcare/global/en/job/R3568994/Territory-Manager&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.readglobal.org/read-offices/read-nepal/read-nepal-job-openings/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://nepal.mercycorps.org/vacancy-announcement/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.justice.gov/archives/criminal-icitap/blog/nepal-icitap-partners-nepal-police-complete-job-task-analysis-criminal&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.kumarijob.com/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.linkedin.com/jobs/nepali-jobs&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.upwork.com/freelance-jobs/nepali/&#39;</span><span class="p">,</span> <span class="s1">&#39;http://www.ipsnews.net/2021/01/wanted-affirmative-legislation-job-market-nepal/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.facebook.com/pages/category/Advertising-Marketing/Anmol-Job-Nepal-100804748041220/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://np.linkedin.com/jobs&#39;</span><span class="p">,</span> <span class="s1">&#39;http://www.xinhuanet.com/english/2019-02/13/c_137819124.htm&#39;</span><span class="p">,</span> <span class="s1">&#39;http://cotiviti.com.np/jobs&#39;</span><span class="p">,</span> <span class="s1">&#39;https://jobs.undp.org/cj_view_job.cfm?cur_job_id=98159&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.usaid.gov/nepal/vacancy-announcements/21-02-human-resources-assistant-fsnpsc-9&#39;</span><span class="p">,</span> <span class="s1">&#39;https://getjobnepal.com/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.rollingnexus.com/jobs&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.ustraveldocs.com/np/np-niv-typework.asp&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.solidaritycenter.org/publication/rebuilding-nepal-creating-good-job-amid-reconstruction-migration/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://kathmandupost.com/national/2021/07/31/for-israeli-job-a-nepali-worker-needs-to-invest-around-rs165-700&#39;</span><span class="p">,</span> <span class="s1">&#39;https://eeas.europa.eu/delegations/nepal/90609/vacancy-administrative-assistant_en&#39;</span><span class="p">,</span> <span class="s1">&#39;https://rtiint.referrals.selectminds.com/international/jobs/chief-of-party-nepal-early-grade-learning-5877&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.collegenp.com/vacancy&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.who.int/nepal/careers&#39;</span><span class="p">,</span> <span class="s1">&#39;https://servlife.org/nepal-field-agent-job-description/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://bmcnurs.biomedcentral.com/articles/10.1186/s12912-019-0379-2&#39;</span><span class="p">,</span> <span class="s1">&#39;https://thehimalayantimes.com/nepal/israel-announces-1000-job-vacancies-for-nepalis&#39;</span><span class="p">,</span> <span class="s1">&#39;https://jobs.unops.org/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://jobs.unicef.org/fr/job/541328/individual-contractor-supply-manager-unicef-nepal-2-months&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.instagram.com/phalanojob/?hl=en&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.csmonitor.com/World/Making-a-difference/2013/1122/Olga-Murray-found-a-second-career-educating-the-children-of-Nepal&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.jobejee.com/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.glassdoor.com/Job/nepal-systems-analyst-jobs-SRCH_IL.0,5_IN181_KO6,21.htm&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.merorojgari.com/&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;https://www.workforgood.org/employer/471431/nepal-youth-foundation/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.payscale.com/research/NP/Job=Accountant/Salary&#39;</span><span class="p">,</span> <span class="s1">&#39;https://nepalhealthjob.com/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4676855/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.ifj.org/media-centre/news/detail/category/press-releases/article/nepal-union-officials-arrested-protesting-job-losses.html&#39;</span><span class="p">,</span> <span class="s1">&#39;https://documents.worldbank.org/en/publication/documents-reports/documentdetail/501501592797725280/nepal-jobs-diagnostic&#39;</span><span class="p">,</span> <span class="s1">&#39;https://prabhubank.com/career/&#39;</span><span class="p">,</span> <span class="s1">&#39;http://federalgovernmentjobs.us/job-location/nepal.html&#39;</span><span class="p">,</span> <span class="s1">&#39;https://rollingnexus.com/blog/1/Government-Jobs-in-Nepal&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.pinterest.com/pin/589901251188033947/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.international-alert.org/jobs/gender-and-peacebuilding-adviser-nepal&#39;</span><span class="p">,</span> <span class="s1">&#39;https://missoulian.com/news/local/knitted-together-montana-nepal-partnership-builds-jobs-and-security/article_e95bc8f1-c999-5eb7-8b49-693185c925f2.html&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.flexjobs.com/remote-jobs/company/nepal_youth_foundation&#39;</span><span class="p">,</span> <span class="s1">&#39;https://blogs.uofi.uic.edu/view/8284/805783&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.savetherhino.org/poaching-crisis/assam-rocked-by-claims-kaziranga-poaching-is-an-insider-job-nepal-celebrates-two-poaching-free-years/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.wfp.org/careers/job-openings&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.gsif.it/job-vacancy-program-manager-nepal-country-office/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.tefl.org/tefl-jobs-centre/countries/tefl-jobs-in-nepal/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://careers.wvi.org/job-opportunities-in-nepal&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.welthungerhilfe.org/news/latest-articles/i-love-my-job-emergency-response-team-in-nepal/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://news.trust.org/item/20200715093743-vypfq/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.financialnotices.com/career-notices.html&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.fhi360.org/careers&#39;</span><span class="p">,</span> <span class="s1">&#39;https://econpapers.repec.org/RePEc:wbk:jbsgrp:32149232&#39;</span><span class="p">,</span> <span class="s1">&#39;https://winrock.org/join-us/careers/job-openings/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.nepalitimes.com/banner/missing-the-plot-in-nepals-job-scheme/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://brainly.in/question/36161325&#39;</span><span class="p">,</span> <span class="s1">&#39;https://nepal.un.org/en/jobs&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.livemint.com/Consumer/7KFvNSxoIZ2T6qZumYQodO/LokSewa-Nepal-An-app-for-govt-job-openings.html&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.nepallivetoday.com/2021/07/27/israel-announces-1000-job-vacancies-for-nepalis/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.ziprecruiter.com/Jobs/Nepali&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.nicasiabank.com/current-vacancies&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.np.undp.org/content/nepal/en/home/presscenter/articles/2020/Three-in-Five-employees-lost-their-jobs-due-to-COVID19-in-Nepal.html&#39;</span><span class="p">,</span> <span class="s1">&#39;https://spajumpmarco.com/jl1cknb/nepal-investigation-bureau-vacancy&#39;</span><span class="p">,</span> <span class="s1">&#39;https://unctad.org/press-material/job-creation-critical-durable-economic-progress-nepal&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.sajhajobs.com/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.icranepal.com/career/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://publichealthupdate.com/category/healthjobopportunities/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.ilo.org/employment/Whatwedo/Publications/WCMS_502340/lang--en/index.htm&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.hindustantimes.com/india-news/former-ips-officer-accused-in-assam-police-job-scam-could-be-hiding-in-nepal/story-e01ojqxnPtTMD3Hkgi2WbI.html&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.theguardian.com/global-development/2013/sep/25/qatar-nepalese-workers-poverty-camps&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.nursingtimes.net/clinical-archive/critical-care/nurse-swaps-nhs-job-to-develop-icu-in-nepal-06-07-2012/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://abtassociates.dejobs.org/npl/jobs/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.allnepaljob.com/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://m.facebook.com/Anmol-Job-Nepal-100804748041220/groups/?ref=page_internal&amp;mt_nav=0&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.nepalyouthfoundation.org/get-involved/career/&#39;</span><span class="p">,</span> <span class="s1">&#39;https://capmh.biomedcentral.com/articles/10.1186/s13034-020-00319-5&#39;</span><span class="p">,</span> <span class="s1">&#39;https://www.unilever.com/careers/&#39;</span><span class="p">]</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">CheckJobWebsite</span><span class="p">(</span><span class="n">urls</span><span class="o">=</span><span class="n">urls</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">check_urls</span><span class="p">())</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">checkers.checkjobwebsite</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

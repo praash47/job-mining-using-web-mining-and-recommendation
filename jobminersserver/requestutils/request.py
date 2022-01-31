@@ -66,7 +66,7 @@ class Request:
 
         eg:- https://unjobs.org from https://unjobs.org/duty_stations/nepal
 
-        Paramters
+        Parameters
         ---------
         home_page: list
                 homepage of the urls in the format https://unjobs.org

@@ -9,8 +9,8 @@ Parameters()
 import re
 import string
 import logging
-import spacy
 
+from memory_profiler import profile
 
 from backend.misc import read_config, try_and_pass
 from tagprocessor.decorators import for_existing_leaf_nodes
@@ -19,6 +19,7 @@ from tagprocessor.misc import clean_text
 logger = logging.getLogger('jobdetailsextractor')
 mainlogger = logging.getLogger('main')
 
+fp = open('memprofilingreport.log', 'w+')
 
 class Parameters:
     """
@@ -30,7 +31,8 @@ class Parameters:
         2.1. Involves to extracting value from the next node of the xpath of the parameter.
         2.2. Paragraph values are got out then by collecting values from some nodes after the discovered parameters. This is valid for parameters like description, specifications etc.
     """
-    def __init__(self, job_block_xpath, tree, website=None):
+    
+    def __init__(self, job_block_xpath, tree, nlp, website=None):
         """
         Initializes Parameters object
 
@@ -53,8 +55,7 @@ class Parameters:
             self.job_block_root = self.job_block_tree.xpath(self.job_block_xpath)[0]
         self.website = website
 
-        # Loading of the NLP module for company name extraction
-        self.nlp = spacy.load("en_core_web_lg")
+        self.nlp = nlp
 
         # Parameters and Parameters Xpath Structured Storage
         self.parameters_dict = {
@@ -104,6 +105,7 @@ class Parameters:
         self.symbols_to_omit = \
             self.parser.get('parameters', 'symbols_to_omit').split(',')
     
+    
     def get_core_parameters(self):
         """
         Gets out the core parameters from the HTML document of the job advertisement. Extracts out both single word, multi word and paragraph values.
@@ -125,6 +127,7 @@ class Parameters:
         self.parameters_dict['description'] = self.get_paragraph_values(self.keywords['description'])
         self.parameters_dict['misc'] = self.get_paragraph_values(self.keywords['misc'])
 
+    
     def get_parameters_from_node(self, root):
         """
         Returns the parameters discovered from the HTML document and assigns its xpaths into the self.parameters_xpath_dict. Applies some special techniques for company name and company email.
@@ -195,6 +198,7 @@ class Parameters:
 
         return obj['parameters_discovered']
 
+    
     def detect_and_assign_xpath(self, node, node_text):
         """
         Detects the xpath of the parameter and assign its xpath inside the self.parameters_xpath_dict.
@@ -211,6 +215,7 @@ class Parameters:
             if path:
                 self.parameters_xpath_dict[parameter + '_xpath'] = path
 
+    
     def values_from_xpaths(self):
         """
         Extracts and assign single word and multi word (not paragraph values) from the parameters xpaths already obtained.
@@ -253,6 +258,7 @@ class Parameters:
                 self.assign_misc_parameters_value(node, node_text)
         
         assign_misc_parameters(root=self.job_block_root)
+
         
     def get_paragraph_values(self, keywords):
         """
@@ -324,11 +330,14 @@ class Parameters:
             root=self.job_block_root,
             obj=obj
         )
-        logger.info(f'{obj["paragraph"]}')
 
+        # Freeing up memory from obj
+        paragraph = obj['paragraph']
+        del obj
 
-        return obj['paragraph']
+        return paragraph
 
+    
     # Utilities
     def match_company_email(self, text):
         """
@@ -351,6 +360,7 @@ class Parameters:
             return match.group(0)
         except: return None
 
+    
     def match_company_name(self, text, node):
         """
         Tries to match the company name if the company name is in the text.
@@ -384,6 +394,7 @@ class Parameters:
             return None
         return None
 
+    
     def search_word_in_tag(self, words):
         """
         Returns a list of words in tag and returns the word and last index value of the word list, if the word is present in the tag.
@@ -405,6 +416,7 @@ class Parameters:
 
         return None, None  
 
+    
     def get_xpath(self, node, node_text, parameter):
         """
         Returns the xpath of node by checking the node_text if it is inside the alternative keywords.
@@ -455,6 +467,7 @@ class Parameters:
     #             self.parameters_dict['company_info'] += clean_text(node.text_content())
     #     except: pass
 
+    
     def assign_misc_parameters_value(self, node, node_text):
         """
         Assigns the value of the misc parameters.
@@ -476,6 +489,7 @@ class Parameters:
                 self.parameters_dict['misc'] += clean_text(node.getnext().text_content()) + '\n'
             except: pass
 
+    
     def get_parent(self, node):
         """
         Returns parent of a node.

@@ -20,7 +20,7 @@ def is_interested_website(home_page_url):
     list of misccheckers.ini. This is in order to ignore websites to reduce processing
     time.
 
-    Paramaters
+    Parameters
     ----------
     home_page_url: str
         home page url to check, without a trailing slash '/'.

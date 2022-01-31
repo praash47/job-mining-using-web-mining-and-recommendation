@@ -103,37 +103,47 @@ website is a job website or not.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.checkjobwebsite.</span></span><span class="sig-name descname"><span class="pre">CheckJobWebsite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">urls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/checkers/checkjobwebsite.html#CheckJobWebsite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#checkers.checkjobwebsite.CheckJobWebsite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Utilities required to check whether a website is job website or not.</p>
-<dl class="simple">
-<dt>check_urls()</dt><dd><p>Returns dictionary of checked urls.</p>
-</dd>
-<dt>check_single_url(url)</dt><dd><p>Checks single url is job website url or not.</p>
-</dd>
-</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.checkjobwebsite.CheckJobWebsite.check_urls">
+<span class="sig-name descname"><span class="pre">check_urls</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/checkers/checkjobwebsite.html#CheckJobWebsite.check_urls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#checkers.checkjobwebsite.CheckJobWebsite.check_urls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns dictionary of checked urls.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="checkers.checkjobwebsite.CheckJobWebsite.check_single_url">
 <span class="sig-name descname"><span class="pre">check_single_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/checkers/checkjobwebsite.html#CheckJobWebsite.check_single_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#checkers.checkjobwebsite.CheckJobWebsite.check_single_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks single url is job website url or not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">check_single_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/checkers/checkjobwebsite.html#CheckJobWebsite.check_single_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks single url and returns True if it is a job website.</p>
-<dl class="simple">
-<dt>url: str</dt><dd><p>url to check if it is a job website or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – url to check if it is a job website or not.</p></li>
+<li><p><strong>job_or_jobs_nepal</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Set if job or jobs nepal keyword is to be checked instead of job
+and jobs and nepal.</p></li>
+</ul>
 </dd>
-<dt>job_or_jobs_nepal: boolean, optional</dt><dd><p>Set if job or jobs nepal keyword is to be checked instead of job
-and jobs and nepal.</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>boolean</dt><dd><p>True if self._analyze_keywords() or in general terms, it is a job website.
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if self._analyze_keywords() or in general terms, it is a job website.
 else False.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="checkers.checkjobwebsite.CheckJobWebsite.check_urls">
-<span class="sig-name descname"><span class="pre">check_urls</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/checkers/checkjobwebsite.html#CheckJobWebsite.check_urls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#checkers.checkjobwebsite.CheckJobWebsite.check_urls" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">check_urls</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/checkers/checkjobwebsite.html#CheckJobWebsite.check_urls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Used after the url property of the object has been set.</p>
-<blockquote>
-<div><dl>
-<dt>dict:</dt><dd><p>of the following format
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p>of the following format
 Eg:
 {</p>
 <blockquote>
@@ -145,21 +155,27 @@ Eg:
 <p>}</p>
 </div></blockquote>
 <p>}</p>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="checkers.checkjobwebsite.CheckJobWebsite.collect_meta_info">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">collect_meta_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/checkers/checkjobwebsite.html#CheckJobWebsite.collect_meta_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#checkers.checkjobwebsite.CheckJobWebsite.collect_meta_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects meta info and returns from the html.</p>
-<dl class="simple">
-<dt>html: str</dt><dd><p>html string to collect meta info from</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>html</strong> (<em>str</em>) – html string to collect meta info from</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>list</dt><dd><p>list of meta_info keywords</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of meta_info keywords</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -172,29 +188,32 @@ Eg:
 <span id="checkers-misccheckers-module"></span><h2>checkers.misccheckers module<a class="headerlink" href="#module-checkers.misccheckers" title="Permalink to this headline">¶</a></h2>
 <p>This file consists of miscellaneous checkers required in various steps of our
 processing.</p>
-<section id="methods">
-<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
-<dl class="simple">
-<dt>is_interested_website(home_page_url)</dt><dd><p>Returns False for websites present in the misccheckers.ini’s interested_websites
-non_interested variable.</p>
-</dd>
-</dl>
-<dl class="py function">
+<dl class="py method">
 <dt class="sig sig-object py" id="checkers.misccheckers.is_interested_website">
 <span class="sig-prename descclassname"><span class="pre">checkers.misccheckers.</span></span><span class="sig-name descname"><span class="pre">is_interested_website</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">home_page_url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/checkers/misccheckers.html#is_interested_website"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#checkers.misccheckers.is_interested_website" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns False for websites present in the misccheckers.ini’s interested_websites
+non_interested variable.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-prename descclassname"><span class="pre">checkers.misccheckers.</span></span><span class="sig-name descname"><span class="pre">is_interested_website</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">home_page_url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/checkers/misccheckers.html#is_interested_website"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if given home page url is in interested list i.e. not in non_interested
 list of misccheckers.ini. This is in order to ignore websites to reduce processing
 time.</p>
-<dl class="simple">
-<dt>home_page_url: str</dt><dd><p>home page url to check, without a trailing slash ‘/’.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>home_page_url</strong> (<em>str</em>) – home page url to check, without a trailing slash ‘/’.
 for eg.: <a class="reference external" href="https://www.youtube.com">https://www.youtube.com</a>
 and NOT <a class="reference external" href="https://www.facebook.com/">https://www.facebook.com/</a></p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Boolean</dt><dd><p>Is interested website or not? True, if interested
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Is interested website or not? True, if interested
 False, if present in non_interested section of
 interested_websites section of misccheckers.ini.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Boolean</p>
 </dd>
 </dl>
 </dd></dl>
@@ -204,7 +223,6 @@ interested_websites section of misccheckers.ini.</p>
 <span class="sig-prename descclassname"><span class="pre">checkers.misccheckers.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/checkers/misccheckers.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#checkers.misccheckers.main" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</section>
 </section>
 <section id="module-checkers.models">
 <span id="checkers-models-module"></span><h2>checkers.models module<a class="headerlink" href="#module-checkers.models" title="Permalink to this headline">¶</a></h2>
@@ -334,10 +352,7 @@ object the first time, the query is executed.</p>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-checkers.misccheckers">checkers.misccheckers module</a><ul>
-<li><a class="reference internal" href="#methods">Methods</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#module-checkers.misccheckers">checkers.misccheckers module</a></li>
 <li><a class="reference internal" href="#module-checkers.models">checkers.models module</a></li>
 <li><a class="reference internal" href="#module-checkers.tests">checkers.tests module</a></li>
 <li><a class="reference internal" href="#module-checkers">Module contents</a></li>

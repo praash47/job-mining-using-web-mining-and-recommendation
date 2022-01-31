@@ -17,7 +17,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="requestutils.migrations package" href="requestutils.migrations.html" /> 
+    <link rel="prev" title="requestutils.requestgooglemodule package" href="requestutils.requestgooglemodule.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,7 +29,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="requestutils.migrations.html" title="requestutils.migrations package"
+          <a href="requestutils.requestgooglemodule.html" title="requestutils.requestgooglemodule package"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">jobminersserver</a> &#187;</li>
@@ -74,8 +74,9 @@
 <dt class="sig sig-object py" id="timers.jobextractor.extract_jobs">
 <span class="sig-prename descclassname"><span class="pre">timers.jobextractor.</span></span><span class="sig-name descname"><span class="pre">extract_jobs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pending_jobs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timers/jobextractor.html#extract_jobs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timers.jobextractor.extract_jobs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts job parameters from the pending jobs in a cyclic fashion. Cyclic fashion means each job website gets once per cycle for it’s single job extraction.</p>
-<dl class="simple">
-<dt>pending_jobs: QuerySet</dt><dd><p>Django QuerySet containing the iterable of pending jobs (extracted=False).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pending_jobs</strong> (<em>QuerySet</em>) – Django QuerySet containing the iterable of pending jobs (extracted=False).</p>
 </dd>
 </dl>
 </dd></dl>
@@ -84,10 +85,12 @@
 <dt class="sig sig-object py" id="timers.jobextractor.wait">
 <span class="sig-prename descclassname"><span class="pre">timers.jobextractor.</span></span><span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_end_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/timers/jobextractor.html#wait"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timers.jobextractor.wait" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sleeps for the time frame mentioned in server wait time excluding the job execution time.</p>
-<dl class="simple">
-<dt>job_start_time: datetime</dt><dd><p>datetime object of the job starting time</p>
-</dd>
-<dt>job_end_time: datetime</dt><dd><p>datetime object of the job ending time</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job_start_time</strong> (<em>datetime</em>) – datetime object of the job starting time</p></li>
+<li><p><strong>job_end_time</strong> (<em>datetime</em>) – datetime object of the job ending time</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -101,10 +104,12 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">timers.mainloop.</span></span><span class="sig-name descname"><span class="pre">Timer</span></span><a class="reference internal" href="_modules/timers/mainloop.html#Timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timers.mainloop.Timer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Schedules the checking for deadline in existing job and checking for new job website and new job URLs in existing websites. Finally, finds the pending jobs and runs extract_jobs() for extracting parameters from the jobs in timely manner.</p>
-<dl class="simple">
-<dt>run()</dt><dd><p>Runs the backend part of the program. * Use this function inside a threading Thread.</p>
-</dd>
-</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="timers.mainloop.Timer.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timers/mainloop.html#Timer.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timers.mainloop.Timer.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the backend part of the program. * Use this function inside a threading Thread.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="timers.mainloop.Timer.check_pending_job_urls">
 <span class="sig-name descname"><span class="pre">check_pending_job_urls</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timers/mainloop.html#Timer.check_pending_job_urls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timers.mainloop.Timer.check_pending_job_urls" title="Permalink to this definition">¶</a></dt>
@@ -112,8 +117,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="timers.mainloop.Timer.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timers/mainloop.html#Timer.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#timers.mainloop.Timer.run" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/timers/mainloop.html#Timer.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
 <dd><p>Schedules the main operations in program at 12.00 am and performs it exactly once.</p>
 </dd></dl>
 
@@ -152,8 +157,8 @@
   </div>
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="requestutils.migrations.html"
-                          title="previous chapter">requestutils.migrations package</a></p>
+    <p class="topless"><a href="requestutils.requestgooglemodule.html"
+                          title="previous chapter">requestutils.requestgooglemodule package</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -186,7 +191,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="requestutils.migrations.html" title="requestutils.migrations package"
+          <a href="requestutils.requestgooglemodule.html" title="requestutils.requestgooglemodule package"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >jobminersserver</a> &#187;</li>

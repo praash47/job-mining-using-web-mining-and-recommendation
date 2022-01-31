@@ -74,7 +74,7 @@ def check_for_new_job_website_urls():
             if titleextractor:
                 titleextractor.store_into_database()
 
-    check_new_job_urls_in_existing_websites(job_websites)
+    # check_new_job_urls_in_existing_websites(job_websites)
 
 
 def check_new_job_urls_in_existing_websites(job_websites):
