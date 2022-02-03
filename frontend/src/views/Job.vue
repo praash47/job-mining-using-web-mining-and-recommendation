@@ -28,7 +28,8 @@
   </div>
 
   <div class="right">
-      <div class="first-segment">
+      <Loading v-if="loading_job" />
+      <div class="first-segment" v-else>
           <div class="first-segment-left">
               <h1 class="job-title">{{ job.title }}</h1>
               <a :href="job.url" target="blank">{{ job.url }}</a><br>
@@ -37,7 +38,6 @@
                 {{ job.company_email }}
               </a>
           </div>
-
           <div class="first-segment-right">
               <table>
                   <tr>
@@ -117,11 +117,15 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import axios from 'axios';
+import Loading from '../components/Loading.vue';
 
 export default defineComponent({
   name: 'Job',
   props: ['message', 'recJobs'],
   emits: ['emit-snackbar'],
+  components: {
+    Loading,
+  },
   computed: {
     skills() {
       let { skills } = this.job;
@@ -134,36 +138,41 @@ export default defineComponent({
   created() {
     axios({
       method: 'POST',
-      url: 'http://192.168.133.141:8000/job',
+      url: 'http://192.168.1.82:8000/job',
       data: {
         id: this.$route.params.id,
       },
     }).then((response) => {
+      this.loading_job = false;
       this.job = response.data;
     });
   },
-  components: {
-  },
   watch: {
     $route() {
+      this.loading_job = true;
       axios({
         method: 'POST',
-        url: 'http://192.168.133.141:8000/job',
+        url: 'http://192.168.1.82:8000/job',
         data: {
           id: this.$route.params.id,
         },
       }).then((response) => {
+        this.loading_job = false;
         this.job = response.data;
       });
     },
   },
   methods: {
     matchingSkills(job) {
-      if (this.recJobs.length > 0) {
+      if (this.recJobs.length > 0 && job) {
         let matchedSkills = [];
         this.recJobs.forEach((recJob) => {
           if (recJob.title === job.title) {
-            matchedSkills = recJob.matching_skills;
+            if (recJob.matching_skills.length) {
+              matchedSkills = recJob.matching_skills;
+            } else {
+              matchedSkills = [];
+            }
           }
         });
         return matchedSkills;
@@ -174,6 +183,7 @@ export default defineComponent({
   data() {
     return {
       job: null,
+      loading_job: true,
     };
   },
 });
@@ -335,5 +345,8 @@ body{
 
 .sixth-segment{
     padding-bottom:10px;
+}
+.container {
+  height: 100vh;
 }
 </style>

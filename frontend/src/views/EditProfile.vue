@@ -64,16 +64,37 @@
             <i class="fa fa-search"></i>
         </a>
       </div>
-      <ul class="skills" id="nonselected">
-        <li class="skill" v-for="skill in skills_filtered" :key="skill">{{ skill }}
-          <i class="fa fa-arrow-circle-right" @click="moveSelected(skill)"></i></li>
+      <Loading v-if="loading_added_skills" />
+      <ul class="skills"
+        id="nonselected"
+        @drop.prevent="moveSelected($event)"
+        @dragover.prevent v-else>
+      <li class="skill"
+          title="You can drag this to another box"
+          v-for="skill in skills_filtered"
+          :key="skill"
+          draggable="true"
+          @dragstart="$event.dataTransfer.setData('skill', skill)">
+        {{ skill }}
+        <i class="fa fa-arrow-circle-right" @click="moveSelected(skill)"></i></li>
       </ul>
     </div>
 
     <div class="container container-2">
-      <ul class="skills" id="selected">
-        <li class="skill" v-for="skill in selected_skills" :key="skill">{{ skill }}
-          <i class="fa fa-arrow-circle-left" @click="moveSelected(skill)"></i></li>
+      <Loading v-if="loading_all_skills" />
+      <ul class="skills"
+        id="selected"
+        @drop.prevent="moveSelected($event)"
+        @dragover.prevent
+        v-else>
+      <li class="skill"
+          title="You can drag this to another box"
+          v-for="skill in selected_skills"
+          :key="skill"
+          draggable="true"
+          @dragstart="$event.dataTransfer.setData('skill', skill)">
+        {{ skill }}
+        <i class="fa fa-arrow-circle-left" @click="moveSelected(skill)"></i></li>
       </ul>
     </div>
     <div class="continue-button">
@@ -85,11 +106,15 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import axios from 'axios';
+import Loading from '../components/Loading.vue';
 
 export default defineComponent({
   name: 'EditProfile',
   props: ['message', 'rec-jobs'],
   emits: ['emit-snackbar'],
+  components: {
+    Loading,
+  },
   computed: {
     skills_filtered() {
       return this.search_term
@@ -101,7 +126,7 @@ export default defineComponent({
     this.username = this.$store.getters.getUsername;
     axios({
       method: 'POST',
-      url: 'http://192.168.133.141:8000/register',
+      url: 'http://192.168.1.82:8000/register',
       data: {
         action: 'email_needed',
         username: this.username,
@@ -110,8 +135,6 @@ export default defineComponent({
       this.email = response.data.email;
     });
     this.fillSkills();
-  },
-  components: {
   },
   watch: {
     username() {
@@ -122,7 +145,7 @@ export default defineComponent({
       } else {
         axios({
           method: 'POST',
-          url: 'http://192.168.133.141:8000/register',
+          url: 'http://192.168.1.82:8000/register',
           data: {
             username: this.username,
             action: 'username_check',
@@ -148,19 +171,21 @@ export default defineComponent({
     fillSkills() {
       axios({
         method: 'POST',
-        url: 'http://192.168.133.141:8000/register',
+        url: 'http://192.168.1.82:8000/register',
         data: {
           username: this.username,
           action: 'skills_check',
         },
       }).then((response) => {
+        this.loading_added_skills = false;
         const skills = response.data.skills.replaceAll('[', '').replaceAll(']', '')
           .replaceAll("'", '').replaceAll(', ', ',');
         this.selected_skills = skills.split(',');
         axios({
           method: 'POST',
-          url: 'http://192.168.133.141:8000/skills',
+          url: 'http://192.168.1.82:8000/skills',
         }).then((selresponse) => {
+          this.loading_all_skills = false;
           this.skills = selresponse.data.skills.filter(
             (skill) => !this.selected_skills.includes(skill),
           );
@@ -168,12 +193,21 @@ export default defineComponent({
       });
     },
     moveSelected(skill) {
-      if (this.skills.indexOf(skill) !== -1) {
-        this.skills = this.skills.filter((arraySkill) => arraySkill !== skill);
-        this.selected_skills.push(skill);
-      } else if (this.selected_skills.indexOf(skill) !== -1) {
-        this.selected_skills = this.selected_skills.filter((arraySkill) => arraySkill !== skill);
-        this.skills.push(skill);
+      let toMove;
+      if (skill.target) {
+        toMove = skill.dataTransfer.getData('skill');
+      } else {
+        toMove = skill;
+      }
+      if (this.skills.indexOf(toMove) !== -1) {
+        this.skills = this.skills.filter((arraySkill) => arraySkill !== toMove);
+        this.selected_skills.push(toMove);
+        setTimeout(() => {
+          document.querySelector('#selected').scrollTop = document.querySelector('#selected').scrollHeight;
+        }, 1);
+      } else if (this.selected_skills.indexOf(toMove) !== -1) {
+        this.selected_skills = this.selected_skills.filter((arraySkill) => arraySkill !== toMove);
+        this.skills.push(toMove);
       }
     },
     updateUser() {
@@ -182,7 +216,7 @@ export default defineComponent({
       && this.selected_skills.length > 0) {
         axios({
           method: 'POST',
-          url: 'http://192.168.133.141:8000/register',
+          url: 'http://192.168.1.82:8000/register',
           data: {
             username: this.username,
             ousername: localStorage.getItem('username'),
@@ -207,7 +241,7 @@ export default defineComponent({
     changePassword() {
       axios({
         method: 'POST',
-        url: 'http://192.168.133.141:8000/register',
+        url: 'http://192.168.1.82:8000/register',
         data: {
           username: this.username,
           password: this.password,
@@ -230,6 +264,8 @@ export default defineComponent({
       selected_skills: [],
       password: '',
       new_password: '',
+      loading_all_skills: true,
+      loading_added_skills: true,
     };
   },
 });
@@ -456,6 +492,7 @@ ul {
     box-sizing: border-box;
     border-radius: 10px;
     margin-bottom: 2px;
+    cursor: move;
 }
 
 .fa.fa-arrow-circle-right, .fa.fa-arrow-circle-left{

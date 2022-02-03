@@ -5,6 +5,7 @@ import Recommend from '../views/Recommend.vue';
 import Job from '../views/Job.vue';
 import EditProfile from '../views/EditProfile.vue';
 import Daemon from '../views/Daemon.vue';
+import CV from '../views/CV.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -36,6 +37,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/daemon',
     name: 'Daemon',
     component: Daemon,
+  },
+  {
+    path: '/cv',
+    name: 'CV',
+    component: CV,
   },
 ];
 

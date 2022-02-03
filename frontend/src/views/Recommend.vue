@@ -10,8 +10,18 @@
   <i class="fas fa-coins"></i> Backend Daemon
   </router-link>
   <div class="container-1">
-    <div class="skills" >
-      <span class="skill" v-for="skill in added_skills" :key="skill">{{ skill }}
+    <div class="skills"
+        @drop.prevent="addSkill($event)"
+        @dragover.prevent
+        >
+      <Loading v-if="loading_added_skills" />
+      <span class="skill"
+            title="You can drag this to another box"
+            @dragstart = "$event.dataTransfer.setData('skill', skill)"
+            v-for="skill in added_skills"
+            draggable="true"
+            :key="skill">
+        {{ skill }}
         <i class="fa fa-times" @click="removeSkill(skill)"></i>
       </span>
     </div>
@@ -24,9 +34,18 @@
 
   <div class="left">
     <h2>Add Skills</h2>
-    <div class="add-skills">
-      <div class="skills-inner">
-        <span class="skill" v-for="skill in all_skills_filtered" :key="skill">{{ skill }}
+    <div class="add-skills"
+        @drop.prevent="removeSkill($event)"
+        @dragover.prevent>
+      <Loading v-if="loading_all_skills" />
+      <div class="skills-inner" v-else>
+        <span class="skill"
+              title="You can drag this to another box"
+              v-for="skill in all_skills_filtered"
+              draggable="true"
+              @dragstart = "$event.dataTransfer.setData('skill', skill)"
+              :key="skill">
+          {{ skill }}
           <i class="fa fa-plus" @click="addSkill(skill)"></i>
         </span>
       </div>
@@ -37,7 +56,8 @@
       <table>
         <tr>
           <td><div class="salary">Salary:</div></td>
-          <td><input type="text" class="value"> - <input type="text" class="value"></td>
+          <td><input type="number" class="value" v-model="filter_salary.lower" min="1">
+          - <input type="number" class="value" v-model="filter_salary.upper" min="2"></td>
         </tr>
         <tr>
           <td><div class="location">Location:</div></td>
@@ -46,8 +66,12 @@
         </tr>
         <tr>
           <td><div class="deadline">Deadline:</div></td>
-          <td>within <input type="text" class="value-sm"> days<br>
-              within <input type="text" class="value-sm"> month
+          <td>
+            within
+             <input type="number" class="value-sm" v-model="filter_deadline.days" min="0"> day(s)
+             <br>
+            within
+            <input type="number" class="value-sm" v-model="filter_deadline.months" min="0"> month(s)
           </td>
         </tr>
         <tr>
@@ -68,14 +92,16 @@
       </table>
     </div>
   </div>
-  <div class="right">
-    <div class="job" v-for="job in jobs_filtered" :key="job">
+  <div class="right" @scroll="lazyLoading">
+    <div class="job" v-for="job in this.jobs" :key="job">
       <div class="top-content">
         <span class="job-title">
           <h1>{{ job.title }}</h1>
         </span>
         <router-link :to="'/job/' + job.id">Read More</router-link>
-        <span class="job-deadline"><strong>Deadline:</strong> {{ job.deadline }}</span>
+        <span class="job-deadline">
+          <strong>Deadline:</strong> {{ deadline(job.deadline) }}
+        </span>
       </div>
       <div class="bottom-content">
         <table class="first-table">
@@ -117,18 +143,21 @@
         </table>
       </div>
     </div>
+    <Loading v-if="loading_jobs" />
   </div>
 </div>
 </template>
 <script lang="ts">
 import axios from 'axios';
 import { defineComponent } from 'vue';
+import Loading from '../components/Loading.vue';
 
 export default defineComponent({
   name: 'Recommend',
   props: ['message'],
   emits: ['emit-snackbar', 'jobs'],
   components: {
+    Loading,
   },
   computed: {
     all_skills_filtered() {
@@ -136,57 +165,97 @@ export default defineComponent({
         ? this.all_skills.filter((skill) => skill.toLowerCase().includes(this.search_term))
         : this.all_skills;
     },
-    jobs_filtered() {
-      return this.filter_location || this.filter_name || this.filter_qualification
-        || this.filter_experience
-        ? this.jobs.filter(
-          (job) => job.location.toLowerCase().includes(this.filter_location)
-            && job.title.toLowerCase().includes(this.filter_name)
-            && job.qualification.toLowerCase().includes(this.filter_qualification)
-            && job.experience.toLowerCase().includes(this.filter_experience),
-        )
-        : this.jobs;
-    },
+    // jobs_filtered() {
+    //   return this.filter_location || this.filter_name || this.filter_qualification
+    //     || this.filter_experience || this.filter_salary.lower || this.filter_salary.upper
+    //     || this.filter_deadline.days || this.filter_deadline.months
+    //     ? this.jobs.filter(
+    //       (job) => job.location.toLowerCase().includes(this.filter_location)
+    //         && job.title.toLowerCase().includes(this.filter_name)
+    //         && job.qualification.toLowerCase().includes(this.filter_qualification)
+    //         && job.experience.toLowerCase().includes(this.filter_experience)
+    //         && this.salaryInRange(job.salary)
+    //         && this.deadlineWithin(job.deadline),
+    //     )
+    //     : this.jobs;
+    // },
   },
   created() {
     this.username = this.$store.getters.getUsername;
     axios({
       method: 'POST',
-      url: 'http://192.168.133.141:8000/skills',
+      url: 'http://192.168.1.82:8000/skills',
       data: {
         username: this.username,
       },
     }).then((response) => {
       if (response.data.skills) {
+        this.loading_added_skills = false;
         this.added_skills = response.data.skills;
         axios({
           method: 'POST',
-          url: 'http://192.168.133.141:8000/skills',
+          url: 'http://192.168.1.82:8000/skills',
         }).then((allskillsresponse) => {
           if (allskillsresponse.data.skills) {
+            this.loading_all_skills = false;
             this.all_skills = allskillsresponse.data.skills.filter(
               (skill) => !this.added_skills.includes(skill),
             );
-            axios({
-              method: 'POST',
-              url: 'http://192.168.133.141:8000/recommend',
-              data: {
-                skills: this.added_skills,
-                offset: 0,
-              },
-            }).then((skillsresponse) => {
-              if (skillsresponse.data) {
-                skillsresponse.data.jobs.forEach((job) => {
-                  this.jobs.push(JSON.parse(job));
-                });
-              }
-            });
+            this.fetchJobs();
           }
         });
       }
     });
   },
   watch: {
+    filter_location() {
+      this.offset = 0;
+      this.filterJobs();
+      setTimeout(() => {
+        document.querySelector('.right').scrollTop = 0;
+      }, 1);
+    },
+    filter_name() {
+      this.offset = 0;
+      this.filterJobs();
+      setTimeout(() => {
+        document.querySelector('.right').scrollTop = 0;
+      }, 1);
+    },
+    filter_qualification() {
+      this.offset = 0;
+      this.filterJobs();
+      setTimeout(() => {
+        document.querySelector('.right').scrollTop = 0;
+      }, 1);
+    },
+    filter_experience() {
+      this.offset = 0;
+      this.filterJobs();
+      setTimeout(() => {
+        document.querySelector('.right').scrollTop = 0;
+      }, 1);
+    },
+    filter_salary: {
+      handler() {
+        this.offset = 0;
+        this.filterJobs();
+        setTimeout(() => {
+          document.querySelector('.right').scrollTop = 0;
+        }, 1);
+      },
+      deep: true,
+    },
+    filter_deadline: {
+      handler() {
+        this.offset = 0;
+        this.filterJobs();
+        setTimeout(() => {
+          document.querySelector('.right').scrollTop = 0;
+        }, 1);
+      },
+      deep: true,
+    },
     changes() {
       const confirm = document.querySelector<HTMLButtonElement>('#confirm');
       if (this.changes) {
@@ -196,47 +265,64 @@ export default defineComponent({
       }
     },
     added_skills() {
-      axios({
-        method: 'POST',
-        url: 'http://192.168.133.141:8000/recommend',
-        data: {
-          skills: this.added_skills,
-          offset: 0,
-        },
-      }).then((skillsresponse) => {
-        if (skillsresponse.data) {
-          this.jobs = [];
-          skillsresponse.data.jobs.forEach((job) => {
-            this.jobs.push(JSON.parse(job));
-          });
-        }
-      });
+      this.offset = 0;
+      if (!this.loading_jobs) this.fetchJobs();
+      setTimeout(() => {
+        document.querySelector('.right').scrollTop = 0;
+      }, 1);
     },
     all_skills() {
-      axios({
-        method: 'POST',
-        url: 'http://192.168.133.141:8000/recommend',
-        data: {
-          skills: this.added_skills,
-          offset: 0,
-        },
-      }).then((skillsresponse) => {
-        if (skillsresponse.data) {
-          this.jobs = [];
-          skillsresponse.data.jobs.forEach((job) => {
-            this.jobs.push(JSON.parse(job));
-          });
-        }
-      });
+      this.offset = 0;
+      if (!this.loading_jobs) this.fetchJobs();
+      setTimeout(() => {
+        document.querySelector('.right').scrollTop = 0;
+      }, 1);
     },
     $route() {
+      this.offset = 0;
       this.$emit('jobs', this.jobs);
     },
   },
   methods: {
+    fetchJobs() {
+      this.loading_jobs = true;
+      axios({
+        method: 'POST',
+        url: 'http://192.168.1.82:8000/recommend',
+        data: {
+          skills: this.added_skills,
+          username: this.username,
+          offset: this.offset,
+          filter: {
+            name: this.filter_name,
+            location: this.filter_location,
+            qualification: this.filter_qualification,
+            experience: this.filter_experience,
+            salary: {
+              lower: this.filter_salary.lower,
+              upper: this.filter_salary.upper,
+            },
+            deadline: {
+              days: this.filter_deadline.days,
+              months: this.filter_deadline.months,
+            },
+          },
+        },
+      }).then((response) => {
+        if (response.data) {
+          if (!this.offset) this.jobs = [];
+          this.loading_jobs = false;
+          response.data.jobs.forEach((job) => {
+            this.jobs.push(JSON.parse(job));
+          });
+          if (!this.jobs.length) this.results_finished = true;
+        }
+      });
+      return this.jobs;
+    },
     logOut() {
       axios({
-        url: 'http://192.168.133.141:8000/logout',
+        url: 'http://192.168.1.82:8000/logout',
         method: 'POST',
       })
         .then((response) => {
@@ -248,14 +334,27 @@ export default defineComponent({
         });
     },
     removeSkill(skillToRemove) {
-      this.added_skills = this.added_skills.filter((skill) => skill !== skillToRemove);
-      this.all_skills.push(skillToRemove);
-      this.changes = true;
+      this.added_skills = this.sendFromTo(skillToRemove, this.added_skills, this.all_skills);
     },
     addSkill(skillToAdd) {
-      this.all_skills = this.all_skills.filter((skill) => skill !== skillToAdd);
-      this.added_skills.push(skillToAdd);
+      this.all_skills = this.sendFromTo(skillToAdd, this.all_skills, this.added_skills);
+    },
+    sendFromTo(element, from, to) {
+      let changingElement;
+
+      if (element.target) {
+        changingElement = element.dataTransfer.getData('skill');
+      } else {
+        changingElement = element;
+      }
+      // eslint-disable-line
+      const fromVal = from.filter((skill) => skill !== changingElement);
+      to.push(changingElement);
+      setTimeout(() => {
+        document.querySelector('.skills').scrollTop = document.querySelector('.skills').scrollHeight;
+      }, 1);
       this.changes = true;
+      return fromVal;
     },
     saveSkills() {
       if (!this.added_skills.length) {
@@ -263,7 +362,7 @@ export default defineComponent({
       } else {
         axios({
           method: 'POST',
-          url: 'http://192.168.133.141:8000/register',
+          url: 'http://192.168.1.82:8000/register',
           data: {
             username: this.$store.getters.getUsername,
             skills: this.added_skills,
@@ -276,6 +375,105 @@ export default defineComponent({
             this.$emit('emit-snackbar', response.data.message);
           }
         });
+      }
+    },
+    salaryInRange(salary) {
+      let salaries = salary.split(' ').map((number) => Number(number.replace(/[^0-9.]+/g, '')));
+      salaries = salaries.filter((number) => number !== 0 && !Number.isNaN(number)).sort();
+      const nSalaries = salaries.length - 1;
+      if (this.filter_salary.lower
+      && salaries[0] >= this.filter_salary.lower
+      && this.filter_salary.lower <= salaries[nSalaries]
+      && !this.filter_salary.upper) {
+        return true;
+      }
+      if (this.filter_salary.upper
+      && !this.filter_salary.lower
+      && salaries[nSalaries] <= this.filter_salary.upper) {
+        return true;
+      }
+      if (!this.filter_salary.upper && !this.filter_salary.lower) {
+        return true;
+      }
+      if (this.filter_salary.lower
+      && this.filter_salary.upper
+      && this.filter_salary.upper > this.filter_salary.lower
+      && this.filter_salary.lower >= salaries[0]
+      && this.filter_salary.upper <= salaries[nSalaries]) {
+        return true;
+      }
+      return false;
+    },
+    deadline(date) {
+      const { days, months } = this.getDeadline(date);
+      if (Number.isNaN(days) && Number.isNaN(months)) { return 'Not Available'; }
+      if (!days && !months) { return 'Deadline Crossed'; }
+
+      const addS = (value) => { if (value > 1) { return 's'; } return ''; };
+      const isToday = () => {
+        if (months > 0 && days > 0) { return `${days} day${addS(days)}`; }
+        if (months === 0 && days === 0) { return 'today'; }
+        if (months === 0 && days === 1) { return 'tommorow'; }
+        return '';
+      };
+
+      return `Within ${(months > 0) ? `${months} month${addS(months)}` : ''}
+      ${(months > 0 && days > 0) ? ' and ' : ''}
+      ${(days > 1) ? `${days} day${addS(days)}` : isToday()}`;
+    },
+    getDeadline(date) {
+      const deadlineDate = new Date(date).getTime();
+      const now = new Date().getTime();
+      if (now > deadlineDate) { return { days: false, months: false }; }
+
+      const diff = Math.abs(now - deadlineDate);
+      if (Number.isNaN(diff)) { return { days: NaN, months: NaN }; }
+
+      let days = Math.floor(diff / (86400 * 1000));
+      const months = Math.floor(days / 30);
+      days = (months > 0) ? Math.floor(days % 30) : days;
+
+      return { days, months };
+    },
+    deadlineWithin(date) {
+      const { days, months } = this.getDeadline(date);
+      if (!this.filter_deadline.days
+      && !this.filter_deadline.months) {
+        return true;
+      }
+      this.filter_deadline.days = this.filter_deadline.days || 0;
+
+      this.filter_deadline.months = (
+        this.filter_deadline.months)
+        ? Number(this.filter_deadline.months)
+        + Math.floor(this.filter_deadline.days / 30)
+        : Math.floor(this.filter_deadline.days / 30);
+
+      this.filter_deadline.days = (
+        this.filter_deadline.days > 29)
+        ? Math.floor(this.filter_deadline.days % 30)
+        : this.filter_deadline.days;
+
+      if (this.filter_deadline.days === 0) { return this.filter_deadline.months <= months; }
+      if (this.filter_deadline.months === 0) { return this.filter_deadline.days <= days; }
+
+      if (this.filter_deadline.days <= days
+      && this.filter_deadline.months <= months) {
+        return true;
+      }
+      if (Number.isNaN(days) && Number.isNaN(months)) { return false; }
+      return false;
+    },
+    filterJobs() {
+      this.fetchJobs();
+    },
+    lazyLoading(e) {
+      if (Math.abs(e.target.scrollTop - e.target.scrollHeight) <= 800
+      && !this.loading_jobs
+      && !this.results_finished) {
+        this.loading_jobs = true;
+        this.offset += 10;
+        this.fetchJobs();
       }
     },
   },
@@ -291,6 +489,20 @@ export default defineComponent({
       filter_name: '',
       filter_qualification: '',
       filter_experience: '',
+      filter_salary: {
+        lower: '',
+        upper: '',
+      },
+      filter_deadline: {
+        days: '',
+        months: '',
+      },
+      offset: 0,
+      results_finished: false,
+      loading_added_skills: true,
+      loading_all_skills: true,
+      loading_jobs: true,
+      first_filter: true,
     };
   },
 });
@@ -377,6 +589,7 @@ export default defineComponent({
   margin: 2px;
   border-radius: 10px;
   font-size: 10px;
+  cursor: move;
 }
 .confirmation {
   position: absolute;
@@ -416,6 +629,7 @@ button:disabled {
 }
 .left {
   width: 20%;
+  user-select: none;
 }
 .right {
   width: 76.5%;

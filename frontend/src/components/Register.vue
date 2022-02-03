@@ -41,7 +41,7 @@ export default defineComponent({
       } else {
         axios({
           method: 'POST',
-          url: 'http://192.168.133.141:8000/register',
+          url: 'http://192.168.1.82:8000/register',
           headers: { 'X-CSRFToken': this.csrftoken },
           data: {
             csrfmiddlewaretoken: this.csrftoken,
@@ -70,7 +70,7 @@ export default defineComponent({
       if (!(inputbox.style.backgroundColor === 'red')) {
         axios({
           method: 'POST',
-          url: 'http://192.168.133.141:8000/register',
+          url: 'http://192.168.1.82:8000/register',
           data: {
             username: this.username,
             email: this.email,

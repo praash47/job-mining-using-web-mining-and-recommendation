@@ -40,7 +40,7 @@ export default defineComponent({
   },
   created() {
     this.setIdle();
-    const es = new EventSource('http://192.168.133.141:8000/events/');
+    const es = new EventSource('http://192.168.1.82:8000/events/');
     es.onmessage = (e) => {
       const data = JSON.parse(e.data);
       this.current_message = data.currentMessage;
