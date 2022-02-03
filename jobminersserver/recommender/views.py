@@ -2,21 +2,29 @@
 Our backend end points in order to communicate and transfer data to and fro from frontend using HTTP requests and response
 """
 import json
+import PyPDF2
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.models import User
+from django.core.cache import cache
+from django.core.files.storage import FileSystemStorage
 from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import JobSeeker
+
+from .utils import decode_utf, jaccard_similarity, get_skills_from_string, lies_in_salary_range, \
+    deadline_left
+
+from jobdetailsextractor.skills import SkillSet
+
 from jobdetailsextractor.models import Job
 
 
 @csrf_exempt
 def register(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
+    body = decode_utf(request.body)
     if body['action'] == 'username_check':
         username = body['username']
         if User.objects.filter(username=username).first():
@@ -100,8 +108,7 @@ def register(request):
 
 @csrf_exempt
 def log_in_user(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
+    body = decode_utf(request.body)
     username = body['username']
     password = body['password']
 
@@ -127,24 +134,25 @@ def log_out_user(request):
 @csrf_exempt
 def skills(request):
     try:
-        body_unicode = request.body.decode('utf-8')
-        body = json.loads(body_unicode)
+        body = decode_utf(request.body)
         username = body['username']
         
         job_seeker = JobSeeker.objects.get(
             user=User.objects.get(username=username))
-        skills_list = job_seeker.skill_set.replace('[', '').replace(']', '')
-        skills_list = skills_list.replace(
-            ', ', ',').replace("'", "").split(',')
+        skills_list = get_skills_from_string(
+            skills_string=job_seeker.skill_set,
+            brackets=('[',']')
+        )
         
         return JsonResponse({'skills': skills_list})
     except Exception:
         skills = set()
         for job in Job.objects.all():
             if job.job_skills:
-                skills_list = job.job_skills.replace('{', '').replace('}', '')
-                skills_list = skills_list.replace(
-                    ', ', ',').replace("'", "").split(',')
+                skills_list = get_skills_from_string(
+                    skills_string=job.job_skills,
+                    brackets=('{','}')
+                )
                 skills = skills.union(set(skills_list))
         
         return JsonResponse({'skills': list(skills)})
@@ -152,63 +160,87 @@ def skills(request):
 
 @csrf_exempt
 def recommender(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
+    body = decode_utf(request.body)
     
     similarity_dict = dict()
     matching_skills_dict = dict()
+    
     skills_list = body['skills']
     user_skills = set(skills_list)
+
+    user = body['username']
+    filter_dict = body['filter']
+
     offset = int(body['offset'])
     n_results = 10
-    
-    for job in Job.objects.all():
-        if job.job_skills:
-            skills_list = job.job_skills.replace('{', '').replace('}', '')
-            skills_list = skills_list.replace(
-                ', ', ',').replace("'", "").split(',')
-            job_skills = set(skills_list)
-            similarity_dict[job.title], matching_skills_dict[job.title] = \
-                jaccard_similarity(job_skills, user_skills)
 
-    similarity_dict = dict(
-        sorted(similarity_dict.items(), key=lambda item: item[1], reverse=True))
-    print(similarity_dict)
-    
-    result = []
-    for i in range(n_results):
-        to_sent_dict = dict()
-        job = Job.objects.get(title=list(similarity_dict.keys())[i+offset])
-        to_sent_dict['title'] = job.title
-        to_sent_dict['id'] = job.id
-        to_sent_dict['deadline'] = str(job.deadline)
-        to_sent_dict['skills'] = job.job_skills
-        to_sent_dict['qualification'] = job.qualifications
-        to_sent_dict['experience'] = job.experiences
-        to_sent_dict['description'] = job.description
-        to_sent_dict['salary'] = job.salary
-        to_sent_dict['location'] = job.location
-        to_sent_dict['level'] = job.level
-        to_sent_dict['matching_skills'] = matching_skills_dict[job.title]
-        result.append(json.dumps(to_sent_dict))
-    
-    return JsonResponse({'jobs': result})
+    # try to get from cache
+    cache_expired = False
+    if (body['offset'] != 0):
+        try:
+            print('getting from cache')
+            similarity_dict = json.loads(cache.get(f'{user}_similarity'))
+            matching_skills_dict = json.loads(cache.get(f'{user}_matching_skills'))
+            if not similarity_dict and not matching_skills_dict: raise Exception
+        except:
+            cache_expired = True
+            cache.clear()
+    if body['offset'] == 0 or cache_expired:
+        for job in Job.objects.filter(
+            title__icontains=filter_dict['name'],
+            location__icontains=filter_dict['location'],
+            qualifications__icontains=filter_dict['qualification'],
+            experiences__icontains=filter_dict['experience']
+        ):
+            # Salary based filtering
+            if not lies_in_salary_range(job.salary, filter_dict['salary']): continue
+            # Deadline based filtering
+            if not deadline_left(job.deadline, filter_dict['deadline']): continue
+            if job.job_skills:
+                skills_list = get_skills_from_string(
+                    skills_string=job.job_skills,
+                    brackets=('{','}')
+                )
+                job_skills = set(skills_list)
+                similarity_dict[job.title], matching_skills_dict[job.title] = \
+                    jaccard_similarity(job_skills, user_skills)
 
+        similarity_dict = dict(
+            sorted(similarity_dict.items(), key=lambda item: item[1], reverse=True))
+            
+        cache.set(f'{user}_similarity', json.dumps(similarity_dict), 600)
+        cache.set(f'{user}_matching_skills', json.dumps(similarity_dict), 600)
+    
+    cache.close()
 
-def jaccard_similarity(job_skills, candidate_skills):
-    if job_skills:
-        common_skills = set(job_skills) & set(candidate_skills)
-        score = len(common_skills) / \
-            len(set(job_skills).union(set(candidate_skills)))
-        return score, list(common_skills)
-    else:
-        return 0, []
+    if similarity_dict.keys():
+        result = []
+
+        try:
+            for i in range(n_results):
+                to_sent_dict = dict()
+                job = Job.objects.get(title=list(similarity_dict.keys())[i+offset])
+                to_sent_dict['title'] = job.title
+                to_sent_dict['id'] = job.id
+                to_sent_dict['deadline'] = str(job.deadline)
+                to_sent_dict['skills'] = job.job_skills
+                to_sent_dict['qualification'] = job.qualifications
+                to_sent_dict['experience'] = job.experiences
+                to_sent_dict['description'] = job.description
+                to_sent_dict['salary'] = job.salary
+                to_sent_dict['location'] = job.location
+                to_sent_dict['level'] = job.level
+                to_sent_dict['matching_skills'] = matching_skills_dict[job.title]
+                result.append(json.dumps(to_sent_dict))
+        except: pass
+        
+        return JsonResponse({'jobs': result})
+    return JsonResponse({'jobs': []})
 
 
 @csrf_exempt
 def job(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
+    body = decode_utf(request.body)
     id = body['id']
     
     job = Job.objects.get(id=id)
@@ -231,3 +263,26 @@ def job(request):
     job_object['extracted'] = job.extracted
 
     return JsonResponse(job_object)
+
+@csrf_exempt
+def upload_cv(request):
+    username = request.POST['username']
+    fs = FileSystemStorage()
+    fs.save(request.FILES['pdf'].name, request.FILES['pdf'])
+    pdf_file = open('recommender/uploads/' + request.FILES['pdf'].name, 'rb')
+    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+
+    pdf_text = ''
+    for i in range(pdf_reader.numPages):    
+        pdf_text = pdf_text.join(pdf_reader.getPage(i).extractText())
+    skills = SkillSet()
+    skills.get_skills(pdf_text)
+    if not set(skills): return JsonResponse({'message': 'No skills able to be extracted. So, skillset not saved.'})
+
+    job_seeker = JobSeeker.objects.get(
+        user=User.objects.get(username=username))
+    job_seeker.skill_set = list(skills)
+    job_seeker.save()
+
+    return JsonResponse({'message': 'Your skills have been placed in your skillset.'})
+    

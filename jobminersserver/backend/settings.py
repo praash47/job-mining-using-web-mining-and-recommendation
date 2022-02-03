@@ -1,6 +1,7 @@
 """
 Django settings for backend project.
 """
+import os
 
 from pathlib import Path
 CORS_ORIGIN_ALLOW_ALL = True
@@ -192,7 +193,19 @@ LOGGING = {
     },
 }
 
+# Caching
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': 'recommender/_request_caches_',
+    }
+}
+
 # Server Sent Events (django_eventstream settings)
 EVENTSTREAM_ALLOW_ORIGIN = '*'
 EVENTSTREAM_ALLOW_CREDENTIALS = True
 EVENTSTREAM_ALLOW_HEADERS = 'Authorization'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'recommender/uploads')
+
+MEDIA_URL = '/files/'
