@@ -35,7 +35,8 @@
             Clear All Logs
         </button>
     </div>
-    <div class="container-2">
+    <Loading v-if='loading'/>
+    <div class="container-2" v-else>
         <span :class="'message ' + message.priority" v-for="message in messages"
         :key="message">
           {{ message.timestamp }} {{ message.message }}
@@ -46,6 +47,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import axios from 'axios';
+import Loading from '../components/Loading.vue';
 
 export default defineComponent({
   name: 'Log',
@@ -57,6 +59,7 @@ export default defineComponent({
     this.requestLog();
   },
   components: {
+    Loading,
   },
   watch: {
   },
@@ -74,6 +77,7 @@ export default defineComponent({
       this.requestLog();
     },
     requestLog() {
+      this.loading = true;
       this.messages = [];
       axios({
         url: `http://192.168.1.82:8000/logs/${this.source}/`,
@@ -99,6 +103,7 @@ export default defineComponent({
           } else {
             this.messages = [];
           }
+          this.loading = false;
           this.clear = false;
         });
       this.eventSource = new EventSource(`http://192.168.1.82:8000/events/${this.source}/`);
@@ -128,6 +133,7 @@ export default defineComponent({
       source: 'log_main',
       clear: false,
       eventSource: '',
+      loading: true,
     };
   },
 });
@@ -253,5 +259,10 @@ select {
 }
 .text {
     font-size: 50px;
+}
+.container {
+  position: absolute; 
+  top: 200px;
+  height:400px;
 }
 </style>
