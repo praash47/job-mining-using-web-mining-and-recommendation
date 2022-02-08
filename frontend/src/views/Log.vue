@@ -20,12 +20,21 @@
         </ul>
       </nav>
     </div>
-    <div :class="'container-1 ' + message_priority">
-        <span class="text">
-            {{ current_message }}
-        </span>
+    <div class="container-1">
+        <select class="log-option" @change="changeSource">
+            <option value="log_main">log_main</option>
+            <option value="log_requestinggoogle">log_requestinggoogle</option>
+            <option value="log_checkjobs">log_checkjobs</option>
+            <option value="log_interactor">log_interactor</option>
+            <option value="log_jobdetailsextractor">log_jobdetailsextractor</option>
+        </select>
+        <button class="clear" @click="clearLog">
+            Clear Log
+        </button>
+        <button class="clear-all" @click="clearAll">
+            Clear All Logs
+        </button>
     </div>
-
     <div class="container-2">
         <span :class="'message ' + message.priority" v-for="message in messages"
         :key="message">
@@ -36,50 +45,89 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
+import axios from 'axios';
 
 export default defineComponent({
-  name: 'Daemon',
+  name: 'Log',
   computed: {
   },
   created() {
-    this.isAdmin = this.$store.getters.getIsAdmin;
-    this.setIdle();
-    const es = new EventSource('http://192.168.1.82:8000/events/backend_daemon/');
-    es.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      this.current_message = data.currentMessage;
-      this.message_priority = data.messagePriority;
-      const currentdate = new Date();
-      const timestamp = `${currentdate.getFullYear()}-
-        ${currentdate.getMonth() + 1}-
-        ${currentdate.getDate()} @ 
-        ${currentdate.getHours()}:
-        ${currentdate.getMinutes()}:
-        ${currentdate.getSeconds()}`;
-      this.messages.unshift({
-        message: this.current_message,
-        priority: this.message_priority,
-        timestamp,
-      });
-      setTimeout(this.setIdle, 5000);
-    };
+    this.isAdmin = this.$store.getters.getUsername;
+    if (!this.isAdmin) this.$router.push('/recommend');
+    this.requestLog();
   },
   components: {
   },
   watch: {
   },
   methods: {
-    setIdle() {
-      this.current_message = 'Idle';
-      this.message_priority = 'idle';
+    clearLog() {
+      this.clear = true;
+      this.requestLog();
+    },
+    clearAll() {
+      this.clear = 'all';
+      this.requestLog();
+    },
+    changeSource(e) {
+      this.source = e.srcElement.value;
+      this.requestLog();
+    },
+    requestLog() {
+      this.messages = [];
+      axios({
+        url: `http://192.168.1.82:8000/logs/${this.source}/`,
+        method: 'POST',
+        data: {
+          clear: this.clear,
+        },
+      })
+        .then((response) => {
+          if (response.data) {
+            const messages = response.data.contents.split('\n');
+            const logContents = [];
+            messages.forEach((message) => {
+              let priority = 'info';
+              if (message.includes('ERROR')) priority = 'error';
+              logContents.push({
+                message,
+                priority,
+                timestamp: '',
+              });
+            });
+            this.messages = logContents;
+          } else {
+            this.messages = [];
+          }
+          this.clear = false;
+        });
+      this.eventSource = new EventSource(`http://192.168.1.82:8000/events/${this.source}/`);
+      this.eventSource.onmessage = (e) => {
+        const data = JSON.parse(e.data);
+        this.current_message = data.message;
+        this.message_priority = data.type;
+        const currentdate = new Date();
+        const timestamp = `${currentdate.getFullYear()}-
+          ${currentdate.getMonth() + 1}-
+          ${currentdate.getDate()} @ 
+          ${currentdate.getHours()}:
+          ${currentdate.getMinutes()}:
+          ${currentdate.getSeconds()}`;
+        this.messages.unshift({
+          message: this.current_message,
+          priority: this.message_priority,
+          timestamp,
+        });
+      };
     },
   },
   data() {
     return {
-      current_message: 'Idle',
-      message_priority: 'idle',
       messages: [],
       isAdmin: '',
+      source: 'log_main',
+      clear: false,
+      eventSource: '',
     };
   },
 });
@@ -160,58 +208,48 @@ body{
     position: relative;
     margin: 10px;
 }
-
-.container-1{
-    color:white;
-    position:absolute;
-    width:500px;
-    top:70px;
-    height:250px;
-    left:50%;
+.container-1 {
+    position: absolute;
+    top: 120px;
+    left: 50%;
     transform: translateX(-50%);
-    margin:20px 0;
-    font-size:30px;
-    padding: 20px;
-    text-align: center;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    gap: 10px;
 }
+select {
+    font-size: 20px;
+    padding: 10px;
+}
+.clear, .clear-all {
+    background: rgb(141, 96, 103);
+    border: none;
+    padding: 15px 10px;
+    color: white;
+    cursor: pointer;
+}
+.clear-all {
+    background-color: maroon;
+}
+
 .container-2{
     background:rgba(0,0,0,0.9);
     color:white;
     position:absolute;
     margin:10px;
     padding:10px;
-    bottom:-10px;
     width:97%;
-    height:200px;
+    height:400px;
     overflow-y:auto;
-}
-.container-1.scraping {
-  background:rgb(2, 32, 2);
-}
-.container-1.info {
-  background: rgb(3, 3, 49);
-}
-.container-1.idle {
-  background: gray;
-  color: #000;
-}
-.container-1.error {
-  background: rgb(97, 13, 13);
+    top: 200px;
 }
 .container-2 .message{
     display:block;
 }
-.message.scraping{
-    color:green;
+.container-2 .info{
+    color:gray;
 }
-.message.info{
-    color:rgb(2, 2, 255);
-}
-.message.error{
-    color:red;
+.container-2 .error{
+    color:rgb(143, 22, 22);
 }
 .text {
     font-size: 50px;

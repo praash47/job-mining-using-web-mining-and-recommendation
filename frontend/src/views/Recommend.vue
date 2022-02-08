@@ -9,6 +9,10 @@
   font-weight: 400; color: #ddd;">
   <i class="fas fa-coins"></i> Backend Daemon
   </router-link>
+  <router-link to="/logs" class="right-nav" style="background: #2b5701;
+  font-weight: 400; color: #ddd;" v-if="isAdmin">
+  <i class="fas fa-scroll"></i> Logs
+  </router-link>
   <div class="container-1">
     <div class="skills"
         @drop.prevent="addSkill($event)"
@@ -182,6 +186,7 @@ export default defineComponent({
   },
   created() {
     this.username = this.$store.getters.getUsername;
+    this.isAdmin = this.$store.getters.getIsAdmin;
     axios({
       method: 'POST',
       url: 'http://192.168.1.82:8000/skills',
@@ -329,6 +334,8 @@ export default defineComponent({
           if (response.data.message === 'successfully logged out!') {
             this.$store.dispatch('setUsername', '');
             localStorage.setItem('username', '');
+            this.$store.dispatch('setIsAdmin', '');
+            localStorage.setItem('isAdmin', '');
             this.$router.push('/');
           }
         });
@@ -480,6 +487,7 @@ export default defineComponent({
   data() {
     return {
       username: '',
+      isAdmin: '',
       added_skills: [],
       all_skills: [],
       changes: false,

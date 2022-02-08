@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap');    
+.container-1 {
+    position: absolute;
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+select {
+    font-size: 20px;
+    padding: 10px;
+}
+.clear, .clear-all {
+    background: rgb(141, 96, 103);
+    border: none;
+    padding: 15px 10px;
+    color: white;
+    cursor: pointer;
+}
+.clear-all {
+    background-color: maroon;
+}
+
+.container-2{
+    background:rgba(0,0,0,0.9);
+    color:white;
+    position:absolute;
+    margin:10px;
+    padding:10px;
+    width:97%;
+    height:400px;
+    overflow-y:auto;
+    top: 200px;
+}
+    
+.container-2 .message{
+    display:block;
+}
+   
+.container-2 .info{
+    color:gray;
+}
+
+.container-2 .error{
+    color:red;
+}
+.text {
+    font-size: 50px;
+}

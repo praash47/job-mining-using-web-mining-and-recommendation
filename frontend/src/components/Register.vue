@@ -81,6 +81,8 @@ export default defineComponent({
           if (response.data.message === 'successfully registered!') {
             this.$store.dispatch('setUsername', response.data.user);
             localStorage.setItem('username', this.username);
+            this.$store.dispatch('setIsAdmin', response.data.isAdmin);
+            localStorage.setItem('isAdmin', response.data.isAdmin);
             this.$router.push('skills');
           }
         });

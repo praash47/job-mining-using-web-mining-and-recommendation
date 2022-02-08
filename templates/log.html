@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daemon</title>
+    <link rel="stylesheet" href="log.css">
+</head>
+<body>
+    <div class="container-1">
+        <select class="log-option">
+            <option value="log_main">log_main</option>
+            <option value="log_requestinggoogle">log_requestinggoogle</option>
+            <option value="log_checkjobs">log_checkjobs</option>
+            <option value="log_interactor">log_interactor</option>
+            <option value="log_jobdetailsextractor">log_jobdetailsextractor</option>
+        </select>
+        <button class="clear">
+            Clear Log
+        </button>
+        <button class="clear-all">
+            Clear All Logs
+        </button>
+    </div>
+    <div class="container-2">
+        <span class="message scraping">Scraping URL in jobsnepal.com</span>
+        <span class="message idle">Getting files</span>
+        <span class="message error">Error in scraping necessary files and folders</span>
+    </div>
+</body>
+</html>

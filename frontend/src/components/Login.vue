@@ -49,6 +49,8 @@ export default defineComponent({
           } else {
             this.$store.dispatch('setUsername', this.username);
             localStorage.setItem('username', this.username);
+            this.$store.dispatch('setIsAdmin', response.data.isAdmin);
+            localStorage.setItem('isAdmin', response.data.isAdmin);
             this.checkSkillsAdded();
           }
         });

@@ -14,6 +14,9 @@
         <li>
           <router-link to="/daemon"><i class="fas fa-coins"></i> Backend Daemon</router-link>
         </li>
+        <li v-if="isAdmin">
+          <router-link to="/logs"><i class="fas fa-scroll"></i> Logs</router-link>
+        </li>
       </ul>
     </nav>
   </div>
@@ -124,6 +127,7 @@ export default defineComponent({
   },
   created() {
     this.username = this.$store.getters.getUsername;
+    this.isAdmin = this.$store.getters.getIsAdmin;
     axios({
       method: 'POST',
       url: 'http://192.168.1.82:8000/register',
@@ -258,6 +262,7 @@ export default defineComponent({
   data() {
     return {
       username: '',
+      isAdmin: '',
       email: '',
       skills: [],
       search_term: '',
@@ -317,6 +322,15 @@ body{
     background: #001fac;
     box-shadow: inset 5px 5px 10px #001a8f,
             inset -5px -5px 10px #0024c9;
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+}
+.top ul li:nth-child(3) a {
+    display: inline-block;
+    background: #598000;
+    box-shadow: inset 5px 5px 10px #598000,
+            inset -5px -5px 10px #2b5701;
     color: white;
     padding: 10px;
     text-decoration: none;
