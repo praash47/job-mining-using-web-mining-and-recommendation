@@ -8,7 +8,6 @@ Subpackages
    :maxdepth: 4
 
    requestutils.migrations
-   requestutils.requestgooglemodule
 
 Submodules
 ----------
@@ -41,14 +40,6 @@ requestutils.request module
 ---------------------------
 
 .. automodule:: requestutils.request
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-requestutils.tests module
--------------------------
-
-.. automodule:: requestutils.tests
    :members:
    :undoc-members:
    :show-inheritance:

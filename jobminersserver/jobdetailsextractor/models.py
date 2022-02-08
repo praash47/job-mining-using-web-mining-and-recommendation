@@ -6,6 +6,7 @@ class Job(models.Model):
     """
     PostGreSQL table for Job URL
     """
+
     website = models.ForeignKey(JobWebsite, on_delete=models.CASCADE)
     title = models.TextField()
     url = models.CharField(max_length=500)

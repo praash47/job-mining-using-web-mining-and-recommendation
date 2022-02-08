@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>recommender.utils &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">recommender.utils</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for recommender.utils</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Utilities reqeuired for the views, or in dealing with the client.</span>
+
+<span class="sd">Consists:</span>
+<span class="sd">* decode_utf(body): decodes utf and returns the body dict.</span>
+<span class="sd">* jaccard_similarity(job_skills, candidate_skills): computes the Jaccard Similarity and returns the result.</span>
+<span class="sd">* get_skills_from_string(skills_string, brackets): Gets skills from skill string by removing the brackets.</span>
+<span class="sd">* lies_in_salary_range(job_salary, salary): Returns true if the salary lies in range of job_salary.</span>
+<span class="sd">* deadline_left(job_deadline, deadline): Returns true if the deadline lies within job_deadline.</span>
+<span class="sd">* get_deadline(date): Returns days and months from given deadline date string.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">decimal</span> <span class="k">import</span> <span class="n">Decimal</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">floor</span>
+<span class="kn">from</span> <span class="nn">re</span> <span class="k">import</span> <span class="n">sub</span>
+
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="k">import</span> <span class="n">timezone</span>
+
+
+<div class="viewcode-block" id="decode_utf"><a class="viewcode-back" href="../../recommender.html#recommender.utils.decode_utf">[docs]</a><span class="k">def</span> <span class="nf">decode_utf</span><span class="p">(</span><span class="n">body</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decodes the UTF text to a dict format and returns it.</span>
+<span class="sd">    A request.POST could be used instead.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    body: request.body</span>
+<span class="sd">        body of the request</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Dict of the body.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">body_unicode</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">body_unicode</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="jaccard_similarity"><a class="viewcode-back" href="../../recommender.html#recommender.utils.jaccard_similarity">[docs]</a><span class="k">def</span> <span class="nf">jaccard_similarity</span><span class="p">(</span><span class="n">job_skills</span><span class="p">,</span> <span class="n">candidate_skills</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes and returns the Jaccard similarity between two skillsets namely job skills and candidate skills. Returns score and common skills.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    job_skills: list</span>
+<span class="sd">        List of job skills</span>
+<span class="sd">    candidate_skills: list</span>
+<span class="sd">        List of candidate skills</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float, list</span>
+<span class="sd">        score and list of common skills if job_skills available, else, 0 and []</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">job_skills</span><span class="p">:</span>
+        <span class="n">common_skills</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">job_skills</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">candidate_skills</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">common_skills</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">job_skills</span><span class="p">)</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">candidate_skills</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">score</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">common_skills</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="get_skills_from_string"><a class="viewcode-back" href="../../recommender.html#recommender.utils.get_skills_from_string">[docs]</a><span class="k">def</span> <span class="nf">get_skills_from_string</span><span class="p">(</span><span class="n">skills_string</span><span class="p">,</span> <span class="n">brackets</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    From a skill set, remove brackets and parse out the skills into a list.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    skills_string: str</span>
+<span class="sd">        string where the skills are present</span>
+<span class="sd">    brackets: tuple</span>
+<span class="sd">        opening and closing brackets from which to parse.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List of the skills</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">skills_list</span> <span class="o">=</span> <span class="n">skills_string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">brackets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">brackets</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">skills_list</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="lies_in_salary_range"><a class="viewcode-back" href="../../recommender.html#recommender.utils.lies_in_salary_range">[docs]</a><span class="k">def</span> <span class="nf">lies_in_salary_range</span><span class="p">(</span><span class="n">job_salary</span><span class="p">,</span> <span class="n">salary</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns true if the filtering salary lies in the job salary range.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    job_salary: str</span>
+<span class="sd">        string of the job_salary</span>
+<span class="sd">    salary: dict</span>
+<span class="sd">        dict of the salary of the format salary: {lower: &#39;&#39;, upper: &#39;&#39;}</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    boolean</span>
+<span class="sd">        True if the salary lies in range of job_salary else False</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">job_salary</span> <span class="ow">and</span> <span class="p">(</span><span class="n">salary</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">job_salary</span> <span class="o">==</span> <span class="s2">&quot;negotiable&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">salaries_range</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Decimal</span><span class="p">(</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^\d.]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">salary</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">salary</span> <span class="ow">in</span> <span class="n">job_salary</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d&quot;</span><span class="p">,</span> <span class="n">salary</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">n_salaries</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">salaries_range</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">salaries_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">salaries_range</span><span class="p">[</span><span class="n">n_salaries</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">salaries_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span>
+                <span class="ow">and</span> <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">salaries_range</span><span class="p">[</span><span class="n">n_salaries</span><span class="p">]</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">salaries_range</span><span class="p">[</span><span class="n">n_salaries</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">salary</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="deadline_left"><a class="viewcode-back" href="../../recommender.html#recommender.utils.deadline_left">[docs]</a><span class="k">def</span> <span class="nf">deadline_left</span><span class="p">(</span><span class="n">job_deadline</span><span class="p">,</span> <span class="n">deadline</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns true if the deadline is left. It returns true even if the deadline is not available.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    job_deadline: str</span>
+<span class="sd">        string of the job_deadline</span>
+<span class="sd">    deadline: dict</span>
+<span class="sd">        dict of the deadline of the format deadline: {days: &#39;&#39;, months: &#39;&#39;}</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    boolean</span>
+<span class="sd">        True if the deadline lies in range of job_deadline else False</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">job_deadline</span> <span class="ow">and</span> <span class="p">(</span><span class="n">deadline</span><span class="p">[</span><span class="s2">&quot;days&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">deadline</span><span class="p">[</span><span class="s2">&quot;months&quot;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">job_deadline</span> <span class="o">==</span> <span class="s2">&quot;Not Available&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">days</span><span class="p">,</span> <span class="n">months</span> <span class="o">=</span> <span class="n">get_deadline</span><span class="p">(</span><span class="n">job_deadline</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">deadline</span><span class="p">[</span><span class="s2">&quot;days&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">deadline</span><span class="p">[</span><span class="s2">&quot;months&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">months</span>
+        <span class="k">if</span> <span class="n">deadline</span><span class="p">[</span><span class="s2">&quot;months&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">deadline</span><span class="p">[</span><span class="s2">&quot;days&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">days</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">deadline</span><span class="p">[</span><span class="s2">&quot;days&quot;</span><span class="p">]:</span>
+            <span class="n">deadline</span><span class="p">[</span><span class="s2">&quot;days&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">deadline</span><span class="p">[</span><span class="s2">&quot;months&quot;</span><span class="p">]:</span>
+            <span class="n">deadline</span><span class="p">[</span><span class="s2">&quot;months&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">deadline</span><span class="p">[</span><span class="s2">&quot;days&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">days</span> <span class="ow">and</span> <span class="n">deadline</span><span class="p">[</span><span class="s2">&quot;months&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">months</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="get_deadline"><a class="viewcode-back" href="../../recommender.html#recommender.utils.get_deadline">[docs]</a><span class="k">def</span> <span class="nf">get_deadline</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns days and months from given deadline string.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    date: str</span>
+<span class="sd">        string of the job_deadline to get months and days from.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        (days, months) if it exists else (None, None)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">date</span><span class="p">:</span>
+        <span class="n">deadline_date</span> <span class="o">=</span> <span class="n">date</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">now</span> <span class="o">&gt;</span> <span class="n">deadline_date</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span>
+
+        <span class="n">diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">now</span> <span class="o">-</span> <span class="n">deadline_date</span><span class="p">)</span>
+
+        <span class="n">days</span> <span class="o">=</span> <span class="n">diff</span><span class="o">.</span><span class="n">days</span>
+        <span class="n">months</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">days</span> <span class="o">/</span> <span class="mi">30</span><span class="p">)</span>
+        <span class="n">days</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">days</span> <span class="o">%</span> <span class="mi">30</span><span class="p">)</span> <span class="k">if</span> <span class="n">months</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">days</span>
+
+        <span class="k">return</span> <span class="n">days</span><span class="p">,</span> <span class="n">months</span>
+    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">recommender.utils</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

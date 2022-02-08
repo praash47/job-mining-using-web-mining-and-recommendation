@@ -8,23 +8,19 @@ This file returns 100 urls as a list.
 This file requires googleapiclient to be installed.
 
 This file consists of two classes:
-    * RequestGoogle: used for requesting 100 urls from
-    google from API.
-    * GoogleAPI: Google API object used for making request.
+* RequestGoogle: used for requesting 100 urls from
+google from API.
+* GoogleAPI: Google API object used for making request.
 """
-import logging
-
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 from django.utils.timezone import now
 
-from backend.misc import read_config
-
 from requestutils.models import API
 
-logger = logging.getLogger('requestinggoogle')
-mainlogger = logging.getLogger('main')
+from backend.misc import read_config, log
+
 
 class RequestGoogle:
     """
@@ -42,24 +38,24 @@ class RequestGoogle:
     get_100_urls()
         Returns list of 100 urls from Google Custom Search API.
     """
+
     def __init__(self):
         """
         * Read configuration files.
         * Initialize all api objects
         """
-        logger.info('Created the request google object')
-        mainlogger.info('Created the request google object')
+        log("main", "info", "Created the request google object")
+        log("requestinggoogle", "info", "Created the request google object")
         self._100urls = []
 
         # Parser
         # Google API settings
-        self._parser = read_config('requestutils/requestgooglemodule/googleapis.ini')
-        
+        self._parser = read_config("requestutils/requestgooglemodule/googleapis.ini")
+
         # Multiple google apis for switching between apis after limit reached
         # for each api.
         self._google_apis = []
         self._get_all_apis()
-
 
     def get_100_urls(self):
         """
@@ -72,8 +68,8 @@ class RequestGoogle:
         """
         # TODO: handle logic such that 100 urls are got using different apis.
         self._100urls = self._get_from_api()
-        logger.info(f'Got 100 search URLs')
-        mainlogger.info(f'Got 100 search URLs')
+        log("main", "info", "Got 100 search URLs")
+        log("requestinggoogle", "info", "Got 100 search URLs")
 
         return self._100urls
 
@@ -86,45 +82,50 @@ class RequestGoogle:
         and creates a Google API object and appends it to self.google_a
         """
         # First three letters API
-        logger.info('Getting saved APIs')
-        apis = [api for api in self._parser.sections() if api[0:3] == 'API']
+        log("requestinggoogle", "info", "Getting APIs.")
+        apis = [api for api in self._parser.sections() if api[0:3] == "API"]
 
         for api in apis:
-            self._google_apis.append(GoogleAPI(
-                self._parser.get(api, "api_key"),
-                self._parser.get(api, "search_engine_id")
-            ))
+            self._google_apis.append(
+                GoogleAPI(
+                    self._parser.get(api, "api_key"),
+                    self._parser.get(api, "search_engine_id"),
+                )
+            )
 
     def _get_from_api(self):
-        
+
         """
         Checks if API is available and if it is available, recursively gets 100 urls in
         10 iterations.
         """
         # If available, take the first one available.
         apis = [curr_api for curr_api in self._google_apis if curr_api._is_available()]
-        api = apis[0]                
-        logger.info(f'Using {api.API_KEY}')
+        api = apis[0]
+        log("requestinggoogle", "info", f"Using {api.API_KEY}")
 
         search_results = []
-        
+
         # 11, 21, 31, ..., 91
         SEARCH_INDEX_STEP = 10
-        for i in range(1, self._parser.getint('global', 'num_links'),SEARCH_INDEX_STEP): 
+        for i in range(
+            1, self._parser.getint("global", "num_links"), SEARCH_INDEX_STEP
+        ):
             search_result, api = api.search(
-                search_query=self._parser.get('global', 'search_query'),
+                search_query=self._parser.get("global", "search_query"),
                 start_index=i,  # search index for getting from paged search result.
-                api=api, # if api is invalid, to return the api
-                apis=self._google_apis
+                api=api,  # if api is invalid, to return the api
+                apis=self._google_apis,
             )
             try:
-            # {items: {link: 'www.example.com'}} for all pages.
-                if len(search_result) > 1: 
-                    search_results += [item['link'] for item in search_result['items']]
+                # {items: {link: 'www.example.com'}} for all pages.
+                if len(search_result) > 1:
+                    search_results += [item["link"] for item in search_result["items"]]
             except:
                 i -= 10  # if no search result, then don't proceed the loop
 
         return search_results
+
 
 class GoogleAPI:
     """
@@ -136,17 +137,15 @@ class GoogleAPI:
         number of time the API is used in a day.
     last_used_time : time object (current time in ms)
         last time instance that API was created or used to
-        fetch a search result. 
+        fetch a search result.
 
     Methods
     -------
     search(sound=None)
         Search using a search query to google search api with optional parameters
         num_results and start_index for specifying the page.
-    is_available()
-        Checks elapsed time from last used time and checks if one day has elapsed
-        and API limit has been crossed for today.
     """
+
     def __init__(self, api_key, search_engine_id):
         """
         Parameters
@@ -160,17 +159,14 @@ class GoogleAPI:
         self._ONE_DAY = 86400
         self._SEARCH_ENGINE_ID = search_engine_id
         self._db_ref, _created = API.objects.get_or_create(
-            api_key=api_key,
-            search_engine_id=search_engine_id
+            api_key=api_key, search_engine_id=search_engine_id
         )
         if not _created:
             # Reset the usage count to 0 on next day
             self._time_elapsed = now() - self._db_ref.last_access
-            if self._time_elapsed.total_seconds() > self._ONE_DAY:                
-                logger.info(f'API usage of {self.API_KEY} reset')
+            if self._time_elapsed.total_seconds() > self._ONE_DAY:
+                log("requestinggoogle", "info", f"API usage of {self.API_KEY} reset")
                 self._db_ref.usage_count = 0
-
-        
 
     def search(self, search_query, num_results=10, start_index=1, api=None, apis=None):
         """
@@ -200,14 +196,14 @@ class GoogleAPI:
         """
         try:
             # Google API usage syntax, available on google search API documentation.
-            resource = build("customsearch", 'v1', developerKey=self.API_KEY).cse()
+            resource = build("customsearch", "v1", developerKey=self.API_KEY).cse()
             response = resource.list(
                 q=search_query,
                 cx=self._SEARCH_ENGINE_ID,
                 num=num_results,
-                start=start_index
+                start=start_index,
             ).execute()
-            
+
             if response:
                 # Increment usage count and set last access time to now
                 self._db_ref.usage_count += 1
@@ -216,22 +212,30 @@ class GoogleAPI:
 
                 return response, api
         except HttpError as e:
-            logger.error(f'{e}')
-            mainlogger.error(f'{e}')
-            apis = [curr_api for curr_api in apis if curr_api._is_available() and curr_api._SEARCH_ENGINE_ID != api._SEARCH_ENGINE_ID]
+            log("main", "error", f"{e}")
+            log("requestinggoogle", "error", f"{e}")
+            apis = [
+                curr_api
+                for curr_api in apis
+                if curr_api._is_available()
+                and curr_api._SEARCH_ENGINE_ID != api._SEARCH_ENGINE_ID
+            ]
             api = apis[0]
-            logger.info(f'So using {api.API_KEY}')
-            mainlogger.info(f'So using {api.API_KEY}')
-            return None, api            
+            log("main", "info", f"So using {api.API_KEY}")
+            log("requestinggoogle", "info", f"So using {api.API_KEY}")
+            return None, api
 
         except Exception as e:
-            logger.error(f'{e}')
-            mainlogger.error(f'{e}')
+            log("main", "error", f"{e}")
+            log("requestinggoogle", "error", f"{e}")
             return None, api
 
     def _is_available(self):
         """
         Checks if an api is available.
+
+        Checks elapsed time from last used time and checks if one day has elapsed
+        and API limit has been crossed for today.
 
         Returns
         -------
@@ -242,12 +246,16 @@ class GoogleAPI:
         API_DAY_LIMIT = 100
         self._time_elapsed = now() - self._db_ref.last_access
 
-        if self._db_ref.usage_count >= API_DAY_LIMIT and self._time_elapsed.total_seconds() < self._ONE_DAY:
+        if (
+            self._db_ref.usage_count >= API_DAY_LIMIT
+            and self._time_elapsed.total_seconds() < self._ONE_DAY
+        ):
             return False
 
         return True
 
+
 if __name__ == "__main__":
-    google_request = RequestGoogle() 
+    google_request = RequestGoogle()
     urls = google_request.get_100_urls()
     print(urls)

@@ -44,6 +44,14 @@ recommender.urls module
    :undoc-members:
    :show-inheritance:
 
+recommender.utils module
+------------------------
+
+.. automodule:: recommender.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 recommender.views module
 ------------------------
 

@@ -12,6 +12,14 @@ jobdetailsextractor.migrations.0001\_initial module
    :undoc-members:
    :show-inheritance:
 
+jobdetailsextractor.migrations.0002\_delete\_websitestructure module
+--------------------------------------------------------------------
+
+.. automodule:: jobdetailsextractor.migrations.0002_delete_websitestructure
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

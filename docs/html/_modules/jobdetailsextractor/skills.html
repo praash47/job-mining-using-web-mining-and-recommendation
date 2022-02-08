@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jobdetailsextractor.skills &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jobdetailsextractor.skills</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for jobdetailsextractor.skills</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This submodule extracts out skillset from the given text. This submodule compares with our skills in all_skills.csv.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">-------</span>
+<span class="sd">SkillSet()</span>
+<span class="sd">Skill set of something, maybe job or user</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">backend.misc</span> <span class="k">import</span> <span class="n">log</span>
+
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="k">import</span> <span class="n">stopwords</span>
+<span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="k">import</span> <span class="n">WordNetLemmatizer</span>
+<span class="kn">from</span> <span class="nn">nltk.tokenize</span> <span class="k">import</span> <span class="n">word_tokenize</span>
+<span class="kn">from</span> <span class="nn">nltk.util</span> <span class="k">import</span> <span class="n">ngrams</span>
+
+
+<div class="viewcode-block" id="SkillSet"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.skills.SkillSet">[docs]</a><span class="k">class</span> <span class="nc">SkillSet</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Skill set of a user or job</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    get_skills(skills_text)</span>
+<span class="sd">        Get skills from giver skills_text</span>
+<span class="sd">    iter(skills_object): Eg. set(skills_object)</span>
+<span class="sd">        Get the skills as the desired iterable. set in the case of example</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Skill set of a user or job.</span>
+
+<span class="sd">        Instructions</span>
+<span class="sd">        ------------</span>
+<span class="sd">        * Use get_skills(skills_text) to get skills</span>
+<span class="sd">        * Then, using set or list or any iterable as set(skills_object).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;jobdetailsextractor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;SkillSet Object Created&quot;</span><span class="p">)</span>
+        <span class="n">skills</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;jobdetailsextractor/reqs/all_skills.csv&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_skills</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">skills</span><span class="p">[</span><span class="s2">&quot;skill&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lemmatizer</span> <span class="o">=</span> <span class="n">WordNetLemmatizer</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;1 gram&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;2 grams&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;3 grams&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;4 grams&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;5 grams&quot;</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns an iterable of the skills set.</span>
+
+<span class="sd">        Usage</span>
+<span class="sd">        -----</span>
+<span class="sd">        set(skills_object) where skills_object is the object of which to get set of skills out of.</span>
+
+<span class="sd">        Note: Run this only after running get_skills()</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        iterable</span>
+<span class="sd">            iterable of the skills</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Union all the gram skills and return</span>
+        <span class="n">skills</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="s2">&quot;1 gram&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="s2">&quot;2 grams&quot;</span><span class="p">])</span>
+        <span class="n">skills</span> <span class="o">=</span> <span class="n">skills</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="s2">&quot;3 grams&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">union</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="s2">&quot;4 grams&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">skills</span> <span class="o">=</span> <span class="n">skills</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="s2">&quot;5 grams&quot;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">skill</span> <span class="k">for</span> <span class="n">skill</span> <span class="ow">in</span> <span class="n">skills</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SkillSet.get_skills"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.skills.SkillSet.get_skills">[docs]</a>    <span class="k">def</span> <span class="nf">get_skills</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skills_text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets skills from the skills_text and store it into 1-5 grams internal variable.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        skills_text: str</span>
+<span class="sd">            skills text to extract skills from.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># lemmatize the text</span>
+        <span class="n">lemmatized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lemmatizer</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="n">skills_text</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="c1"># tokenize the text</span>
+        <span class="n">word_tokens</span> <span class="o">=</span> <span class="n">word_tokenize</span><span class="p">(</span><span class="n">lemmatized</span><span class="p">)</span>
+
+        <span class="c1"># remove . , and ?</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">w</span>
+            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">word_tokens</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">w</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_words</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">w</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">w</span> <span class="o">==</span> <span class="s2">&quot;,&quot;</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">w</span> <span class="o">==</span> <span class="s2">&quot;?&quot;</span>
+        <span class="p">]</span>
+
+        <span class="c1"># find n grams</span>
+        <span class="n">output_2grams</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">ngrams</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="mi">2</span><span class="p">))]</span>
+        <span class="n">output_3grams</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">ngrams</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="mi">3</span><span class="p">))]</span>
+        <span class="n">output_4grams</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">ngrams</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="mi">4</span><span class="p">))]</span>
+        <span class="n">output_5grams</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">ngrams</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="mi">5</span><span class="p">))]</span>
+
+        <span class="c1"># find common between all skills and the n grams and store in equivalent skill_words.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="s2">&quot;1 gram&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_skills</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="s2">&quot;2 grams&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_skills</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">output_2grams</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="s2">&quot;3 grams&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_skills</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">output_3grams</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="s2">&quot;4 grams&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_skills</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">output_4grams</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="s2">&quot;5 grams&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_skills</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">output_5grams</span><span class="p">)</span>
+
+        <span class="c1"># Filter out lower grams.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filter_lower_grams</span><span class="p">()</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;jobdetailsextractor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;Got skills&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;Got skills&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_filter_lower_grams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Filters out lower grams from the obtain skills. For eg.: Web Application Services is prioritized, and Application Services or Web Application is filtered out.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">grams</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">grams</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">gram</span> <span class="ow">in</span> <span class="n">grams</span><span class="p">:</span>
+            <span class="c1"># If gram that doesn&#39;t exist arrives.</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="n">gram</span><span class="p">]:</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">later_gram</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">gram</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; gram&quot;</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># for more than 1 gram enter s for indexing</span>
+                    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">gram</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">later_gram</span> <span class="o">+=</span> <span class="s2">&quot;s&quot;</span>
+                    <span class="n">one_gram_present_in_two</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="c1"># Find a lower gram that is present in the higher gram.</span>
+                    <span class="k">for</span> <span class="n">higher_gram</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="n">gram</span><span class="p">]:</span>
+                        <span class="n">one_gram_present_in_two</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="n">skill</span>
+                            <span class="k">for</span> <span class="n">skill</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="n">later_gram</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="n">skill</span> <span class="ow">in</span> <span class="n">higher_gram</span>
+                        <span class="p">]</span>
+                    <span class="c1"># Remove all the lower grams.</span>
+                    <span class="k">for</span> <span class="n">skill</span> <span class="ow">in</span> <span class="n">one_gram_present_in_two</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">skill_words</span><span class="p">[</span><span class="n">later_gram</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">skill</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">skillset</span> <span class="o">=</span> <span class="n">SkillSet</span><span class="p">()</span>
+    <span class="n">skills_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    Skills Required </span>
+
+<span class="s2">    Strong knowledge in javascript</span>
+<span class="s2">    Proficient in developing web applications</span>
+<span class="s2">    Must have experience in web application development using VueJs or ReactJS</span>
+<span class="s2">    Sound knowledge in working with restful API or GraphQL</span>
+<span class="s2">    Proficient in understanding of code versioning tools, such as Git</span>
+<span class="s2">    Good knowledge of SQL and No-SQL </span>
+<span class="s2">    Good knowledge of HTML and CSS (SCSS or similar) </span>
+<span class="s2">    </span>
+<span class="s2">    Skills Preferred </span>
+
+<span class="s2">    Experience in developing applications using MEARN stack </span>
+<span class="s2">    Proficient in understanding of CI/CD pipeline</span>
+<span class="s2">    Understanding differences between multiple delivery platforms, such as mobile vs. desktop, and optimizing output to match the specific platform</span>
+<span class="s2">    Sound knowledge in unit testing</span>
+<span class="s2">    Should have sound analytical skills and problem-solving skills&quot;&quot;&quot;</span>
+    <span class="n">skillset</span><span class="o">.</span><span class="n">get_skills</span><span class="p">(</span><span class="n">skills_text</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">skillset</span><span class="p">))</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jobdetailsextractor.skills</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

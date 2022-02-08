@@ -3,8 +3,14 @@ This file processes the meta tag in HTML.
 
 It can get keywords, description, og:description and
 og:title from the html.
+
+Classes
+-------
+MetaTagProcessor()
+Extracting out the meta tags data.
 """
 from .tagprocessor import TagProcessor
+
 
 class MetaTagProcessor(TagProcessor):
     """
@@ -22,6 +28,7 @@ class MetaTagProcessor(TagProcessor):
     get_og_description()
         Gets description from the html <meta property="og:description">
     """
+
     def __init__(self, html):
         """
         Parameters
@@ -29,7 +36,7 @@ class MetaTagProcessor(TagProcessor):
         html: str
             raw html to process meta tag from.
         """
-        TagProcessor.__init__(self, html, tag='meta')
+        TagProcessor.__init__(self, html, tag="meta")
 
     def get_keywords(self):
         """
@@ -40,8 +47,8 @@ class MetaTagProcessor(TagProcessor):
             list
                 list of keywords
         """
-        return self._get_property('keywords', name=True)
-    
+        return self._get_property("keywords", name=True)
+
     def get_description(self):
         """
         Gets description from the html <meta name="description">
@@ -51,7 +58,7 @@ class MetaTagProcessor(TagProcessor):
             list
                 list of description words
         """
-        return self._get_property('description', name=True)
+        return self._get_property("description", name=True)
 
     def get_og_title(self):
         """
@@ -62,7 +69,7 @@ class MetaTagProcessor(TagProcessor):
             list
                 list of og:titles
         """
-        return self._get_property('title', og=True)
+        return self._get_property("title", og=True)
 
     def get_og_description(self):
         """
@@ -73,7 +80,7 @@ class MetaTagProcessor(TagProcessor):
             list
                 list of og:descriptions
         """
-        return self._get_property('description', og=True)
+        return self._get_property("description", og=True)
 
     def _get_property(self, property_name, name=False, og=False):
         """
@@ -100,26 +107,37 @@ class MetaTagProcessor(TagProcessor):
             Usage
             -----
             if og=True: <meta property="og:title">
-            else: <meta property="title">    
+            else: <meta property="title">
         """
         property_content = str()
-        if name: property_content = self.get_content_from_name(property_name)
+        if name:
+            property_content = self.get_content_from_name(property_name)
         else:  # for property
-            if og: property_content = self.get_content_from_property(property_name, og) 
-            else: property_content = self.get_content_from_property(property_name)
+            if og:
+                property_content = self.get_content_from_property(property_name, og)
+            else:
+                property_content = self.get_content_from_property(property_name)
         # turn into a list
         property_content = property_content.split(" ")
         # strip . and ' ', turn into lowercase
-        property_content = [content.strip().strip('.').strip('/').strip('|').strip('-')\
-            .strip(',').lower() for content in property_content]
+        property_content = [
+            content.strip()
+            .strip(".")
+            .strip("/")
+            .strip("|")
+            .strip("-")
+            .strip(",")
+            .lower()
+            for content in property_content
+        ]
         # remove empty strings
         property_content = [content for content in property_content if content]
 
         return property_content
 
+
 if __name__ == "__main__":
-    html = \
-    """
+    html = """
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -146,8 +164,13 @@ if __name__ == "__main__":
     <body>Test HTML</body></html>
     """
     meta_tag = MetaTagProcessor(html)
-    title = TagProcessor(html, tag='title')
-    print(set(
-        meta_tag.get_keywords() + meta_tag.get_description() + meta_tag.get_og_title() + meta_tag.get_og_description()
-        + title.get_content()
-    ))
+    title = TagProcessor(html, tag="title")
+    print(
+        set(
+            meta_tag.get_keywords()
+            + meta_tag.get_description()
+            + meta_tag.get_og_title()
+            + meta_tag.get_og_description()
+            + title.get_content()
+        )
+    )

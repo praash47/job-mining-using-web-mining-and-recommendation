@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('requestutils', '0001_initial'),
+        ("requestutils", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='api',
-            name='search_engine_id',
-            field=models.CharField(default='ebee0f013159f11b8', max_length=50),
+            model_name="api",
+            name="search_engine_id",
+            field=models.CharField(default="ebee0f013159f11b8", max_length=50),
             preserve_default=False,
         ),
     ]

@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>interactor.searcher &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor.searcher</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for interactor.searcher</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This submodule abstracts all the searching related operations to a search page of any website to obtain it&#39;s search page and search page URL.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">-------</span>
+<span class="sd">Search()</span>
+<span class="sd">The main class used to extract search page URL.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="k">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.chrome.options</span> <span class="k">import</span> <span class="n">Options</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.keys</span> <span class="k">import</span> <span class="n">Keys</span>
+<span class="kn">from</span> <span class="nn">selenium.common.exceptions</span> <span class="k">import</span> <span class="n">WebDriverException</span>
+
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="k">import</span> <span class="n">urlparse</span>
+
+<span class="kn">from</span> <span class="nn">backend.misc</span> <span class="k">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">try_and_pass</span>
+
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">SearchURLNotFound</span><span class="p">,</span> <span class="n">DriverNotFound</span>
+
+
+<div class="viewcode-block" id="Search"><a class="viewcode-back" href="../../interactor.html#interactor.searcher.Search">[docs]</a><span class="k">class</span> <span class="nc">Search</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class to find the search box in the webpage and</span>
+<span class="sd">    perform search with no character or single space.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    get_search_url(search, self._url)</span>
+<span class="sd">        Gets search URL from the page and returns it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------</span>
+<span class="sd">        url : str</span>
+<span class="sd">            url of the webpages</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        DriverNotFound</span>
+<span class="sd">            Web Driver not found in the server due to some reasons.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">chrome_options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+        <span class="n">chrome_options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--headless&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;/interactor/reqs/chromedriver&quot;</span>
+            <span class="c1"># if windows</span>
+            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;win32&quot;</span><span class="p">):</span>
+                <span class="n">path</span> <span class="o">+=</span> <span class="s2">&quot;_win.exe&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span>
+                <span class="n">executable_path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">chrome_options</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">WebDriverException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{e}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">DriverNotFound</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{e}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_search_term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs search on textbox sending no key or space key</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        search: str</span>
+<span class="sd">            xpath of the text box from xpath_of_textbox below</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        search_url: str</span>
+<span class="sd">            search_url computed.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        DriverNotFound</span>
+<span class="sd">            if the selenium web driver file is not found in the server.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_driver&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">DriverNotFound</span>
+
+        <span class="n">check_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">current_url</span>
+        <span class="n">search_url</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="nd">@try_and_pass</span>
+        <span class="k">def</span> <span class="nf">send_empty</span><span class="p">(</span><span class="n">search</span><span class="p">):</span>
+            <span class="n">search</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>  <span class="c1"># send no keys to search box</span>
+            <span class="n">search</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ENTER</span><span class="p">)</span>  <span class="c1"># Enter the search box</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;sent &quot;&quot; to search box&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">current_url</span>
+
+        <span class="n">search_url</span> <span class="o">=</span> <span class="n">send_empty</span><span class="p">(</span><span class="n">search</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">search_url</span> <span class="o">==</span> <span class="n">check_url</span><span class="p">:</span>
+
+            <span class="nd">@try_and_pass</span>
+            <span class="k">def</span> <span class="nf">send_space</span><span class="p">(</span><span class="n">search</span><span class="p">):</span>
+                <span class="n">search</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>  <span class="c1"># send &#39; &#39; key to search box</span>
+                <span class="n">search</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ENTER</span><span class="p">)</span>  <span class="c1"># Enter the search box</span>
+                <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;sent &quot; &quot; to search box&#39;</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">current_url</span>
+
+            <span class="n">search_url</span> <span class="o">=</span> <span class="n">send_space</span><span class="p">(</span><span class="n">search</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">search_url</span>
+
+<div class="viewcode-block" id="Search.get_search_url"><a class="viewcode-back" href="../../interactor.html#interactor.searcher.Search.get_search_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_search_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the search URL of the website is able to be extracted else raises error.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        url</span>
+<span class="sd">            url to get search_url from</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        search_url</span>
+<span class="sd">            url of the search page</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        SearchURLNotFound</span>
+<span class="sd">            Search URL of the URL not able to be found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Using searcher for </span><span class="si">{self._url}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Using searcher for </span><span class="si">{self._url}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span>
+                <span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Couldn&#39;t get html response for </span><span class="si">{self._url}</span><span class="s2">: </span><span class="si">{e}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Couldn&#39;t get html response for </span><span class="si">{self._url}</span><span class="s2">: </span><span class="si">{e}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">check_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">current_url</span>
+
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;Finding in 3 &lt;input type=&#39;text&#39;&gt;&quot;</span><span class="p">)</span>
+        <span class="n">search_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_element_by_type</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">check_url</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">search_url</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;Checking in 2 &lt;input type=&#39;search&#39;&gt;&quot;</span><span class="p">)</span>
+            <span class="n">search_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_element_by_type</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">check_url</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">search_url</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SearchURLNotFound</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+        <span class="c1"># For kumarijobs type websites</span>
+        <span class="nd">@try_and_pass</span>
+        <span class="k">def</span> <span class="nf">remove_token</span><span class="p">(</span><span class="n">search_url</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;_token&quot;</span> <span class="ow">in</span> <span class="n">search_url</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">(</span>
+                    <span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;_token found in search url, removing _token.&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="p">(</span>
+                    <span class="n">urlparse</span><span class="p">(</span><span class="n">search_url</span><span class="p">)</span><span class="o">.</span><span class="n">scheme</span>
+                    <span class="o">+</span> <span class="s2">&quot;://&quot;</span>
+                    <span class="o">+</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">search_url</span><span class="p">)</span><span class="o">.</span><span class="n">netloc</span>
+                    <span class="o">+</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">search_url</span><span class="p">)</span><span class="o">.</span><span class="n">path</span>
+                    <span class="o">+</span> <span class="s2">&quot;?&quot;</span>
+                    <span class="o">+</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">search_url</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&amp;&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">search_url</span>
+
+        <span class="n">search_url</span> <span class="o">=</span> <span class="n">remove_token</span><span class="p">(</span><span class="n">search_url</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Got search url: </span><span class="si">{search_url}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Got search url: </span><span class="si">{search_url}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">search_url</span></div>
+
+    <span class="k">def</span> <span class="nf">_find_element_by_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_type</span><span class="p">,</span> <span class="n">finish_index</span><span class="p">,</span> <span class="n">check_url</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Finds an element by it&#39;s type.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_type: str</span>
+<span class="sd">            type of element. Can be &#39;search&#39;, &#39;text&#39;</span>
+<span class="sd">        finish_index: int</span>
+<span class="sd">            specifies the finish index of the search object. For eg, if we want to search 2 elements, then finish index is 3, if 3, then 4 and so on.</span>
+<span class="sd">        check_url: str</span>
+<span class="sd">            URL of the page to check on.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            search_url if it is found else None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">search_url</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">check_url</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">:</span>
+
+            <span class="nd">@try_and_pass</span>
+            <span class="k">def</span> <span class="nf">check_first_element</span><span class="p">(</span><span class="n">element_type</span><span class="p">):</span>
+                <span class="n">search</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s2">&quot;//input[@type=&#39;</span><span class="si">{element_type}</span><span class="s2">&#39;]&quot;</span>
+                <span class="p">)</span>
+                <span class="n">search_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_term</span><span class="p">(</span><span class="n">search</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">search_url</span>
+
+            <span class="n">search_url</span> <span class="o">=</span> <span class="n">check_first_element</span><span class="p">(</span><span class="n">element_type</span><span class="p">)</span>
+
+        <span class="nd">@try_and_pass</span>
+        <span class="k">def</span> <span class="nf">check_nth_element</span><span class="p">(</span><span class="n">element_type</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+            <span class="n">search</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;//input[@type=&#39;</span><span class="si">{element_type}</span><span class="s2">&#39;][</span><span class="si">{i}</span><span class="s2">]&quot;</span>
+            <span class="p">)</span>
+            <span class="n">search_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_term</span><span class="p">(</span><span class="n">search</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">search_url</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">finish_index</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">check_url</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">check_nth_element</span><span class="p">(</span>
+                    <span class="n">element_type</span><span class="p">,</span> <span class="n">i</span>
+                <span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="ow">and</span> <span class="n">check_nth_element</span><span class="p">(</span><span class="n">element_type</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+                    <span class="n">search_url</span> <span class="o">=</span> <span class="n">check_nth_element</span><span class="p">(</span><span class="n">element_type</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">search_url</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">search_url</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://www.kumarijob.com/&quot;</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">Search</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">s1</span><span class="o">.</span><span class="n">get_search_url</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor.searcher</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

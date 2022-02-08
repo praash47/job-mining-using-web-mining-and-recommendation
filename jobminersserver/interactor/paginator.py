@@ -3,37 +3,38 @@ This submodule handles all the pagination complexities of the website. It's func
 
 Classes
 -------
-Paginator():
-    Used to handle pages inside a website.
+Paginator()
+Used to handle pages inside a website.
 """
-import logging
-
-logger = logging.getLogger('interactor')
+from backend.misc import log, try_and_pass
 
 
 class Paginator:
-    def __init__(self):
-        """
-        This object is responsible for handling the pages in the non ajax based websites
+    """
+    This object is responsible for handling the pages in the non ajax based websites
 
-        Methods
-        -------
-        has_pages(links): returns true if page number is present in the page.
-        get_last_page(links): gets the last page of the non search step paginated non ajax
-        website
-        check_search_step(site, links): checks and assigns the search step if the search
-        step is present
-        _get_search_page_url(page): according to the current website, this function is responsible
-        for generating the page url on the basis of page number that is provided to it.
-        move_to_next_page(): serially moves the current page of the paginator object up by one step
-        or by search step
-        """
+    Methods
+    -------
+    has_pages(links)
+        Returns true if page number is present in the page.
+    check_search_step(site, links)
+        Checks and assigns the search step if the search step is present. Call it before getting last page.
+    get_last_page(links)
+        Gets the last page of the non search step paginated non ajax website.
+    move_to_next_page()
+        Serially moves the current page of the paginator object up by one step or by search step.
+    reset_paginator()
+        Resets the paginator to 1 after use.
+    """
+
+    def __init__(self):
         # Current and Last pages
         self.curr_page = 1
         self.last_page = None
 
         # Page URL structure of a site
         self.page_url = None
+        self.first_page_url = self.page_url
 
         # For search step, that is the step with which the page number is incremented, required
         # because some websites perform pagination on the basis of number of records of the job.
@@ -56,19 +57,30 @@ class Paginator:
         boolean
             True if there is a number link present in the site's links.
         """
-        logger.info('Site, Xpather object created')
+        log("interactor", "info", f"Checking pages")
+
+        @try_and_pass
+        def check_page_number_found(link):
+            if int(link.text) in range(100):
+                log(
+                    "interactor",
+                    "info",
+                    "Paginator found the site has pages, there is integer in range 1-100 in page.",
+                )
+                return True
+
         for link in links:
             # try and catch, because everything is not a number, int throws
             # an exception in this case.
-            try:
-                if int(link.text) in range(100):
-                    logger.info(
-                        'Paginator found the site has pages, there is integer in range 1-100 in page.')
-                    return True
-            except:
-                pass
-        logger.info(
-            'No integer value in range 1-100 found in page. So, Non paginated')
+            found = check_page_number_found(link)
+            if found:
+                return found
+
+        log(
+            "interactor",
+            "info",
+            "No integer value in range 1-100 found in page. So, Non paginated",
+        )
         return False
 
     def get_last_page(self, links):
@@ -84,19 +96,22 @@ class Paginator:
         links: list of scrapy.Link
             scrapy's link object that stores information abou the link.
         """
-        logger.info('Getting last page')
+        log("interactor", "info", "Getting last page")
+
+        @try_and_pass
+        def check_last_page_in_numbers(link):  # see only numbers
+            if int(link.text) in range(100):
+                # Calculate the greatest number and assign it as last.
+                if not self.last_page:
+                    self.last_page = int(link.text)
+                elif self.last_page < int(link.text):
+                    self.last_page = int(link.text)
+
         if not self.last_page:
             for link in links:
-                try:  # see only numbers
-                    if int(link.text) in range(100):
-                        # Calculate the greatest number and assign it as last.
-                        if not self.last_page:
-                            self.last_page = int(link.text)
-                        elif self.last_page < int(link.text):
-                            self.last_page = int(link.text)
-                except:
-                    pass
-        logger.info(f'Got the last page as {self.last_page}')
+                check_last_page_in_numbers(link)
+
+        log("interactor", "info", f"Got the last page as {self.last_page}")
 
     def check_search_step(self, site, links):
         """
@@ -115,40 +130,44 @@ class Paginator:
         links: list of scrapy.Link
             scrapy's link object that stores information abou the link.
         """
-        logger.info('Checking the search step for the paginated website.')
+        log("interactor", "info", "Checking the search step for the paginated website.")
         # Seperate a search page url
-        for link in links:
-            try:
-                if(int(link.text)) in range(100):
-                    # Check if integer is in that url in order to verify
-                    # Garbage url is often present in page 1 in some cases.
-                    # Removal of that garbage url
-                    int_in_url = False
-                    for char in link.url:
-                        try:
-                            if type(int(char)) is int:
-                                int_in_url = True
-                        except:
-                            pass
+        @try_and_pass
+        def is_int(char):
+            if type(int(char)) is int:
+                return True
 
-                    # only accept the urls with int in them
+        @try_and_pass
+        def if_number_check_search_step(link):
+            if (int(link.text)) in range(100):
+                # Check if integer is in that url in order to verify
+                # Garbage url is often present in page 1 in some cases.
+                # Removal of that garbage url
+                int_in_url = False
+                for char in link.url:
+                    int_in_url = is_int(char)
                     if int_in_url:
-                        self.page_url = link.url
-                        break
-            except:
-                pass
+                        continue
+
+                # only accept the urls with int in them
+                if int_in_url:
+                    self.page_url = link.url
+                    return True
+                return False
+            return False
+
+        for link in links:
+            search_step_found = if_number_check_search_step(link)
+            if search_step_found:
+                break
+        self.first_page_url = self.page_url
 
         # Extract page value in the page url
-        page = ''
+        page = ""
         for char in self.page_url:
-            try:
-                if type(int(char)) is int:
-                    page += str(char)  # Append integer values
-            except:
-                if page:
-                    break  # If page is got, then break away from the site
-                else:
-                    pass
+            if is_int(char):
+                page = page.join(str(char))  # Append integer values
+
         self._search_step = int(page)
         # Normal also set 2, because of page 2, so reset.
         # The search step 2 also can be regarded as one because the above function may
@@ -156,7 +175,7 @@ class Paginator:
         if self._search_step == 2:
             self._search_step = 1
 
-        logger.info(f'Got the search step as {self._search_step}')
+        log("interactor", "info", f"Got the search step as {self._search_step}")
         # Call the specific function for getting last page while the search step is
         # present.
         self._get_last_page_step(site, links)
@@ -174,12 +193,18 @@ class Paginator:
             scrapy's link object that stores information abou the link.
         """
         if self._search_step > 1:
-            logger.info(f'As search step > 1, so reassigning the last page.')
+            log(
+                "interactor",
+                "info",
+                f"As search step > 1, so reassigning the last page.",
+            )
             max_page = 0
-            last_page = ''
+            last_page = ""
             for link in links:
                 # Find if it's a search page URL.
-                if set(site.search_page_url.split('/')).issubset(set(link.url.split('/'))):
+                if set(site.search_page_url.split("/")).issubset(
+                    set(link.url.split("/"))
+                ):
                     for char in link.url:
                         if char.isnumeric():
                             # extract numbers and append it as last page
@@ -188,10 +213,10 @@ class Paginator:
                     if last_page:
                         if int(last_page) > max_page:
                             max_page = int(last_page)
-                    last_page = ''
+                    last_page = ""
             # Assign the largest number that is the last page.
             self.last_page = max_page
-            logger.info(f'Updated last page: {self.last_page}')
+            log("interactor", "info", f"Updated last page: {self.last_page}")
 
     def _get_search_page_url(self, page):
         """
@@ -205,7 +230,7 @@ class Paginator:
         Returns
         -------
         str
-            page url with the page number sent from the parameter.        
+            page url with the page number sent from the parameter.
         """
         # pre_string holds the preceding substring for the url.
         pre_string = [char for char in self.page_url if not char.isnumeric()]
@@ -217,31 +242,17 @@ class Paginator:
                 page_num_str_index = index  # get the page number string index
                 break
 
-        pre_string = ''.join(pre_string)
+        pre_string = "".join(pre_string)
         # get whatever there is after page number and place it into post_string
         post_string = pre_string[page_num_str_index:]
         pre_string = pre_string[0:page_num_str_index]
-        logger.info(post_string)
 
-        logger.info(
-            f'Got url {pre_string + str(page * self._search_step) + post_string} for page {page}.')
+        log(
+            "interactor",
+            "info",
+            f"Got url {pre_string + str(page * self._search_step) + post_string} for page {page}.",
+        )
         return pre_string + str(page * self._search_step) + post_string
-
-    # TODO: Fix the traverse pages for searching xpaths in other pages as
-    # well.
-    # def traverse_pages(self, response):
-    #     print(response)
-    #     if self.traversing_page <= self.last_page:
-    #         if self._search_step == 1: self.traversing_page += 1
-    #         traversing_url = self._get_search_page_url(self.traversing_page)
-    #         if self._search_step > 1: self.traversing_page += 1
-    #         print(f"page {self.traversing_page}")
-    #         yield Request(traversing_url, callback=self.place_response)
-    #     else:
-    #         return False
-
-    # def place_response(self, response):
-    #     print(response)
 
     def move_to_next_page(self):
         """
@@ -255,11 +266,19 @@ class Paginator:
         if self.curr_page <= self.last_page:
             if self._search_step == 1:
                 self.curr_page += 1
-            self.page_url = self._get_search_page_url(self.curr_page)
-            if self._search_step > 1:
+            elif self._search_step > 1:
                 self.curr_page += 1
-            logger.info(f'Moved to page {self.curr_page}')
+
+            self.page_url = self._get_search_page_url(self.curr_page)
+            log("interactor", "info", f"Moved to page {self.curr_page}")
             return self.curr_page
         else:
-            logger.info('No any next page.')
+            log("interactor", "info", "No any next page.")
             return False
+
+    def reset_paginator(self):
+        """
+        Used to reset paginator back to it's original values after use.
+        """
+        self.page_url = self.first_page_url
+        self.curr_page = 1

@@ -1,0 +1,366 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>interactor.paginator &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor.paginator</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for interactor.paginator</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This submodule handles all the pagination complexities of the website. It&#39;s functions includes calculating the next page URL, the next page value and work with other modules to extract jobs in multiple paginated non AJAX websites.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">-------</span>
+<span class="sd">Paginator()</span>
+<span class="sd">Used to handle pages inside a website.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">backend.misc</span> <span class="k">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">try_and_pass</span>
+
+
+<div class="viewcode-block" id="Paginator"><a class="viewcode-back" href="../../interactor.html#interactor.paginator.Paginator">[docs]</a><span class="k">class</span> <span class="nc">Paginator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This object is responsible for handling the pages in the non ajax based websites</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    has_pages(links)</span>
+<span class="sd">        Returns true if page number is present in the page.</span>
+<span class="sd">    check_search_step(site, links)</span>
+<span class="sd">        Checks and assigns the search step if the search step is present. Call it before getting last page.</span>
+<span class="sd">    get_last_page(links)</span>
+<span class="sd">        Gets the last page of the non search step paginated non ajax website.</span>
+<span class="sd">    move_to_next_page()</span>
+<span class="sd">        Serially moves the current page of the paginator object up by one step or by search step.</span>
+<span class="sd">    reset_paginator()</span>
+<span class="sd">        Resets the paginator to 1 after use.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Current and Last pages</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curr_page</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_page</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Page URL structure of a site</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">page_url</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_page_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_url</span>
+
+        <span class="c1"># For search step, that is the step with which the page number is incremented, required</span>
+        <span class="c1"># because some websites perform pagination on the basis of number of records of the job.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_search_step</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Page traversal utilities</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_traversing_page</span> <span class="o">=</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="Paginator.has_pages"><a class="viewcode-back" href="../../interactor.html#interactor.paginator.Paginator.has_pages">[docs]</a>    <span class="k">def</span> <span class="nf">has_pages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">links</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns true if the site has Non AJAX based paginations.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        links: list of scrapy.Link</span>
+<span class="sd">            scrapy&#39;s link object that stores information abou the link.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        boolean</span>
+<span class="sd">            True if there is a number link present in the site&#39;s links.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Checking pages&quot;</span><span class="p">)</span>
+
+        <span class="nd">@try_and_pass</span>
+        <span class="k">def</span> <span class="nf">check_page_number_found</span><span class="p">(</span><span class="n">link</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+                <span class="n">log</span><span class="p">(</span>
+                    <span class="s2">&quot;interactor&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Paginator found the site has pages, there is integer in range 1-100 in page.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+            <span class="c1"># try and catch, because everything is not a number, int throws</span>
+            <span class="c1"># an exception in this case.</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="n">check_page_number_found</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">found</span>
+
+        <span class="n">log</span><span class="p">(</span>
+            <span class="s2">&quot;interactor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;No integer value in range 1-100 found in page. So, Non paginated&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Paginator.get_last_page"><a class="viewcode-back" href="../../interactor.html#interactor.paginator.Paginator.get_last_page">[docs]</a>    <span class="k">def</span> <span class="nf">get_last_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">links</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets last page of the site using links. This is a kind of condition type of</span>
+<span class="sd">        last page extracting function that only works when there is no any search step</span>
+<span class="sd">        present in the page.</span>
+
+<span class="sd">        This function applies the concept of getting out the maximum number.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        links: list of scrapy.Link</span>
+<span class="sd">            scrapy&#39;s link object that stores information abou the link.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;Getting last page&quot;</span><span class="p">)</span>
+
+        <span class="nd">@try_and_pass</span>
+        <span class="k">def</span> <span class="nf">check_last_page_in_numbers</span><span class="p">(</span><span class="n">link</span><span class="p">):</span>  <span class="c1"># see only numbers</span>
+            <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+                <span class="c1"># Calculate the greatest number and assign it as last.</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_page</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">last_page</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_page</span> <span class="o">&lt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">last_page</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_page</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+                <span class="n">check_last_page_in_numbers</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Got the last page as </span><span class="si">{self.last_page}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Paginator.check_search_step"><a class="viewcode-back" href="../../interactor.html#interactor.paginator.Paginator.check_search_step">[docs]</a>    <span class="k">def</span> <span class="nf">check_search_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">links</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to compute search step of a page. A search step is defined as the</span>
+<span class="sd">        number that is used for representing the pagination structure. It is</span>
+<span class="sd">        usually greater than 1.</span>
+
+<span class="sd">        It exists due to the fact that some websites paginated not on the basis</span>
+<span class="sd">        of serial page numbers but with the total number of job adverts present</span>
+<span class="sd">        in a page.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        site: Site object</span>
+<span class="sd">            site object of the website whose search step is being checked</span>
+<span class="sd">        links: list of scrapy.Link</span>
+<span class="sd">            scrapy&#39;s link object that stores information abou the link.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;Checking the search step for the paginated website.&quot;</span><span class="p">)</span>
+        <span class="c1"># Seperate a search page url</span>
+        <span class="nd">@try_and_pass</span>
+        <span class="k">def</span> <span class="nf">is_int</span><span class="p">(</span><span class="n">char</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">char</span><span class="p">))</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="nd">@try_and_pass</span>
+        <span class="k">def</span> <span class="nf">if_number_check_search_step</span><span class="p">(</span><span class="n">link</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">text</span><span class="p">))</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+                <span class="c1"># Check if integer is in that url in order to verify</span>
+                <span class="c1"># Garbage url is often present in page 1 in some cases.</span>
+                <span class="c1"># Removal of that garbage url</span>
+                <span class="n">int_in_url</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">link</span><span class="o">.</span><span class="n">url</span><span class="p">:</span>
+                    <span class="n">int_in_url</span> <span class="o">=</span> <span class="n">is_int</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">int_in_url</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                <span class="c1"># only accept the urls with int in them</span>
+                <span class="k">if</span> <span class="n">int_in_url</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">page_url</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">url</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+            <span class="n">search_step_found</span> <span class="o">=</span> <span class="n">if_number_check_search_step</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">search_step_found</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_page_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_url</span>
+
+        <span class="c1"># Extract page value in the page url</span>
+        <span class="n">page</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_url</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">is_int</span><span class="p">(</span><span class="n">char</span><span class="p">):</span>
+                <span class="n">page</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">char</span><span class="p">))</span>  <span class="c1"># Append integer values</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_search_step</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+        <span class="c1"># Normal also set 2, because of page 2, so reset.</span>
+        <span class="c1"># The search step 2 also can be regarded as one because the above function may</span>
+        <span class="c1"># also recognize pages with search step 2 as 1.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_step</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_search_step</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Got the search step as </span><span class="si">{self._search_step}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Call the specific function for getting last page while the search step is</span>
+        <span class="c1"># present.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_last_page_step</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="n">links</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_last_page_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">links</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the value of last page if a search step is present in the link. This only</span>
+<span class="sd">        works for the websites with search step in it.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        site: Site object</span>
+<span class="sd">            site object of the website whose search step is being checked</span>
+<span class="sd">        links: list of scrapy.Link</span>
+<span class="sd">            scrapy&#39;s link object that stores information abou the link.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_step</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span>
+                <span class="s2">&quot;interactor&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+                <span class="n">f</span><span class="s2">&quot;As search step &gt; 1, so reassigning the last page.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">max_page</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">last_page</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+                <span class="c1"># Find if it&#39;s a search page URL.</span>
+                <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">site</span><span class="o">.</span><span class="n">search_page_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span>
+                    <span class="nb">set</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span>
+                <span class="p">):</span>
+                    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">link</span><span class="o">.</span><span class="n">url</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">char</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">():</span>
+                            <span class="c1"># extract numbers and append it as last page</span>
+                            <span class="n">last_page</span> <span class="o">+=</span> <span class="n">char</span>
+                    <span class="c1"># Compute the largest page number.</span>
+                    <span class="k">if</span> <span class="n">last_page</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">last_page</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">max_page</span><span class="p">:</span>
+                            <span class="n">max_page</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">last_page</span><span class="p">)</span>
+                    <span class="n">last_page</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="c1"># Assign the largest number that is the last page.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_page</span> <span class="o">=</span> <span class="n">max_page</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Updated last page: </span><span class="si">{self.last_page}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_search_page_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets search page url for the current website from the page number that is given to it.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        page: int</span>
+<span class="sd">            page number to generate search page url for.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            page url with the page number sent from the parameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pre_string holds the preceding substring for the url.</span>
+        <span class="n">pre_string</span> <span class="o">=</span> <span class="p">[</span><span class="n">char</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_url</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">char</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">()]</span>
+        <span class="n">page_num_str_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># here self.page_url holds the sample of the current website&#39;s page url.</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">page_url</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">char</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">():</span>
+                <span class="n">page_num_str_index</span> <span class="o">=</span> <span class="n">index</span>  <span class="c1"># get the page number string index</span>
+                <span class="k">break</span>
+
+        <span class="n">pre_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pre_string</span><span class="p">)</span>
+        <span class="c1"># get whatever there is after page number and place it into post_string</span>
+        <span class="n">post_string</span> <span class="o">=</span> <span class="n">pre_string</span><span class="p">[</span><span class="n">page_num_str_index</span><span class="p">:]</span>
+        <span class="n">pre_string</span> <span class="o">=</span> <span class="n">pre_string</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">page_num_str_index</span><span class="p">]</span>
+
+        <span class="n">log</span><span class="p">(</span>
+            <span class="s2">&quot;interactor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+            <span class="n">f</span><span class="s2">&quot;Got url {pre_string + str(page * self._search_step) + post_string} for page </span><span class="si">{page}</span><span class="s2">.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">pre_string</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">page</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_step</span><span class="p">)</span> <span class="o">+</span> <span class="n">post_string</span>
+
+<div class="viewcode-block" id="Paginator.move_to_next_page"><a class="viewcode-back" href="../../interactor.html#interactor.paginator.Paginator.move_to_next_page">[docs]</a>    <span class="k">def</span> <span class="nf">move_to_next_page</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use to move to the next page in a serial order. Moving to the next page</span>
+<span class="sd">        implies increasing the current page by one or by the search page.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        self.curr_page if the next page exists, otherwise False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">curr_page</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_page</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_step</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">curr_page</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_step</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">curr_page</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">page_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_search_page_url</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">curr_page</span><span class="p">)</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Moved to page </span><span class="si">{self.curr_page}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">curr_page</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;No any next page.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Paginator.reset_paginator"><a class="viewcode-back" href="../../interactor.html#interactor.paginator.Paginator.reset_paginator">[docs]</a>    <span class="k">def</span> <span class="nf">reset_paginator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to reset paginator back to it&#39;s original values after use.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">page_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">first_page_url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curr_page</span> <span class="o">=</span> <span class="mi">1</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor.paginator</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

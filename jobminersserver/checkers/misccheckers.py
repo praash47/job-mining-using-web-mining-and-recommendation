@@ -5,14 +5,11 @@ processing.
 Methods
 -------
 is_interested_website(home_page_url)
-    Returns False for websites present in the misccheckers.ini's interested_websites
-    non_interested variable.
+Returns False for websites present in the misccheckers.ini's interested_websites
+non_interested variable.
 """
-import logging
+from backend.misc import read_config, log
 
-from backend.misc import read_config
-
-logger = logging.getLogger('checkjobs')
 
 def is_interested_website(home_page_url):
     """
@@ -34,32 +31,31 @@ def is_interested_website(home_page_url):
         False, if present in non_interested section of
         interested_websites section of misccheckers.ini.
     """
-    config = read_config('checkers/misccheckers.ini')
-    non_interested = config.get(
-        'interested_websites', 'non_interested').split(', ')
+    config = read_config("checkers/misccheckers.ini")
+    non_interested = config.get("interested_websites", "non_interested").split(", ")
     # Removing www. and https://
 
     try:
-        home_page_url = home_page_url.replace('https://', '')
+        home_page_url = home_page_url.replace("https://", "")
     except:
-        home_page_url = home_page_url.replace('http://', '')
+        home_page_url = home_page_url.replace("http://", "")
 
     try:
-        home_page_url = home_page_url.replace('www.', '')
+        home_page_url = home_page_url.replace("www.", "")
     except:
         pass
     if home_page_url in non_interested:
         return False
 
-    logger.info(f'{home_page_url} is not an intrested website.')
+    log("checkjobs", "info", f"{home_page_url} is not an interested website.")
     return True
 
 
 def main():
-    print(is_interested_website('https://play.google.com'))
-    print(is_interested_website('https://youtube.com'))
-    print(is_interested_website('https://www.youtube.com'))
-    print(is_interested_website('https://www.facebook.com'))
+    print(is_interested_website("https://play.google.com"))
+    print(is_interested_website("https://youtube.com"))
+    print(is_interested_website("https://www.youtube.com"))
+    print(is_interested_website("https://www.facebook.com"))
 
 
 if __name__ == "__main__":

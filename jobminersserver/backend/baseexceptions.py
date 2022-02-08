@@ -1,5 +1,5 @@
 """
-This file consists of base exceptions required around the project.
+This file consists of base exceptions required around the project. This is inherited by other exceptions around the project.
 """
 
 

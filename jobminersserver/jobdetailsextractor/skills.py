@@ -4,22 +4,19 @@ This submodule extracts out skillset from the given text. This submodule compare
 Classes
 -------
 SkillSet()
-    Skill set of something, maybe job or user
+Skill set of something, maybe job or user
 """
-import logging
-
 import pandas as pd
+
+from backend.misc import log
 
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 from nltk.util import ngrams
 
-mainlogger = logging.getLogger('main')
-logger = logging.getLogger('jobdetailsextractor')
 
-
-class SkillSet():
+class SkillSet:
     """
     Skill set of a user or job
 
@@ -40,11 +37,10 @@ class SkillSet():
         * Use get_skills(skills_text) to get skills
         * Then, using set or list or any iterable as set(skills_object).
         """
-        mainlogger.info('SkillSet Object Created')
-        logger.info('SkillSet Object Created')
+        log("jobdetailsextractor", "info", "SkillSet Object Created")
         skills = pd.read_csv("jobdetailsextractor/reqs/all_skills.csv")
-        self.all_skills = set(skills['skill'])
-        self.stop_words = set(stopwords.words('english'))
+        self.all_skills = set(skills["skill"])
+        self.stop_words = set(stopwords.words("english"))
         self.lemmatizer = WordNetLemmatizer()
 
         self.skill_words = {
@@ -52,7 +48,7 @@ class SkillSet():
             "2 grams": {},
             "3 grams": {},
             "4 grams": {},
-            "5 grams": {}
+            "5 grams": {},
         }
 
     def __iter__(self):
@@ -71,16 +67,22 @@ class SkillSet():
             iterable of the skills
         """
         # Union all the gram skills and return
-        skills = self.skill_words['1 gram'].union(self.skill_words['2 grams'])
-        skills = skills.union(self.skill_words['3 grams']).union(
-            self.skill_words['4 grams'])
-        skills = skills.union(self.skill_words['5 grams'])
-        logger.info(skill for skill in skills)
+        skills = self.skill_words["1 gram"].union(self.skill_words["2 grams"])
+        skills = skills.union(self.skill_words["3 grams"]).union(
+            self.skill_words["4 grams"]
+        )
+        skills = skills.union(self.skill_words["5 grams"])
+
         return (skill for skill in skills)
 
     def get_skills(self, skills_text):
         """
         Gets skills from the skills_text and store it into 1-5 grams internal variable.
+
+        Parameters
+        ----------
+        skills_text: str
+            skills text to extract skills from.
         """
         # lemmatize the text
         lemmatized = self.lemmatizer.lemmatize(skills_text.lower())
@@ -88,26 +90,34 @@ class SkillSet():
         word_tokens = word_tokenize(lemmatized)
 
         # remove . , and ?
-        tokens = [w for w in word_tokens if not w.lower() in self.stop_words
-                  and not w == '.' and not w == ',' and not w == '?']
+        tokens = [
+            w
+            for w in word_tokens
+            if not w.lower() in self.stop_words
+            and not w == "."
+            and not w == ","
+            and not w == "?"
+        ]
 
         # find n grams
-        output_2grams = [' '.join(tup) for tup in list(ngrams(tokens, 2))]
-        output_3grams = [' '.join(tup) for tup in list(ngrams(tokens, 3))]
-        output_4grams = [' '.join(tup) for tup in list(ngrams(tokens, 4))]
-        output_5grams = [' '.join(tup) for tup in list(ngrams(tokens, 5))]
+        output_2grams = [" ".join(tup) for tup in list(ngrams(tokens, 2))]
+        output_3grams = [" ".join(tup) for tup in list(ngrams(tokens, 3))]
+        output_4grams = [" ".join(tup) for tup in list(ngrams(tokens, 4))]
+        output_5grams = [" ".join(tup) for tup in list(ngrams(tokens, 5))]
 
         # find common between all skills and the n grams and store in equivalent skill_words.
-        self.skill_words['1 gram'] = self.all_skills & set(tokens)
-        self.skill_words['2 grams'] = self.all_skills & set(output_2grams)
-        self.skill_words['3 grams'] = self.all_skills & set(output_3grams)
-        self.skill_words['4 grams'] = self.all_skills & set(output_4grams)
-        self.skill_words['5 grams'] = self.all_skills & set(output_5grams)
+        self.skill_words["1 gram"] = self.all_skills & set(tokens)
+        self.skill_words["2 grams"] = self.all_skills & set(output_2grams)
+        self.skill_words["3 grams"] = self.all_skills & set(output_3grams)
+        self.skill_words["4 grams"] = self.all_skills & set(output_4grams)
+        self.skill_words["5 grams"] = self.all_skills & set(output_5grams)
 
         # Filter out lower grams.
-        self.filter_lower_grams()
+        self._filter_lower_grams()
+        log("jobdetailsextractor", "info", "Got skills")
+        log("main", "info", "Got skills")
 
-    def filter_lower_grams(self):
+    def _filter_lower_grams(self):
         """
         Filters out lower grams from the obtain skills. For eg.: Web Application Services is prioritized, and Application Services or Web Application is filtered out.
         """
@@ -118,16 +128,19 @@ class SkillSet():
             if not self.skill_words[gram]:
                 continue
             else:
-                later_gram = str(int(gram[0])-1) + ' gram'
+                later_gram = str(int(gram[0]) - 1) + " gram"
                 try:
                     # for more than 1 gram enter s for indexing
                     if int(gram[0]) - 1 > 1:
-                        later_gram += 's'
+                        later_gram += "s"
                     one_gram_present_in_two = []
                     # Find a lower gram that is present in the higher gram.
                     for higher_gram in self.skill_words[gram]:
                         one_gram_present_in_two = [
-                            skill for skill in self.skill_words[later_gram] if skill in higher_gram]
+                            skill
+                            for skill in self.skill_words[later_gram]
+                            if skill in higher_gram
+                        ]
                     # Remove all the lower grams.
                     for skill in one_gram_present_in_two:
                         self.skill_words[later_gram].remove(skill)
@@ -137,7 +150,7 @@ class SkillSet():
 
 if __name__ == "__main__":
     skillset = SkillSet()
-    skills_text = '''
+    skills_text = """
     Skills Required 
 
     Strong knowledge in javascript
@@ -154,6 +167,6 @@ if __name__ == "__main__":
     Proficient in understanding of CI/CD pipeline
     Understanding differences between multiple delivery platforms, such as mobile vs. desktop, and optimizing output to match the specific platform
     Sound knowledge in unit testing
-    Should have sound analytical skills and problem-solving skills'''
+    Should have sound analytical skills and problem-solving skills"""
     skillset.get_skills(skills_text)
     print(set(skillset))

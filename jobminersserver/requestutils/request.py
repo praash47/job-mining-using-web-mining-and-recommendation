@@ -1,34 +1,32 @@
-import logging
+"""
+Responsible for handling the requests from our server to the other servers. All of the minor things that needs to be formed after requesting are also handled by this submodule.
+"""
 import re
 
 from lxml import html
 from requests import *
 from urllib import parse
 
-mainlogger = logging.getLogger('main')
+from backend.misc import log
 
 
 class Request:
     """
     A class to request html of webpage from urls
-    and convert to text 
+    and convert to text
 
     Methods
     -------
     request_html(url)
-            returns html in string from the url passed 
-
+        returns html in string from the url passed
     check_homepage(url)
-            returns true if url passed is homepage and has no subdomain
-
+        returns true if url passed is homepage and has no subdomain
     get_only_homepage_based(urls)
-            returns only the homepage based in urls list
-
+        returns only the homepage based in urls list
     get_html_tree()
-            returns the html tree
-
+        returns the html tree
     filter_script_tags()
-            filters the script tags from the html.
+        filters the script tags from the html.
     """
 
     def __init__(self, url):
@@ -36,7 +34,7 @@ class Request:
         Parameters
         ---------
         url : str
-                url of the webpages
+            url of the webpages
         """
         self.url = url
         self.html = None
@@ -49,48 +47,80 @@ class Request:
         Parameters
         ----------
         home_page: str
-                home page of the url
+            home page of the url
 
         format: https://merojob.com
-        """
-        home_page = parse.urlsplit(self.url).scheme + \
-            '://' + parse.urlsplit(self.url).netloc + '/'
 
-        if(self.url == home_page):
+
+        Returns
+        -------
+        boolean
+            True if a homepage based else False.
+        """
+        home_page = (
+            parse.urlsplit(self.url).scheme
+            + "://"
+            + parse.urlsplit(self.url).netloc
+            + "/"
+        )
+
+        if self.url == home_page:
             return True
         return False
 
     def get_only_homepage_based(self, urls=None):
         """
-        Returns homepage from the extracted url
+        Returns homepage from the extracted url or urls. If there is no urls passed, then self.url is used.
 
         eg:- https://unjobs.org from https://unjobs.org/duty_stations/nepal
 
         Parameters
         ---------
-        home_page: list
-                homepage of the urls in the format https://unjobs.org
+        urls: list
+            homepage of the urls in the format https://unjobs.org
+
+        Returns
+        -------
+        str
+            homepage from the self.url
         """
-        home_page = ''
+        home_page = ""
         if urls:
-            home_page = [(parse.urlsplit(url).scheme + '://' + parse.urlsplit(url).netloc)
-                         for url in urls if (parse.urlsplit(url).scheme + '://' + parse.urlsplit(url).netloc) != '://']
-        if (parse.urlsplit(self.url).scheme + '://' + parse.urlsplit(self.url).netloc) != '://':
-            home_page = parse.urlsplit(
-                self.url).scheme + '://' + parse.urlsplit(self.url).netloc
+            home_page = [
+                (parse.urlsplit(url).scheme + "://" + parse.urlsplit(url).netloc)
+                for url in urls
+                if (parse.urlsplit(url).scheme + "://" + parse.urlsplit(url).netloc)
+                != "://"
+            ]
+        if (
+            parse.urlsplit(self.url).scheme + "://" + parse.urlsplit(self.url).netloc
+        ) != "://":
+            home_page = (
+                parse.urlsplit(self.url).scheme
+                + "://"
+                + parse.urlsplit(self.url).netloc
+            )
         return home_page
 
     def request_html(self):
         """
         Returns html from the url of the webpages.
 
-        If webpage is not accessible print error message 
+        If webpage is not accessible print error message
+
+        Returns
+        -------
+        str
+            "" if exception occurs while requesting HTML from the server else returns the HTML string.
         """
         try:
             self.html = get(self.url).text
         except Exception as e:
-            mainlogger.error(
-                f'Error while requesting {self.url}: {e}\n so returning ""')
+            log(
+                "main",
+                "error",
+                f'Error while requesting {self.url}: {e}\n so returning ""',
+            )
             return ""
         return self.html
 
@@ -104,7 +134,7 @@ class Request:
         Returns
         -------
         tree: lxml.etree
-                tree that is computed from the html dom.
+            tree that is computed from the html dom if html is present else None.
         """
         if self.html:
             html_doc = html.fromstring(self.html)
@@ -115,12 +145,14 @@ class Request:
 
     def filter_unnecessary_tags(self):
         """
-        Filters/Removes the script tags from the request html and assigns back to
+        Filters/Removes the <script>, <header>, <style>, <aside> and <footer> tags from the request html and assigns back to
         request html.
         """
-        self.html = re.subn(r'<(script).*?</\1>(?s)', '', str(self.html))[0]
-        self.html = re.subn(r'<(footer).*?</\1>(?s)', '', str(self.html))[0]
-        self.html = re.subn(r'<(header).*?</\1>(?s)', '', str(self.html))[0]
+        self.html = re.subn(r"<(script).*?</\1>(?s)", "", str(self.html))[0]
+        self.html = re.subn(r"<(footer).*?</\1>(?s)", "", str(self.html))[0]
+        self.html = re.subn(r"<(header).*?</\1>(?s)", "", str(self.html))[0]
+        self.html = re.subn(r"<(style).*?</\1>(?s)", "", str(self.html))[0]
+        self.html = re.subn(r"<(aside).*?</\1>(?s)", "", str(self.html))[0]
 
 
 if __name__ == "__main__":

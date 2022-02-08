@@ -7,7 +7,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
     # Redirecting to endpoints that communicates with frontend.
-    path('', include('recommender.urls'))
+    path("", include("recommender.urls")),
 ]

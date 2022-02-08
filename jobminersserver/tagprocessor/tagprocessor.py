@@ -5,8 +5,13 @@ This file is used to process related to tag.
 
 Processing includes
 * extraction of contents from
-    * attributes
-    * innerContent
+* attributes
+* innerContent
+
+Classes
+-------
+TagProcessor
+    Used to perform minor processing in the tags.
 """
 from bs4 import BeautifulSoup
 
@@ -17,7 +22,7 @@ class TagProcessor:
     tag attributes. The attribute may be a name or may be any property that
     includes both og and non og properties.
     ...
-    
+
     Attributes
     ----------
     html: str
@@ -37,6 +42,7 @@ class TagProcessor:
         Returns content from property="<property_name>"
         If og is true, returns from property="og:<property_name>"
     """
+
     def __init__(self, html, tag=None):
         """
         Parameters
@@ -45,10 +51,10 @@ class TagProcessor:
             Raw HTML to create the object of.
         tag: str, optional
             tag without <>.
-            Eg: for <section> tag, pass 'section'. 
+            Eg: for <section> tag, pass 'section'.
         """
         self._tag_to_process = tag
-        self._soup = BeautifulSoup(html, 'html.parser')
+        self._soup = BeautifulSoup(html, "html.parser")
 
     def get_content(self):
         """
@@ -57,23 +63,25 @@ class TagProcessor:
         * For title: a list is returned with , | . split and lower
         cased.
         """
-        if self._tag_to_process == 'title':
+        if self._tag_to_process == "title":
             title = self._soup.title
             if title:
-                try: 
-                    title = title.string.split(' ')
-                    title = [word.strip(',').strip('|').strip('.').lower() for word in title]
+                try:
+                    title = title.string.split(" ")
+                    title = [
+                        word.strip(",").strip("|").strip(".").lower() for word in title
+                    ]
                     # remove empty strings
                     title = [word for word in title if word]
                     return title
                 except:
-                    return ['']
+                    return [""]
 
     def get_content_from_name(self, name_to_get_from):
         """
         Returns content from the name attribute of the
         tag in the object.
-        
+
         Usage
         -----
         To extract <tag name="<name_to_get_from>".
@@ -94,10 +102,10 @@ class TagProcessor:
         No exception. If error is encountered, empty string is returned.
         """
         try:
-            tag = self._soup.find(self._tag_to_process, {"name":name_to_get_from})
-            return tag['content']
+            tag = self._soup.find(self._tag_to_process, {"name": name_to_get_from})
+            return tag["content"]
         except:
-            return ''
+            return ""
 
     def get_content_from_property(self, property_name, og=False):
         """
@@ -119,9 +127,9 @@ class TagProcessor:
         Returns
         -------
         str
-            a string present in 
+            a string present in
             * property="<name_to_get_from>"
-            * property="og:<name_to_get_from>" 
+            * property="og:<name_to_get_from>"
             of the tag of the object.
 
         Raises
@@ -129,9 +137,9 @@ class TagProcessor:
         No exception. If error is encountered, empty string is returned.
         """
         try:
-            if og: property_name = "og:" + property_name 
-            tag = self._soup.find(self._tag_to_process, {"property":property_name})
-            return tag['content']
+            if og:
+                property_name = "og:" + property_name
+            tag = self._soup.find(self._tag_to_process, {"property": property_name})
+            return tag["content"]
         except:
-            return ''
-
+            return ""
