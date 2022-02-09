@@ -1,0 +1,469 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jobdetailsextractor.deadline &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jobdetailsextractor.deadline</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for jobdetailsextractor.deadline</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module consists of class and it&#39;s methods in order to discover, handle and</span>
+<span class="sd">process deadlines.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">--------</span>
+<span class="sd">Deadline():</span>
+<span class="sd">    used for getting the deadline date in string format and it&#39;s xpath.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">bs4</span>
+<span class="kn">import</span> <span class="nn">datefinder</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="k">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="k">import</span> <span class="n">html</span>
+
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">DeadlineNotFound</span><span class="p">,</span> <span class="n">DeadlineXpathNotFound</span>
+
+<span class="kn">from</span> <span class="nn">backend.misc</span> <span class="k">import</span> <span class="n">read_config</span>
+<span class="kn">from</span> <span class="nn">tagprocessor.decorators</span> <span class="k">import</span> <span class="n">for_all_tags</span><span class="p">,</span> <span class="n">for_existing_leaf_nodes</span>
+<span class="kn">from</span> <span class="nn">tagprocessor.misc</span> <span class="k">import</span> <span class="n">clean_text</span>
+
+<span class="n">mainlogger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;main&#39;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jobdetailsextractor&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Deadline"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.deadline.Deadline">[docs]</a><span class="k">class</span> <span class="nc">Deadline</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extracts deadline from a html document. You create a deadline object and</span>
+<span class="sd">    pass in a html document while calling get_deadline_date() function to get</span>
+<span class="sd">    the deadline inside self.deadline and it&#39;s respective xpath inside the self.</span>
+<span class="sd">    xpath variable.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    get_deadline_date(html): </span>
+<span class="sd">        finds the deadline date in an html document and stores into deadline</span>
+<span class="sd">        variable as a date string which can be parsed to obtain a python datetime</span>
+<span class="sd">        object.</span>
+
+<span class="sd">    Static Methods</span>
+<span class="sd">    --------------</span>
+<span class="sd">    check_if_future_date(date):</span>
+<span class="sd">        checks if a date if a future date or a past date.</span>
+<span class="sd">    is_interested_date(date):</span>
+<span class="sd">        interested date refers to the date from which 90 days</span>
+<span class="sd">        haven&#39;t been passed. checks if a date passed is within</span>
+<span class="sd">        90 days.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">xpath</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tree: lxml.etree</span>
+<span class="sd">            lxml.etree to find the deadline on.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_soup</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_probable_date_strings</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tags_with_date_string</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span> <span class="o">=</span> <span class="n">tree</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xpath</span> <span class="o">=</span> <span class="n">xpath</span>
+
+        <span class="c1"># for deadline options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span> <span class="o">=</span> <span class="n">read_config</span><span class="p">(</span><span class="s2">&quot;jobdetailsextractor/reqs/extraction_options.ini&quot;</span><span class="p">)</span>
+        <span class="c1"># commonly used words in the deadline such as Apply before,</span>
+        <span class="c1"># apply, deadline etc.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_common_deadline_words</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;deadline&#39;</span><span class="p">,</span> <span class="s1">&#39;common_deadline_words&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_common_deadline_words</span> <span class="o">=</span> \
+            <span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_common_deadline_words</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">mainlogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Deadline Object Created&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Deadline Object Created&#39;</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="Deadline.get_deadline_date"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.deadline.Deadline.get_deadline_date">[docs]</a>    <span class="k">def</span> <span class="nf">get_deadline_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">html</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stores deadline date and xpath in the object variables after it&#39;s</span>
+<span class="sd">        extraction from the document.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        html: string</span>
+<span class="sd">            String in which an HTML document is present.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_probable_dates</span><span class="p">()</span>  <span class="c1"># this function summarizes date string as date.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_tags_with_date_string</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_deadline_words</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_tags_with_date_string</span><span class="p">,</span> <span class="n">soup</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_soup</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_assign_deadline_otherwise</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_xpath</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="p">:</span> <span class="k">raise</span> <span class="n">DeadlineNotFound</span>
+            <span class="k">else</span><span class="p">:</span> 
+                <span class="n">mainlogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Deadline: </span><span class="si">{self.deadline}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Deadline: </span><span class="si">{self.deadline}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">DeadlineNotFound</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DeadlineNotFound</span>
+        <span class="k">except</span> <span class="n">DeadlineXpathNotFound</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">DeadlineXpathNotFound</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">mainlogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_probable_dates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets a list of probable date strings in the document using the datefinder</span>
+<span class="sd">        module. datefinder is a module that can find strings with many date formats</span>
+<span class="sd">        in the string. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Getting probable dates&#39;</span><span class="p">)</span>
+        <span class="n">dates</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                    <span class="n">datefinder</span><span class="o">.</span><span class="n">find_dates</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_soup</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+        <span class="n">future_dates</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">Deadline</span><span class="o">.</span><span class="n">check_if_future_date</span><span class="p">,</span> <span class="n">dates</span><span class="p">))</span>
+        <span class="c1"># Intersted date refers to date within 90 days from today.</span>
+        <span class="n">interested_dates</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">Deadline</span><span class="o">.</span><span class="n">is_interested_date</span><span class="p">,</span> <span class="n">future_dates</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">interested_dates</span><span class="p">:</span> <span class="k">raise</span> <span class="n">DeadlineNotFound</span>
+        <span class="c1"># find probable date strings from the interested_dates datetime objects.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_probable_date_strings</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_soup</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">year</span><span class="p">)))</span> <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">interested_dates</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Probable date strings: </span><span class="si">{self._probable_date_strings}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_tags_with_date_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used to find tags with probable date strings in the html document. Stores</span>
+<span class="sd">        it in the self._tags_with_date_string variable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Getting tags with date string&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_soup</span><span class="o">.</span><span class="n">findAll</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">string</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;script&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span>  
+                <span class="c1"># ignore &lt;script&gt; &amp; title:</span>
+                <span class="c1"># match the date string and find the tags</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">string</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_probable_date_strings</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_tags_with_date_string</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;script&#39;</span><span class="p">:</span>
+                <span class="c1"># If the deadline word is present inside a nested tag then,</span>
+                <span class="n">date_to_check</span> <span class="o">=</span> \
+                    <span class="nb">list</span><span class="p">(</span><span class="n">datefinder</span><span class="o">.</span><span class="n">find_dates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_probable_date_strings</span><span class="p">[</span><span class="mi">0</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_for_nested_tag_label</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">date_to_check</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_tags_with_date_string</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Tags with date string: </span><span class="si">{self._tags_with_date_string}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Deadline.check_for_nested_tag_label"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.deadline.Deadline.check_for_nested_tag_label">[docs]</a>    <span class="k">def</span> <span class="nf">check_for_nested_tag_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">date_to_check</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks for a date in a nested tag label. </span>
+<span class="sd">        </span>
+<span class="sd">        Eg.: &lt;p&gt;&lt;strong&gt;Apply Before: &lt;/strong&gt; 2021-12-23&lt;/p&gt;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tag: bs4.element.Tag</span>
+<span class="sd">            tag to check sub contents of, in example &lt;p&gt;</span>
+<span class="sd">        date_to_check: datetime object</span>
+<span class="sd">            convert your string into python datetime object and put</span>
+<span class="sd">            here.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        boolean:</span>
+<span class="sd">            True if a deadline word is present in the nested tag label and</span>
+<span class="sd">            there is date_to_check besides that label otherwise False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If the deadline word is present inside a nested tag then,</span>
+        <span class="c1"># loop through that parent tag&#39;s sub contents</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">contents</span><span class="p">):</span>
+            <span class="c1"># if a nested tag is found</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="ow">is</span> <span class="n">bs4</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">Tag</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># find the sub contents just beside that tag, the tag</span>
+                    <span class="c1"># has a label for that sub content, thus, check to see</span>
+                    <span class="c1"># if the probable date strings matches with the date, if</span>
+                    <span class="c1"># matched, parent tag is sent for the xpath.</span>
+                    <span class="k">if</span> <span class="nb">list</span><span class="p">(</span><span class="n">datefinder</span><span class="o">.</span><span class="n">find_dates</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">contents</span><span class="p">[</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> \
+                        <span class="n">date_to_check</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="kc">True</span>
+                <span class="k">except</span><span class="p">:</span> <span class="k">pass</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+    
+    <span class="nd">@for_all_tags</span>
+    <span class="k">def</span> <span class="nf">_check_deadline_words</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        [wrapped with @loop_in_all_tags decorator]</span>
+<span class="sd">        Checks if the deadline word is present on the nodes that are on the</span>
+<span class="sd">        left or right of where the probable date string was found.</span>
+<span class="sd">        </span>
+<span class="sd">        If it&#39;s found then, it&#39;s created as a list and first element of the</span>
+<span class="sd">        list is assigned as a deadline.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">string</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_probable_date_strings</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_deadline_word_present</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">previous_siblings</span><span class="p">))</span> <span class="ow">or</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_deadline_word_present</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">next_siblings</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">datefinder</span><span class="o">.</span><span class="n">find_dates</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">string</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
+
+    
+<div class="viewcode-block" id="Deadline.check_deadline_word_present"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.deadline.Deadline.check_deadline_word_present">[docs]</a>    <span class="k">def</span> <span class="nf">check_deadline_word_present</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">words_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes in a words_list and checks if any of the common deadline words</span>
+<span class="sd">        are present in the words_list.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        words_list: list of strings</span>
+<span class="sd">            words_list is a collection of sentences like collection of group</span>
+<span class="sd">            of words termed as words_collections here.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        boolean</span>
+<span class="sd">            True if the deadline word is present in common_deadline_words else</span>
+<span class="sd">            False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">words_collections</span> <span class="ow">in</span> <span class="n">words_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">words</span> <span class="ow">in</span> <span class="n">words_collections</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">deadline_word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_common_deadline_words</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">deadline_word</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                        <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+    <span class="k">def</span> <span class="nf">_assign_deadline_otherwise</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assigns deadline if the deadline word is not found in the left or right</span>
+<span class="sd">        nodes of the probable date strings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if deadline is still not found, and if only option is available then</span>
+        <span class="c1"># use that date string and parse out deadline from that.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_probable_date_strings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">datefinder</span><span class="o">.</span><span class="n">find_dates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_probable_date_strings</span><span class="p">[</span><span class="mi">0</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># if more than one probable date strings then, check to see if deadline</span>
+        <span class="c1"># word is present in the probable date string itself.</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_probable_date_strings</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">string</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_probable_date_strings</span><span class="p">:</span>
+                <span class="c1"># If time component present then assign date.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_check_deadline_in_nested_string</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="c1"># If 2 deadlines are present, take the later onhttps://jobaxle.com/jobs/quality-assurance-engineer/5821e.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="p">:</span>
+            <span class="c1"># If deadline is still not there, just sort the dates, take the most later</span>
+            <span class="c1"># one.</span>
+            <span class="n">dates</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_probable_date_strings</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">datefinder</span><span class="o">.</span><span class="n">find_dates</span><span class="p">(</span><span class="n">date</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">except</span><span class="p">:</span> <span class="k">pass</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">dates</span><span class="p">)[</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Deadline: </span><span class="si">{self.deadline}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">mainlogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Deadline: </span><span class="si">{self.deadline}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_deadline_in_nested_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks for deadline word in the nested string and assigns the string if a common deadline word is found in that string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="p">:</span>
+            <span class="n">processed_words</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">processed_words</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># if any words in the date string is in common deadline words,</span>
+                <span class="c1"># then assign that date string as the deadline.</span>
+                <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">processed_words</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_common_deadline_words</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">datefinder</span><span class="o">.</span><span class="n">find_dates</span><span class="p">(</span><span class="n">string</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># this branch creates a contradicting opinion with the words</span>
+                <span class="c1"># collection presented in the _check_deadline_words_documents.</span>
+                <span class="c1"># instead of some words collections, if only directly words</span>
+                <span class="c1"># are present.</span>
+                <span class="k">if</span> <span class="n">processed_words</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_common_deadline_words</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">datefinder</span><span class="o">.</span><span class="n">find_dates</span><span class="p">(</span><span class="n">processed_words</span><span class="p">[</span><span class="mi">0</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_get_xpath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        [wrapped with @loop_in_all_tags decorator]</span>
+<span class="sd">        Extracts the deadline xpath from the deadline string.</span>
+
+<span class="sd">        Uses a list because there may be more than one string that</span>
+<span class="sd">        matches the deadline string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="p">:</span> <span class="k">raise</span> <span class="n">DeadlineNotFound</span>
+        <span class="nd">@for_all_tags</span>
+        <span class="k">def</span> <span class="nf">try_get_path</span><span class="p">(</span><span class="n">tag</span><span class="p">):</span>
+            <span class="n">deadline_xpaths</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">list</span><span class="p">(</span><span class="n">datefinder</span><span class="o">.</span><span class="n">find_dates</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">string</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span> <span class="n">root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span><span class="o">.</span><span class="n">getchildren</span><span class="p">()</span>
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span> <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{e}</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{root}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+                    <span class="nd">@for_existing_leaf_nodes</span>
+                    <span class="k">def</span> <span class="nf">assign_el_if_matches</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                        <span class="n">node_text</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;node_text&#39;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">node_text</span> <span class="o">==</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">string</span><span class="p">):</span> <span class="k">return</span> <span class="n">node</span>
+                        
+                        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+                    <span class="n">element</span> <span class="o">=</span> <span class="n">assign_el_if_matches</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+                    
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="ow">is</span> <span class="n">html</span><span class="o">.</span><span class="n">HtmlElement</span><span class="p">:</span> <span class="n">deadline_xpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">getpath</span><span class="p">(</span><span class="n">element</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># if common deadline word is in the nested tag. </span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_for_nested_tag_label</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="p">):</span>
+                        <span class="n">element</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;//{ tag.name }&quot;</span><span class="p">):</span>
+                            <span class="c1"># find the node with date as text content and assign it</span>
+                            <span class="c1"># as the element and compute it&#39;s xpath.</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="nb">list</span><span class="p">(</span><span class="n">datefinder</span><span class="o">.</span><span class="n">find_dates</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">text_content</span><span class="p">())))[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> \
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="p">:</span>
+                                    <span class="n">element</span> <span class="o">=</span> <span class="n">node</span>
+                            <span class="k">except</span><span class="p">:</span> <span class="k">pass</span>
+                        <span class="n">deadline_xpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tree</span><span class="o">.</span><span class="n">getpath</span><span class="p">(</span><span class="n">element</span><span class="p">))</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">deadline_xpaths</span>
+
+        <span class="n">deadline_xpaths</span> <span class="o">=</span> <span class="n">try_get_path</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_tags_with_date_string</span><span class="p">,</span> <span class="n">soup</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_soup</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">deadline_xpaths</span><span class="p">:</span> <span class="k">raise</span> <span class="n">DeadlineXpathNotFound</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">xpath</span> <span class="o">=</span> <span class="n">deadline_xpaths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Deadline Xpath: </span><span class="si">{self.xpath}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Deadline.check_if_future_date"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.deadline.Deadline.check_if_future_date">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">check_if_future_date</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes in a datetime object date and checks whether the date is a future</span>
+<span class="sd">        date or not.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        date: datetime</span>
+<span class="sd">            python datetime object to check</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        boolean</span>
+<span class="sd">            True if future date, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span> 
+            <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">date</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Deadline.is_interested_date"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.deadline.Deadline.is_interested_date">[docs]</a>    <span class="nd">@staticmethod</span>    
+    <span class="k">def</span> <span class="nf">is_interested_date</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks whether the date or the datetime object passed is interested date</span>
+<span class="sd">        or not. Interested date refers to the date within 90 days from today&#39;s</span>
+<span class="sd">        date.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        date: datetime</span>
+<span class="sd">            python datetime object to check</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        boolean</span>
+<span class="sd">            True if within 90 days (interested date), False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">date</span> <span class="o">-</span> <span class="n">now</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">90</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://merojob.com/intern-social-media-coordinator/&quot;</span>
+    <span class="c1"># request = Request(url)</span>
+    <span class="n">request_html</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">content</span>
+    <span class="c1"># strip off &lt;script tag&gt;</span>
+    <span class="n">request_html</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">subn</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;(script).*?&lt;/\1&gt;(?s)&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">request_html</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">request_html</span><span class="p">)</span><span class="o">.</span><span class="n">getroottree</span><span class="p">()</span>
+    <span class="n">deadline_obj</span> <span class="o">=</span> <span class="n">Deadline</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span> 
+    <span class="n">deadline_obj</span><span class="o">.</span><span class="n">get_deadline_date</span><span class="p">(</span><span class="n">request_html</span><span class="p">)</span> <span class="c1">#request.request_html())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">deadline_obj</span><span class="o">.</span><span class="n">deadline</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">deadline_obj</span><span class="o">.</span><span class="n">xpath</span><span class="p">)</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jobdetailsextractor.deadline</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

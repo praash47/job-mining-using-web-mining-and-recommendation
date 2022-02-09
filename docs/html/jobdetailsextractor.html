@@ -1,0 +1,650 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>jobdetailsextractor package &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="jobdetailsextractor.migrations package" href="jobdetailsextractor.migrations.html" />
+    <link rel="prev" title="interactor package" href="interactor.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jobdetailsextractor.migrations.html" title="jobdetailsextractor.migrations package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="interactor.html" title="interactor package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">jobminersserver</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jobdetailsextractor package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="jobdetailsextractor-package">
+<h1>jobdetailsextractor package<a class="headerlink" href="#jobdetailsextractor-package" title="Permalink to this headline">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="jobdetailsextractor.migrations.html">jobdetailsextractor.migrations package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jobdetailsextractor.migrations.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobdetailsextractor.migrations.html#module-jobdetailsextractor.migrations.0001_initial">jobdetailsextractor.migrations.0001_initial module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobdetailsextractor.migrations.html#module-jobdetailsextractor.migrations.0002_delete_websitestructure">jobdetailsextractor.migrations.0002_delete_websitestructure module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobdetailsextractor.migrations.html#module-jobdetailsextractor.migrations">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-jobdetailsextractor.admin">
+<span id="jobdetailsextractor-admin-module"></span><h2>jobdetailsextractor.admin module<a class="headerlink" href="#module-jobdetailsextractor.admin" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-jobdetailsextractor.apps">
+<span id="jobdetailsextractor-apps-module"></span><h2>jobdetailsextractor.apps module<a class="headerlink" href="#module-jobdetailsextractor.apps" title="Permalink to this headline">¶</a></h2>
+<p>Contains configuration for jobdetailsextractor django app. Also, starts our backend server when the jobdetailsextractor django app is ready.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="jobdetailsextractor.apps.JobdetailsextractorConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.apps.</span></span><span class="sig-name descname"><span class="pre">JobdetailsextractorConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/apps.html#JobdetailsextractorConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.apps.JobdetailsextractorConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.apps.JobdetailsextractorConfig.default_auto_field">
+<span class="sig-name descname"><span class="pre">default_auto_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'django.db.models.BigAutoField'</span></em><a class="headerlink" href="#jobdetailsextractor.apps.JobdetailsextractorConfig.default_auto_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.apps.JobdetailsextractorConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'jobdetailsextractor'</span></em><a class="headerlink" href="#jobdetailsextractor.apps.JobdetailsextractorConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jobdetailsextractor.apps.JobdetailsextractorConfig.ready">
+<span class="sig-name descname"><span class="pre">ready</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/apps.html#JobdetailsextractorConfig.ready"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.apps.JobdetailsextractorConfig.ready" title="Permalink to this definition">¶</a></dt>
+<dd><p>When the jobdetailsextractor is ready, this function starts creates a timer object and
+starts it in a new thread.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-jobdetailsextractor.deadline">
+<span id="jobdetailsextractor-deadline-module"></span><h2>jobdetailsextractor.deadline module<a class="headerlink" href="#module-jobdetailsextractor.deadline" title="Permalink to this headline">¶</a></h2>
+<p>This module consists of class and it’s methods in order to discover, handle and
+process deadlines.</p>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<p>Deadline():
+used for getting the deadline date in string format and it’s xpath.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="jobdetailsextractor.deadline.Deadline">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.deadline.</span></span><span class="sig-name descname"><span class="pre">Deadline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/deadline.html#Deadline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.deadline.Deadline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Extracts deadline from a html document. You create a deadline object and
+pass in a html document while calling get_deadline_date() function to get
+the deadline inside self.deadline and it’s respective xpath inside the self.
+xpath variable.</p>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_deadline_date(html):</span></span></dt>
+<dd><p>finds the deadline date in an html document and stores into deadline
+variable as a date string which can be parsed to obtain a python datetime
+object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Static</span> <span class="pre">Methods</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">--------------</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">check_if_future_date(date):</span></span></dt>
+<dd><p>checks if a date if a future date or a past date.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">is_interested_date(date):</span></span></dt>
+<dd><p>interested date refers to the date from which 90 days
+haven’t been passed. checks if a date passed is within
+90 days.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jobdetailsextractor.deadline.Deadline.check_if_future_date">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_if_future_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/deadline.html#Deadline.check_if_future_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.deadline.Deadline.check_if_future_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes in a datetime object date and checks whether the date is a future
+date or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>date</strong> (<em>datetime</em>) – python datetime object to check</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if future date, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jobdetailsextractor.deadline.Deadline.get_deadline_date">
+<span class="sig-name descname"><span class="pre">get_deadline_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/deadline.html#Deadline.get_deadline_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.deadline.Deadline.get_deadline_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores deadline date and xpath in the object variables after it’s
+extraction from the document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>html</strong> (<em>string</em>) – String in which an HTML document is present.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jobdetailsextractor.deadline.Deadline.is_interested_date">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_interested_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/deadline.html#Deadline.is_interested_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.deadline.Deadline.is_interested_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the date or the datetime object passed is interested date
+or not. Interested date refers to the date within 90 days from today’s
+date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>date</strong> (<em>datetime</em>) – python datetime object to check</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if within 90 days (interested date), False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-jobdetailsextractor.exceptions">
+<span id="jobdetailsextractor-exceptions-module"></span><h2>jobdetailsextractor.exceptions module<a class="headerlink" href="#module-jobdetailsextractor.exceptions" title="Permalink to this headline">¶</a></h2>
+<p>This module consists of exceptions for the jobdetailsextractor module for exceptions for JobTitleXpath, Deadline, DeadlineXpath, NameXpath not being found.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="jobdetailsextractor.exceptions.DeadlineNotFound">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.exceptions.</span></span><span class="sig-name descname"><span class="pre">DeadlineNotFound</span></span><a class="reference internal" href="_modules/jobdetailsextractor/exceptions.html#DeadlineNotFound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.exceptions.DeadlineNotFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="backend.html#backend.baseexceptions.SomeThingNotFound" title="backend.baseexceptions.SomeThingNotFound"><code class="xref py py-class docutils literal notranslate"><span class="pre">backend.baseexceptions.SomeThingNotFound</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="jobdetailsextractor.exceptions.DeadlineXpathNotFound">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.exceptions.</span></span><span class="sig-name descname"><span class="pre">DeadlineXpathNotFound</span></span><a class="reference internal" href="_modules/jobdetailsextractor/exceptions.html#DeadlineXpathNotFound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.exceptions.DeadlineXpathNotFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="backend.html#backend.baseexceptions.SomeThingNotFound" title="backend.baseexceptions.SomeThingNotFound"><code class="xref py py-class docutils literal notranslate"><span class="pre">backend.baseexceptions.SomeThingNotFound</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="jobdetailsextractor.exceptions.JobTitleXpathNotFound">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.exceptions.</span></span><span class="sig-name descname"><span class="pre">JobTitleXpathNotFound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/exceptions.html#JobTitleXpathNotFound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.exceptions.JobTitleXpathNotFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="backend.html#backend.baseexceptions.SomeThingNotFound" title="backend.baseexceptions.SomeThingNotFound"><code class="xref py py-class docutils literal notranslate"><span class="pre">backend.baseexceptions.SomeThingNotFound</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="jobdetailsextractor.exceptions.NameXpathNotFound">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.exceptions.</span></span><span class="sig-name descname"><span class="pre">NameXpathNotFound</span></span><a class="reference internal" href="_modules/jobdetailsextractor/exceptions.html#NameXpathNotFound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.exceptions.NameXpathNotFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="backend.html#backend.baseexceptions.SomeThingNotFound" title="backend.baseexceptions.SomeThingNotFound"><code class="xref py py-class docutils literal notranslate"><span class="pre">backend.baseexceptions.SomeThingNotFound</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-jobdetailsextractor.main">
+<span id="jobdetailsextractor-main-module"></span><h2>jobdetailsextractor.main module<a class="headerlink" href="#module-jobdetailsextractor.main" title="Permalink to this headline">¶</a></h2>
+<p>This file acts as the main flow for the jobdetailsextractor and abstracts all the details that are performed by it’s submodules. This module is responsible for extraction of the job parameters like job location, description etc and skills. It’s submodules are deadline, parameters and skills.</p>
+<section id="id1">
+<h3>Classes<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>JobDetails()
+Job Details object which is responsible for extraction of skills and parameters and storing into the database.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="jobdetailsextractor.main.JobDetails">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.main.</span></span><span class="sig-name descname"><span class="pre">JobDetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/main.html#JobDetails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.main.JobDetails" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Job Details object with parameters and skills which facilitates it’s extractions and storing into the database.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="jobdetailsextractor.main.JobDetails.fetch">
+<span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/main.html#JobDetails.fetch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.main.JobDetails.fetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to fetch job details of the job from the server</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jobdetailsextractor.main.JobDetails.get_details">
+<span class="sig-name descname"><span class="pre">get_details</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">company_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/main.html#JobDetails.get_details"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.main.JobDetails.get_details" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to get details of the job. company_names for checking of the company names in the details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jobdetailsextractor.main.JobDetails.store_into_database">
+<span class="sig-name descname"><span class="pre">store_into_database</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/main.html#JobDetails.store_into_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.main.JobDetails.store_into_database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the job details that are extracted into the database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/main.html#JobDetails.fetch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd><p>** Call this first
+Fetches HTML content from server, extracts out the tree and does some minor pre-processing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">get_details</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">company_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/main.html#JobDetails.get_details"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dd><p>** Call this after calling fetch()
+Extracts out job details from the HTML page including the skill-set of the job.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>company_names</strong> (<em>list</em>) – company names list of 2001-2074</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">store_into_database</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/main.html#JobDetails.store_into_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the job details into the database.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-jobdetailsextractor.models">
+<span id="jobdetailsextractor-models-module"></span><h2>jobdetailsextractor.models module<a class="headerlink" href="#module-jobdetailsextractor.models" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.models.</span></span><span class="sig-name descname"><span class="pre">Job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/models.html#Job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.models.Job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.db.models.base.Model</span></code></p>
+<p>PostGreSQL table for Job URL</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.company_email">
+<span class="sig-name descname"><span class="pre">company_email</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.company_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.company_info">
+<span class="sig-name descname"><span class="pre">company_info</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.company_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.company_name">
+<span class="sig-name descname"><span class="pre">company_name</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.company_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.deadline">
+<span class="sig-name descname"><span class="pre">deadline</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.deadline" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.experiences">
+<span class="sig-name descname"><span class="pre">experiences</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.experiences" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.extracted">
+<span class="sig-name descname"><span class="pre">extracted</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.extracted" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.job_skills">
+<span class="sig-name descname"><span class="pre">job_skills</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.job_skills" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.level">
+<span class="sig-name descname"><span class="pre">level</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.level" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.location">
+<span class="sig-name descname"><span class="pre">location</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.location" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.misc">
+<span class="sig-name descname"><span class="pre">misc</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.misc" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.n_vacancy">
+<span class="sig-name descname"><span class="pre">n_vacancy</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.n_vacancy" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#jobdetailsextractor.models.Job.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.qualifications">
+<span class="sig-name descname"><span class="pre">qualifications</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.qualifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.salary">
+<span class="sig-name descname"><span class="pre">salary</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.salary" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.title">
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.url">
+<span class="sig-name descname"><span class="pre">url</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.url" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.website">
+<span class="sig-name descname"><span class="pre">website</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.website" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="jobdetailsextractor.models.Job.website_id">
+<span class="sig-name descname"><span class="pre">website_id</span></span><a class="headerlink" href="#jobdetailsextractor.models.Job.website_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-jobdetailsextractor.parameters">
+<span id="jobdetailsextractor-parameters-module"></span><h2>jobdetailsextractor.parameters module<a class="headerlink" href="#module-jobdetailsextractor.parameters" title="Permalink to this headline">¶</a></h2>
+<p>This submodule deals with complexities of extraction of parameters from the Job Advertisement HTML document. This includes all of the parameters like Job Location, Job Description, Job Salary, Company Name etc.</p>
+<section id="id4">
+<h3>Classes<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Parameters()
+Parameters abstracts all the details for extraction of the parameters</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="jobdetailsextractor.parameters.Parameters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.parameters.</span></span><span class="sig-name descname"><span class="pre">Parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_block_xpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">website</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/parameters.html#Parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.parameters.Parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parameters extract the parameters of a job advertisement.</p>
+<p>This involves:
+1. Extraction of the parameters values from node like location, salary, description etc and it’s xpaths in the HTML document.
+2. Extraction of the Values from Xpaths</p>
+<blockquote>
+<div><p>2.1. Involves to extracting value from the next node of the xpath of the parameter.
+2.2. Paragraph values are got out then by collecting values from some nodes after the discovered parameters. This is valid for parameters like description, specifications etc.</p>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="jobdetailsextractor.parameters.Parameters.get_core_parameters">
+<span class="sig-name descname"><span class="pre">get_core_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/parameters.html#Parameters.get_core_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.parameters.Parameters.get_core_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the core parameters of the job including the skillset of the job.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">get_core_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/parameters.html#Parameters.get_core_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets out the core parameters from the HTML document of the job advertisement. Extracts out both single word, multi word and paragraph values.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-jobdetailsextractor.skills">
+<span id="jobdetailsextractor-skills-module"></span><h2>jobdetailsextractor.skills module<a class="headerlink" href="#module-jobdetailsextractor.skills" title="Permalink to this headline">¶</a></h2>
+<p>This submodule extracts out skillset from the given text. This submodule compares with our skills in all_skills.csv.</p>
+<section id="id6">
+<h3>Classes<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>SkillSet()
+Skill set of something, maybe job or user</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="jobdetailsextractor.skills.SkillSet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.skills.</span></span><span class="sig-name descname"><span class="pre">SkillSet</span></span><a class="reference internal" href="_modules/jobdetailsextractor/skills.html#SkillSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.skills.SkillSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Skill set of a user or job</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="jobdetailsextractor.skills.SkillSet.get_skills">
+<span class="sig-name descname"><span class="pre">get_skills</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skills_text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/skills.html#SkillSet.get_skills"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.skills.SkillSet.get_skills" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get skills from giver skills_text</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="jobdetailsextractor.skills.SkillSet.iter">
+<span class="sig-name descname"><span class="pre">iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skills_object):</span> <span class="pre">Eg.</span> <span class="pre">set(skills_object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#jobdetailsextractor.skills.SkillSet.iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the skills as the desired iterable. set in the case of example</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">get_skills</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skills_text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/skills.html#SkillSet.get_skills"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets skills from the skills_text and store it into 1-5 grams internal variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>skills_text</strong> (<em>str</em>) – skills text to extract skills from.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-jobdetailsextractor.tests">
+<span id="jobdetailsextractor-tests-module"></span><h2>jobdetailsextractor.tests module<a class="headerlink" href="#module-jobdetailsextractor.tests" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="jobdetailsextractor.tests.test_deadline">
+<span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.tests.</span></span><span class="sig-name descname"><span class="pre">test_deadline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/tests.html#test_deadline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.tests.test_deadline" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jobdetailsextractor.tests.test_jobdetailsextractor">
+<span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.tests.</span></span><span class="sig-name descname"><span class="pre">test_jobdetailsextractor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/tests.html#test_jobdetailsextractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.tests.test_jobdetailsextractor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jobdetailsextractor.tests.test_parameters">
+<span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.tests.</span></span><span class="sig-name descname"><span class="pre">test_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/tests.html#test_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.tests.test_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jobdetailsextractor.tests.test_skills">
+<span class="sig-prename descclassname"><span class="pre">jobdetailsextractor.tests.</span></span><span class="sig-name descname"><span class="pre">test_skills</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jobdetailsextractor/tests.html#test_skills"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jobdetailsextractor.tests.test_skills" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-jobdetailsextractor">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-jobdetailsextractor" title="Permalink to this headline">¶</a></h2>
+<p>After the URL and title of the individual jobs in various websites are extracted and stored in the database. The job details of each job which includes it’s parameters such as location, salary, description etc. are extracted here. The extracted details are stored into the database with functions present it.</p>
+<p>This abstracts all the steps included which includes the deadline extraction, skills extraction and extraction of paragraph and normal parameters.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">jobdetailsextractor package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-jobdetailsextractor.admin">jobdetailsextractor.admin module</a></li>
+<li><a class="reference internal" href="#module-jobdetailsextractor.apps">jobdetailsextractor.apps module</a></li>
+<li><a class="reference internal" href="#module-jobdetailsextractor.deadline">jobdetailsextractor.deadline module</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-jobdetailsextractor.exceptions">jobdetailsextractor.exceptions module</a></li>
+<li><a class="reference internal" href="#module-jobdetailsextractor.main">jobdetailsextractor.main module</a><ul>
+<li><a class="reference internal" href="#id1">Classes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-jobdetailsextractor.models">jobdetailsextractor.models module</a></li>
+<li><a class="reference internal" href="#module-jobdetailsextractor.parameters">jobdetailsextractor.parameters module</a><ul>
+<li><a class="reference internal" href="#id4">Classes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-jobdetailsextractor.skills">jobdetailsextractor.skills module</a><ul>
+<li><a class="reference internal" href="#id6">Classes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-jobdetailsextractor.tests">jobdetailsextractor.tests module</a></li>
+<li><a class="reference internal" href="#module-jobdetailsextractor">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="interactor.html"
+                          title="previous chapter">interactor package</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="jobdetailsextractor.migrations.html"
+                          title="next chapter">jobdetailsextractor.migrations package</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/jobdetailsextractor.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jobdetailsextractor.migrations.html" title="jobdetailsextractor.migrations package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="interactor.html" title="interactor package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >jobminersserver</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jobdetailsextractor package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

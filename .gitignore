@@ -1,0 +1,14 @@
+*.pyc
+*.cpython-38.pyc
+*/*/*/__pycache__/
+*/*/__pycache__/
+*/__pycache__/
+__pycache__/
+*.pdf
+*.djcache
+*.log
+*/*/*/__pycache__/
+*/*/__pycache__/
+jobminersserver/main.log
+jobminersserver/jobdetailsextractor/jobdetailsextractor.log
+*/.env

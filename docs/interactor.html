@@ -1,0 +1,615 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>interactor package &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="jobdetailsextractor package" href="jobdetailsextractor.html" />
+    <link rel="prev" title="checkers.migrations package" href="checkers.migrations.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jobdetailsextractor.html" title="jobdetailsextractor package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="checkers.migrations.html" title="checkers.migrations package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">jobminersserver</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="interactor-package">
+<h1>interactor package<a class="headerlink" href="#interactor-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-interactor.apps">
+<span id="interactor-apps-module"></span><h2>interactor.apps module<a class="headerlink" href="#module-interactor.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="interactor.apps.InteractorConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.apps.</span></span><span class="sig-name descname"><span class="pre">InteractorConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/apps.html#InteractorConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.apps.InteractorConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interactor.apps.InteractorConfig.default_auto_field">
+<span class="sig-name descname"><span class="pre">default_auto_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'django.db.models.BigAutoField'</span></em><a class="headerlink" href="#interactor.apps.InteractorConfig.default_auto_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interactor.apps.InteractorConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'interactor'</span></em><a class="headerlink" href="#interactor.apps.InteractorConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-interactor.exceptions">
+<span id="interactor-exceptions-module"></span><h2>interactor.exceptions module<a class="headerlink" href="#module-interactor.exceptions" title="Permalink to this headline">¶</a></h2>
+<p>This file consists of exceptions related to the interactor module. The exceptions are self explanatory with it’s name.</p>
+<section id="exceptions">
+<h3>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>SearchURLNotFound</p></li>
+<li><p>NoTwoMatchingTitles</p></li>
+<li><p>DriverNotFound</p></li>
+</ul>
+<dl class="py exception">
+<dt class="sig sig-object py" id="interactor.exceptions.DriverNotFound">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.exceptions.</span></span><span class="sig-name descname"><span class="pre">DriverNotFound</span></span><a class="reference internal" href="_modules/interactor/exceptions.html#DriverNotFound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.exceptions.DriverNotFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="backend.html#backend.baseexceptions.SomeThingNotFound" title="backend.baseexceptions.SomeThingNotFound"><code class="xref py py-class docutils literal notranslate"><span class="pre">backend.baseexceptions.SomeThingNotFound</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="interactor.exceptions.NoTwoMatchingTitles">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.exceptions.</span></span><span class="sig-name descname"><span class="pre">NoTwoMatchingTitles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/exceptions.html#NoTwoMatchingTitles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.exceptions.NoTwoMatchingTitles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="backend.html#backend.baseexceptions.SomeThingNotFound" title="backend.baseexceptions.SomeThingNotFound"><code class="xref py py-class docutils literal notranslate"><span class="pre">backend.baseexceptions.SomeThingNotFound</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="interactor.exceptions.SearchURLNotFound">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.exceptions.</span></span><span class="sig-name descname"><span class="pre">SearchURLNotFound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/exceptions.html#SearchURLNotFound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.exceptions.SearchURLNotFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="backend.html#backend.baseexceptions.SomeThingNotFound" title="backend.baseexceptions.SomeThingNotFound"><code class="xref py py-class docutils literal notranslate"><span class="pre">backend.baseexceptions.SomeThingNotFound</span></code></a></p>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-interactor.paginator">
+<span id="interactor-paginator-module"></span><h2>interactor.paginator module<a class="headerlink" href="#module-interactor.paginator" title="Permalink to this headline">¶</a></h2>
+<p>This submodule handles all the pagination complexities of the website. It’s functions includes calculating the next page URL, the next page value and work with other modules to extract jobs in multiple paginated non AJAX websites.</p>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>Paginator():</dt><dd><p>Used to handle pages inside a website.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="interactor.paginator.Paginator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.paginator.</span></span><span class="sig-name descname"><span class="pre">Paginator</span></span><a class="reference internal" href="_modules/interactor/paginator.html#Paginator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.paginator.Paginator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="interactor.paginator.Paginator.check_search_step">
+<span class="sig-name descname"><span class="pre">check_search_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">links</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/paginator.html#Paginator.check_search_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.paginator.Paginator.check_search_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to compute search step of a page. A search step is defined as the
+number that is used for representing the pagination structure. It is
+usually greater than 1.</p>
+<p>It exists due to the fact that some websites paginated not on the basis
+of serial page numbers but with the total number of job adverts present
+in a page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>site</strong> (<em>Site object</em>) – site object of the website whose search step is being checked</p></li>
+<li><p><strong>links</strong> (<em>list of scrapy.Link</em>) – scrapy’s link object that stores information abou the link.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interactor.paginator.Paginator.get_last_page">
+<span class="sig-name descname"><span class="pre">get_last_page</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">links</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/paginator.html#Paginator.get_last_page"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.paginator.Paginator.get_last_page" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets last page of the site using links. This is a kind of condition type of
+last page extracting function that only works when there is no any search step
+present in the page.</p>
+<p>This function applies the concept of getting out the maximum number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>links</strong> (<em>list of scrapy.Link</em>) – scrapy’s link object that stores information abou the link.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interactor.paginator.Paginator.has_pages">
+<span class="sig-name descname"><span class="pre">has_pages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">links</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/paginator.html#Paginator.has_pages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.paginator.Paginator.has_pages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the site has Non AJAX based paginations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>links</strong> (<em>list of scrapy.Link</em>) – scrapy’s link object that stores information abou the link.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if there is a number link present in the site’s links.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interactor.paginator.Paginator.move_to_next_page">
+<span class="sig-name descname"><span class="pre">move_to_next_page</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/paginator.html#Paginator.move_to_next_page"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.paginator.Paginator.move_to_next_page" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use to move to the next page in a serial order. Moving to the next page
+implies increasing the current page by one or by the search page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>self.curr_page if the next page exists, otherwise False</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-interactor.searcher">
+<span id="interactor-searcher-module"></span><h2>interactor.searcher module<a class="headerlink" href="#module-interactor.searcher" title="Permalink to this headline">¶</a></h2>
+<p>This submodule abstracts all the searching related operations to a search page of any website to obtain it’s search page and search page URL.</p>
+<section id="id1">
+<h3>Classes<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>Search()</dt><dd><p>The main class used to extract search page URL.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="interactor.searcher.Search">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.searcher.</span></span><span class="sig-name descname"><span class="pre">Search</span></span><a class="reference internal" href="_modules/interactor/searcher.html#Search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.searcher.Search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to find the search box in the webpage and
+perform search with no character or single space.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="interactor.searcher.Search.get_search_url">
+<span class="sig-name descname"><span class="pre">get_search_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">self._url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/searcher.html#Search.get_search_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.searcher.Search.get_search_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets search URL from the page and returns it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">get_search_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/searcher.html#Search.get_search_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>xpath_of_textbox(self._url) checks the xpath of</dt><dd><p>input &#64; type = “text”[1][2][3] and “search”[1][2]</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>url of the search page</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>search_url</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#interactor.exceptions.SearchURLNotFound" title="interactor.exceptions.SearchURLNotFound"><strong>SearchURLNotFound</strong></a> – Search URL of the URL not able to be found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-interactor.site">
+<span id="interactor-site-module"></span><h2>interactor.site module<a class="headerlink" href="#module-interactor.site" title="Permalink to this headline">¶</a></h2>
+<p>This submodule consists of all the classes required to abstract a job website as a ‘site’ and perform operations such as getting xpaths of the job title on search page and getting jobs from a page after supply of title xpath.</p>
+<section id="id2">
+<h3>Classes<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>Site()</dt><dd><p>Our abstraction of any site (maybe non AJAX or AJAX based both, but non AJAX based as of now)</p>
+</dd>
+<dt>NonAJAX()</dt><dd><p>NonAJAX is the abstraction of the procedures to get the job URL and title from the nonAJAX based websites.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="interactor.site.NonAJAX">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.site.</span></span><span class="sig-name descname"><span class="pre">NonAJAX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">links</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">site</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paginated</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/site.html#NonAJAX"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.site.NonAJAX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="interactor.site.NonAJAX.get_jobs_for_page">
+<span class="sig-name descname"><span class="pre">get_jobs_for_page</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/site.html#NonAJAX.get_jobs_for_page"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.site.NonAJAX.get_jobs_for_page" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function extracts jobs on the basis of xpaths by finding the variable div. It
+works on the basis of principle that there is a varying same structured div in the
+page that has the same structure as others that holds the job related information
+and job url.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xpaths</strong> (<em>list of str</em>) – list of xpaths of the two jobs in the page</p></li>
+<li><p><strong>response</strong> (<em>str</em>) – html response of the site</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interactor.site.NonAJAX.is_crawlable">
+<span class="sig-name descname"><span class="pre">is_crawlable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/site.html#NonAJAX.is_crawlable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.site.NonAJAX.is_crawlable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if xpaths can be got from the links of the first page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if crawlable else raises Exceptions</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>boolean</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#interactor.exceptions.NoTwoMatchingTitles" title="interactor.exceptions.NoTwoMatchingTitles"><strong>NoTwoMatchingTitles</strong></a> – No two matching titles found</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="interactor.site.Site">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.site.</span></span><span class="sig-name descname"><span class="pre">Site</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_page_url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/site.html#Site"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.site.Site" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-interactor.tests">
+<span id="interactor-tests-module"></span><h2>interactor.tests module<a class="headerlink" href="#module-interactor.tests" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="interactor.tests.test_paginator">
+<span class="sig-prename descclassname"><span class="pre">interactor.tests.</span></span><span class="sig-name descname"><span class="pre">test_paginator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/tests.html#test_paginator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.tests.test_paginator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interactor.tests.test_searcher">
+<span class="sig-prename descclassname"><span class="pre">interactor.tests.</span></span><span class="sig-name descname"><span class="pre">test_searcher</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/tests.html#test_searcher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.tests.test_searcher" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interactor.tests.test_site_non_ajax">
+<span class="sig-prename descclassname"><span class="pre">interactor.tests.</span></span><span class="sig-name descname"><span class="pre">test_site_non_ajax</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/tests.html#test_site_non_ajax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.tests.test_site_non_ajax" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interactor.tests.test_titleextractor">
+<span class="sig-prename descclassname"><span class="pre">interactor.tests.</span></span><span class="sig-name descname"><span class="pre">test_titleextractor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/tests.html#test_titleextractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.tests.test_titleextractor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interactor.tests.test_xpather">
+<span class="sig-prename descclassname"><span class="pre">interactor.tests.</span></span><span class="sig-name descname"><span class="pre">test_xpather</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/tests.html#test_xpather"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.tests.test_xpather" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-interactor.titleextractor">
+<span id="interactor-titleextractor-module"></span><h2>interactor.titleextractor module<a class="headerlink" href="#module-interactor.titleextractor" title="Permalink to this headline">¶</a></h2>
+<p>This submodule consists of the required classes and it’s methods in order to abstract the requirements of the title xpath extraction and extraction of the jobs from that xpath.</p>
+<section id="decorators">
+<h3>Decorators<a class="headerlink" href="#decorators" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>call_if_non_ajax_based()</dt><dd><p>Calls any function wrapped by the decorator if it is Non AJAX based, for now, it is assumed that every website is non AJAX based.</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h3>Classes<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>TitleExtractor()</dt><dd><p>Responsible for extraction of the title xpath and jobs from that title xpath.</p>
+</dd>
+<dt>MockResponse()</dt><dd><p>Use of scrapy’s link extractor requires a scrapy.Response. So, this is our mock (fake) scrapy response to fool scrapy in believing that it has received it’s own Response.</p>
+</dd>
+<dt>MockSelector()</dt><dd><p>One of the elements or properties of the MockResponse object.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="interactor.titleextractor.MockResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.titleextractor.</span></span><span class="sig-name descname"><span class="pre">MockResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/titleextractor.html#MockResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.titleextractor.MockResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Mock Response (fake) Response of the scrapy.Response object in order to use scrapy.link_extractor(). This only consists of the response attributes required for the link_extractor. This maybe only a partial copy of the response. But it works!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – URL of which response needed</p></li>
+<li><p><strong>encoding</strong> (<em>str</em>) – encoding of the page whose response is in, default=’utf-8’</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – html response of the page</p></li>
+<li><p><strong>tree</strong> (<em>lxml.etree</em>) – lxml etree of the html response</p></li>
+<li><p><strong>selector</strong> (<a class="reference internal" href="#interactor.titleextractor.MockSelector" title="interactor.titleextractor.MockSelector"><em>MockSelector</em></a>) – Mock (fake) selector object of the scrapy</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="interactor.titleextractor.MockSelector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.titleextractor.</span></span><span class="sig-name descname"><span class="pre">MockSelector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/titleextractor.html#MockSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.titleextractor.MockSelector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Fake (Mock) scrapy selector required by the MockResponse object. This is also only a partial copy of the scrapy.Selector object with only root parameter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>root</strong> (<em>lxml.HtmlElement</em>) – root lxml HtmlElement of the current lxml.etree of the html response strings.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="interactor.titleextractor.TitleExtractor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.titleextractor.</span></span><span class="sig-name descname"><span class="pre">TitleExtractor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/titleextractor.html#TitleExtractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.titleextractor.TitleExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="interactor.titleextractor.TitleExtractor.extract_jobs_from_title_xpath">
+<span class="sig-name descname"><span class="pre">extract_jobs_from_title_xpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title_xpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/titleextractor.html#TitleExtractor.extract_jobs_from_title_xpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.titleextractor.TitleExtractor.extract_jobs_from_title_xpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts job in the page if only one page and in all pages if a paginated website.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title_xpath</strong> (<em>str</em>) – The template title_xpath from which to extract jobs from.</p></li>
+<li><p><strong>Raises</strong> – </p></li>
+<li><p><strong>------Request</strong> – </p></li>
+<li><p><strong>JobTitleXpathNotFound</strong> – If Job title xpath is not supplied in.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interactor.titleextractor.TitleExtractor.extract_title_xpath">
+<span class="sig-name descname"><span class="pre">extract_title_xpath</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/titleextractor.html#TitleExtractor.extract_title_xpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.titleextractor.TitleExtractor.extract_title_xpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts title xpath and returns it.</p>
+<p>Title xpath is the xpath of the job title inside a search page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>title_xpath: title xpath thus extracted.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interactor.titleextractor.TitleExtractor.mock_scrapy_response">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mock_scrapy_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/titleextractor.html#TitleExtractor.mock_scrapy_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.titleextractor.TitleExtractor.mock_scrapy_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mocks the scrapy response. Mocking means creating an object that matches scrapy’s Response object. It is so as because scrapy’s link_extractor only works for scrapy response.</p>
+<p>Creates a mock (fake) scrapy response as:
+Response:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>url</p></li>
+<li><p>encoding</p></li>
+<li><p>text</p></li>
+<li><dl class="simple">
+<dt>Selector:</dt><dd><ul>
+<li><p>root</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>tree</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>search_url</strong> (<em>str</em>) – search URL of URL from which Scrapy mock response to create</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>our custom mock (fake) Scrapy Response</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#interactor.titleextractor.MockResponse" title="interactor.titleextractor.MockResponse">MockResponse</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interactor.titleextractor.TitleExtractor.store_into_database">
+<span class="sig-name descname"><span class="pre">store_into_database</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/titleextractor.html#TitleExtractor.store_into_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.titleextractor.TitleExtractor.store_into_database" title="Permalink to this definition">¶</a></dt>
+<dd><p>This handles all the operations for storing the collected jobs in self._jobs and stores it properly inside the database.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interactor.titleextractor.call_if_non_ajax_based">
+<span class="sig-prename descclassname"><span class="pre">interactor.titleextractor.</span></span><span class="sig-name descname"><span class="pre">call_if_non_ajax_based</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/titleextractor.html#call_if_non_ajax_based"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.titleextractor.call_if_non_ajax_based" title="Permalink to this definition">¶</a></dt>
+<dd><p>This decorator calls a function only if it is non AJAX based.</p>
+<p>This accepts following keyworded arguments:
+* na_website: NonAJAX</p>
+<blockquote>
+<div><p>NonAJAX object.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>links_in_page: list of scrapy.Links</dt><dd><p>List of links in page</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>pages: boolean</dt><dd><p>Specifies if the page is already checked and is paginated.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-interactor.xpather">
+<span id="interactor-xpather-module"></span><h2>interactor.xpather module<a class="headerlink" href="#module-interactor.xpather" title="Permalink to this headline">¶</a></h2>
+<p>This submodule is responsibe for locating thus named locators. This file handles the location
+within the websites i.e. pages through the paginator object and also handles the locations
+that are within the page with the help of xpather object that is responsible for processing
+of the xpaths.</p>
+<section id="id4">
+<h3>Classes<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>Xpather()</dt><dd><p>Responsible for the extraction of the title xpath and handle all it’s complexities.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="interactor.xpather.Xpather">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interactor.xpather.</span></span><span class="sig-name descname"><span class="pre">Xpather</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">site</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paginated</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/xpather.html#Xpather"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.xpather.Xpather" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="interactor.xpather.Xpather.get_xpath">
+<span class="sig-name descname"><span class="pre">get_xpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">links</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interactor/xpather.html#Xpather.get_xpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interactor.xpather.Xpather.get_xpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets xpaths from paginated and non paginated websites. It is a thin wrapper from
+around the _find_xpaths(). It basically handles pagination and calls it on the basis
+of pagination present or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>links</strong> (<em>list of scrapy.Link</em>) – scrapy’s link object that stores information abou the link.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>xpath</strong> – title_xpath</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#interactor.exceptions.NoTwoMatchingTitles" title="interactor.exceptions.NoTwoMatchingTitles"><strong>NoTwoMatchingTitles</strong></a> – No Two Matching Titles were found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-interactor">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-interactor" title="Permalink to this headline">¶</a></h2>
+<p>Interactor is used for interacting with the components inside the webpage.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">interactor package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-interactor.apps">interactor.apps module</a></li>
+<li><a class="reference internal" href="#module-interactor.exceptions">interactor.exceptions module</a><ul>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-interactor.paginator">interactor.paginator module</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-interactor.searcher">interactor.searcher module</a><ul>
+<li><a class="reference internal" href="#id1">Classes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-interactor.site">interactor.site module</a><ul>
+<li><a class="reference internal" href="#id2">Classes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-interactor.tests">interactor.tests module</a></li>
+<li><a class="reference internal" href="#module-interactor.titleextractor">interactor.titleextractor module</a><ul>
+<li><a class="reference internal" href="#decorators">Decorators</a></li>
+<li><a class="reference internal" href="#id3">Classes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-interactor.xpather">interactor.xpather module</a><ul>
+<li><a class="reference internal" href="#id4">Classes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-interactor">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="checkers.migrations.html"
+                          title="previous chapter">checkers.migrations package</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="jobdetailsextractor.html"
+                          title="next chapter">jobdetailsextractor package</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/interactor.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jobdetailsextractor.html" title="jobdetailsextractor package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="checkers.migrations.html" title="checkers.migrations package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >jobminersserver</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

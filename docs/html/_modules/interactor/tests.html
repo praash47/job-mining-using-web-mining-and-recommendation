@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>interactor.tests &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor.tests</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for interactor.tests</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pytest</span>
+
+<span class="kn">from</span> <span class="nn">scrapy.linkextractors</span> <span class="k">import</span> <span class="n">LinkExtractor</span>
+
+<span class="kn">from</span> <span class="nn">.searcher</span> <span class="k">import</span> <span class="n">Search</span>
+<span class="kn">from</span> <span class="nn">.paginator</span> <span class="k">import</span> <span class="n">Paginator</span>
+<span class="kn">from</span> <span class="nn">.site</span> <span class="k">import</span> <span class="n">Site</span><span class="p">,</span> <span class="n">NonAJAX</span>
+<span class="kn">from</span> <span class="nn">.titleextractor</span> <span class="k">import</span> <span class="n">TitleExtractor</span>
+
+
+<div class="viewcode-block" id="test_searcher"><a class="viewcode-back" href="../../interactor.html#interactor.tests.test_searcher">[docs]</a><span class="k">def</span> <span class="nf">test_searcher</span><span class="p">():</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://froxjob.com/&quot;</span>
+    <span class="n">search</span> <span class="o">=</span> <span class="n">Search</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">search</span><span class="o">.</span><span class="n">get_search_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="o">==</span> <span class="s2">&quot;https://froxjob.com/search/result?keywords=&amp;cityzone=&quot;</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="test_paginator"><a class="viewcode-back" href="../../interactor.html#interactor.tests.test_paginator">[docs]</a><span class="k">def</span> <span class="nf">test_paginator</span><span class="p">():</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://merojob.com/search?q=&quot;</span>
+
+    <span class="n">pages</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">()</span>
+    <span class="n">pages</span><span class="o">.</span><span class="n">page_url</span> <span class="o">=</span> <span class="n">url</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">TitleExtractor</span><span class="o">.</span><span class="n">mock_scrapy_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">link_extractor</span> <span class="o">=</span> <span class="n">LinkExtractor</span><span class="p">()</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">link_extractor</span><span class="o">.</span><span class="n">extract_links</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+    <span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">pages</span><span class="o">.</span><span class="n">has_pages</span><span class="p">(</span><span class="n">links</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span>
+    <span class="n">pages</span><span class="o">.</span><span class="n">get_last_page</span><span class="p">(</span><span class="n">links</span><span class="p">)</span>
+    <span class="n">pages</span><span class="o">.</span><span class="n">check_search_step</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="n">links</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">pages</span><span class="o">.</span><span class="n">last_page</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span>
+    <span class="k">assert</span> <span class="n">pages</span><span class="o">.</span><span class="n">move_to_next_page</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">assert</span> <span class="n">pages</span><span class="o">.</span><span class="n">curr_page</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">assert</span> <span class="n">pages</span><span class="o">.</span><span class="n">page_url</span> <span class="o">==</span> <span class="s2">&quot;https://merojob.com/search?q=&amp;page=2&quot;</span></div>
+
+
+<div class="viewcode-block" id="test_site_non_ajax"><a class="viewcode-back" href="../../interactor.html#interactor.tests.test_site_non_ajax">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">django_db</span>
+<span class="k">def</span> <span class="nf">test_site_non_ajax</span><span class="p">():</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://froxjob.com/search/result?keywords=&amp;cityzone=&quot;</span>
+    <span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">TitleExtractor</span><span class="o">.</span><span class="n">mock_scrapy_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">link_extractor</span> <span class="o">=</span> <span class="n">LinkExtractor</span><span class="p">()</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">link_extractor</span><span class="o">.</span><span class="n">extract_links</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="n">job_titles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># titles_combined.txt: 70,000 titles to match xpaths from.</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;interactor/reqs/titles_combined.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">titles</span><span class="p">:</span>
+        <span class="n">job_titles</span> <span class="o">=</span> <span class="p">[</span><span class="n">title</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">titles</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
+
+    <span class="n">na</span> <span class="o">=</span> <span class="n">NonAJAX</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">links</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">job_titles</span><span class="p">,</span> <span class="n">paginated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">na</span><span class="o">.</span><span class="n">is_crawlable</span><span class="p">()</span> <span class="o">==</span> <span class="kc">True</span>
+
+    <span class="n">title_xpath</span> <span class="o">=</span> <span class="s2">&quot;/html/body/div[1]/div[2]/div/div/div[2]/div/div/div[2]/div/div/div[|]/div[1]/div[2]/h3/a&quot;</span>
+
+    <span class="n">na</span><span class="o">.</span><span class="n">get_jobs_for_page</span><span class="p">(</span><span class="n">title_xpath</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">na</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="test_xpather"><a class="viewcode-back" href="../../interactor.html#interactor.tests.test_xpather">[docs]</a><span class="k">def</span> <span class="nf">test_xpather</span><span class="p">():</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://www.kumarijob.com/search?keywords=&quot;</span>
+    <span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">TitleExtractor</span><span class="o">.</span><span class="n">mock_scrapy_response</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">link_extractor</span> <span class="o">=</span> <span class="n">LinkExtractor</span><span class="p">()</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">link_extractor</span><span class="o">.</span><span class="n">extract_links</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="n">job_titles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># titles_combined.txt: 70,000 titles to match xpaths from.</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;interactor/reqs/titles_combined.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">titles</span><span class="p">:</span>
+        <span class="n">job_titles</span> <span class="o">=</span> <span class="p">[</span><span class="n">title</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">titles</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
+
+    <span class="n">na</span> <span class="o">=</span> <span class="n">NonAJAX</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">links</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">job_titles</span><span class="p">,</span> <span class="n">paginated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">na</span><span class="o">.</span><span class="n">xpaths</span><span class="o">.</span><span class="n">get_xpath</span><span class="p">(</span><span class="n">links</span><span class="p">)</span>
+        <span class="o">==</span> <span class="s2">&quot;/html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a&quot;</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="test_titleextractor"><a class="viewcode-back" href="../../interactor.html#interactor.tests.test_titleextractor">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">django_db</span>
+<span class="k">def</span> <span class="nf">test_titleextractor</span><span class="p">():</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://www.kumarijob.com/search?keywords=&quot;</span>
+    <span class="n">title_extractor</span> <span class="o">=</span> <span class="n">TitleExtractor</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="n">job_titles</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">title_extractor</span><span class="o">.</span><span class="n">extract_title_xpath</span><span class="p">()</span>
+        <span class="o">==</span> <span class="s2">&quot;/html/body/div/div[1]/div[6]/div/div/div/div/div/div[|]/div[1]/div[2]/h5/a&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">title_extractor</span><span class="o">.</span><span class="n">extract_job_title_url_from_title_xpath</span><span class="p">(</span>
+        <span class="n">title_extractor</span><span class="o">.</span><span class="n">extract_title_xpath</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">title_extractor</span><span class="o">.</span><span class="n">_jobs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor.tests</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

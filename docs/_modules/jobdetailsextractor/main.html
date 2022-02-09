@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jobdetailsextractor.main &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jobdetailsextractor.main</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for jobdetailsextractor.main</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file acts as the main flow for the jobdetailsextractor and abstracts all the details that are performed by it&#39;s submodules. This module is responsible for extraction of the job parameters like job location, description etc and skills. It&#39;s submodules are deadline, parameters and skills.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">-------</span>
+<span class="sd">JobDetails()</span>
+<span class="sd">    Job Details object which is responsible for extraction of skills and parameters and storing into the database.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">.deadline</span> <span class="k">import</span> <span class="n">Deadline</span>
+<span class="kn">from</span> <span class="nn">.parameters</span> <span class="k">import</span> <span class="n">Parameters</span>
+<span class="kn">from</span> <span class="nn">.skills</span> <span class="k">import</span> <span class="n">SkillSet</span>
+
+<span class="kn">from</span> <span class="nn">backend.misc</span> <span class="k">import</span> <span class="n">common_start</span><span class="p">,</span> <span class="n">read_config</span>
+<span class="kn">from</span> <span class="nn">jobdetailsextractor.exceptions</span> <span class="k">import</span> <span class="n">DeadlineNotFound</span><span class="p">,</span> <span class="n">DeadlineXpathNotFound</span><span class="p">,</span> <span class="n">NameXpathNotFound</span>
+<span class="kn">from</span> <span class="nn">requestutils.request</span> <span class="k">import</span> <span class="n">Request</span>
+
+<span class="n">mainlogger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;main&#39;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jobdetailsextractor&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="JobDetails"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.main.JobDetails">[docs]</a><span class="k">class</span> <span class="nc">JobDetails</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Job Details object with parameters and skills which facilitates it&#39;s extractions and storing into the database.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    url: str</span>
+<span class="sd">        url of the job to extract details from</span>
+<span class="sd">    name: str</span>
+<span class="sd">        name of the job to extract details from</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="c1"># Main Required Details</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+        <span class="c1"># HTML tree related</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html_page</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">job_block_xpath</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># The main variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_set</span> <span class="o">=</span> <span class="n">SkillSet</span><span class="p">()</span>
+
+        <span class="c1"># for parameter options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parser</span> <span class="o">=</span> <span class="n">read_config</span><span class="p">(</span><span class="s1">&#39;jobdetailsextractor/reqs/extraction_options.ini&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Get Website, store if not there.</span>
+        <span class="kn">from</span> <span class="nn">.models</span> <span class="k">import</span> <span class="n">Job</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">website</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">website</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span> <span class="o">=</span> <span class="n">Deadline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">)</span>
+
+<div class="viewcode-block" id="JobDetails.fetch"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.main.JobDetails.fetch">[docs]</a>    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ** Call this first</span>
+<span class="sd">        Fetches HTML content from server, extracts out the tree and does some minor pre-processing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">request_html</span><span class="p">()</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">filter_unnecessary_tags</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">html_page</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">html</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_html_tree</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="JobDetails.get_details"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.main.JobDetails.get_details">[docs]</a>    <span class="k">def</span> <span class="nf">get_details</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ** Call this after calling fetch()</span>
+<span class="sd">        Extracts out job details from the HTML page including the skill-set of the job. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="o">.</span><span class="n">_tree</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> \
+            <span class="n">Parameters</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_job_block_xpath</span><span class="p">(),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">website</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">get_core_parameters</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skill_set</span><span class="o">.</span><span class="n">get_skills</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">+</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;misc&#39;</span><span class="p">]</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="JobDetails.get_job_block_xpath"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.main.JobDetails.get_job_block_xpath">[docs]</a>    <span class="k">def</span> <span class="nf">get_job_block_xpath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the job block xpath from the html text.</span>
+<span class="sd">        </span>
+<span class="sd">        Job block is the block excluding all of the other content from page, which includes the block where the details of the job are present.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">job_block_xpath</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
+        <span class="n">name_xpath</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">name_xpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_name_xpath</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="o">.</span><span class="n">get_deadline_date</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">html_page</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">DeadlineNotFound</span><span class="p">:</span>
+            <span class="k">pass</span>
+            <span class="c1"># job = Job.objects.get(self.url)</span>
+            <span class="c1"># send_event(&#39;backend_daemon&#39;, &#39;message&#39;, {</span>
+            <span class="c1">#     &#39;currentMessage&#39;: f&#39;Deleting job advert for {job.url}: Deadline Expired.&#39;,</span>
+            <span class="c1">#     &#39;messagePriority&#39;: &#39;error&#39;</span>
+            <span class="c1"># })</span>
+            <span class="c1"># job.delete()</span>
+        <span class="k">except</span> <span class="n">NameXpathNotFound</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">except</span> <span class="n">DeadlineXpathNotFound</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="c1"># If deadline date is found, find the common xpath between the deadline and name xpath.</span>
+            <span class="n">common_xpath</span> <span class="o">=</span> <span class="n">common_start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="o">.</span><span class="n">xpath</span><span class="p">,</span> <span class="n">name_xpath</span><span class="p">)</span>
+            <span class="n">common_xpath_list</span> <span class="o">=</span> <span class="n">common_xpath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+            <span class="n">job_block_xpath</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">common_xpath_list</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">common_xpath_list</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">job_block_xpath</span></div>
+
+<div class="viewcode-block" id="JobDetails.get_name_xpath"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.main.JobDetails.get_name_xpath">[docs]</a>    <span class="k">def</span> <span class="nf">get_name_xpath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts out and returns the name xpath using job name from the HTML document.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        name_xpath</span>
+<span class="sd">            xpath of the name in the HTML document</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name_xpaths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+            <span class="n">f</span><span class="s1">&#39;//*[normalize-space(text()= </span><span class="se">\&#39;</span><span class="s1">&quot;</span><span class="si">{self.name}</span><span class="s1">&quot;</span><span class="se">\&#39;</span><span class="s1">)]&#39;</span><span class="p">)</span>
+        <span class="n">title_xpaths</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># If one found, just accept directly.</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">name_xpaths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">title_xpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">getpath</span><span class="p">(</span><span class="n">name_xpaths</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># If more than one, just search for the h1 - h6, because the name xpath we are interested in most is in the header tags.</span>
+            <span class="k">for</span> <span class="n">xpath</span> <span class="ow">in</span> <span class="n">name_xpaths</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;^h[1-6]$&#39;</span><span class="p">,</span> <span class="n">xpath</span><span class="o">.</span><span class="n">tag</span><span class="p">):</span>
+                    <span class="n">element</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span>
+                        <span class="n">f</span><span class="s2">&quot;//</span><span class="si">{xpath.tag}</span><span class="s2">[normalize-space(text()= </span><span class="se">\&quot;</span><span class="s2">&#39;{str(xpath.text_content())}&#39;</span><span class="se">\&quot;</span><span class="s2">)]&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">title_xpaths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">getpath</span><span class="p">(</span><span class="n">element</span><span class="p">))</span>
+
+        <span class="k">try</span><span class="p">:</span> <span class="k">return</span> <span class="n">title_xpaths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span> <span class="k">raise</span> <span class="n">NameXpathNotFound</span></div>
+
+<div class="viewcode-block" id="JobDetails.store_into_database"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.main.JobDetails.store_into_database">[docs]</a>    <span class="k">def</span> <span class="nf">store_into_database</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stores the job details into the database.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.models</span> <span class="k">import</span> <span class="n">Job</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">deadline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deadline</span><span class="o">.</span><span class="n">deadline</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">job_skills</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_set</span><span class="p">)</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">company_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;company_name&#39;</span><span class="p">]</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">company_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;company_info&#39;</span><span class="p">]</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">company_email</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;company_email&#39;</span><span class="p">]</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">salary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;salary&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;n_vacancy&#39;</span><span class="p">]:</span>
+                <span class="n">job</span><span class="o">.</span><span class="n">n_vacancy</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                    <span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;n_vacancy&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">]</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">qualifications</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;qualifications&#39;</span><span class="p">]</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">experiences</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;experiences&#39;</span><span class="p">]</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">misc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;misc&#39;</span><span class="p">]</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">extracted</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{e}</span><span class="s1">&#39;</span><span class="p">)</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">job_details</span> <span class="o">=</span> <span class="n">JobDetails</span><span class="p">(</span>
+        <span class="s1">&#39;https://merojob.com/officer-corporate-advisory/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;&#39;Hub Manager&#39;&#39;&#39;</span><span class="p">)</span>
+    <span class="n">job_details</span><span class="o">.</span><span class="n">fetch</span><span class="p">()</span>
+    <span class="n">job_details</span><span class="o">.</span><span class="n">get_details</span><span class="p">()</span>
+    <span class="n">job_details</span><span class="o">.</span><span class="n">store_into_database</span><span class="p">()</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jobdetailsextractor.main</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

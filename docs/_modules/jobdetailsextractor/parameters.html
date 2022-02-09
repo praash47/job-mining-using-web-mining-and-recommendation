@@ -1,0 +1,579 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jobdetailsextractor.parameters &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jobdetailsextractor.parameters</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for jobdetailsextractor.parameters</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This submodule deals with complexities of extraction of parameters from the Job Advertisement HTML document. This includes all of the parameters like Job Location, Job Description, Job Salary, Company Name etc.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">-------</span>
+<span class="sd">Parameters()</span>
+<span class="sd">    Parameters abstracts all the details for extraction of the parameters</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">spacy</span>
+
+
+<span class="kn">from</span> <span class="nn">backend.misc</span> <span class="k">import</span> <span class="n">read_config</span><span class="p">,</span> <span class="n">try_and_pass</span>
+<span class="kn">from</span> <span class="nn">tagprocessor.decorators</span> <span class="k">import</span> <span class="n">for_existing_leaf_nodes</span>
+<span class="kn">from</span> <span class="nn">tagprocessor.misc</span> <span class="k">import</span> <span class="n">clean_text</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jobdetailsextractor&#39;</span><span class="p">)</span>
+<span class="n">mainlogger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;main&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Parameters"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.parameters.Parameters">[docs]</a><span class="k">class</span> <span class="nc">Parameters</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters extract the parameters of a job advertisement.</span>
+
+<span class="sd">    This involves:</span>
+<span class="sd">    1. Extraction of the parameters values from node like location, salary, description etc and it&#39;s xpaths in the HTML document.</span>
+<span class="sd">    2. Extraction of the Values from Xpaths</span>
+<span class="sd">        2.1. Involves to extracting value from the next node of the xpath of the parameter.</span>
+<span class="sd">        2.2. Paragraph values are got out then by collecting values from some nodes after the discovered parameters. This is valid for parameters like description, specifications etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_block_xpath</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes Parameters object</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        job_block_xpath: str</span>
+<span class="sd">            block of the job where the most of the job details are expected to be present</span>
+<span class="sd">        tree: lxml.etree</span>
+<span class="sd">            tree of the HTML document</span>
+<span class="sd">        website: JobWebsite</span>
+<span class="sd">            JobWebsite that we are currently working on</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">job_block_xpath</span> <span class="o">=</span> <span class="n">job_block_xpath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">job_block_tree</span> <span class="o">=</span> <span class="n">tree</span>
+
+        <span class="c1"># If no any job_block_xpath, then use the root of the current tree as the job block root node</span>
+        <span class="k">if</span> <span class="n">job_block_xpath</span> <span class="o">==</span> <span class="s1">&#39;/&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">job_block_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_block_tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">job_block_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_block_tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_block_xpath</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">website</span> <span class="o">=</span> <span class="n">website</span>
+
+        <span class="c1"># Loading of the NLP module for company name extraction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;en_core_web_lg&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Parameters and Parameters Xpath Structured Storage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;company_name&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;company_info&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;company_email&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;location&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;salary&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;n_vacancy&quot;</span><span class="p">:</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;level&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;qualifications&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;experiences&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;misc&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters_xpath_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;location_xpath&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description_xpath&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;salary_xpath&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;n_vacancy_xpath&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;level_xpath&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;qualifications_xpath&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;experiences_xpath&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span>
+        <span class="p">}</span>
+
+        <span class="c1"># for parameter options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parser</span> <span class="o">=</span> <span class="n">read_config</span><span class="p">(</span><span class="s2">&quot;jobdetailsextractor/reqs/extraction_options.ini&quot;</span><span class="p">)</span>
+        <span class="c1"># interested parameters that we want to match</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interested_parameters</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;interested_parameters&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interested_parameters</span> <span class="o">=</span> \
+            <span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interested_parameters</span><span class="p">]</span>
+
+        <span class="c1"># Our keywords for parameters (Our naming convention / identification for the job parameters)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keyword_parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="s1">&#39;n_vacancy&#39;</span><span class="p">,</span> <span class="s1">&#39;location&#39;</span><span class="p">,</span> <span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="s1">&#39;salary&#39;</span><span class="p">,</span> \
+            <span class="s1">&#39;qualifications&#39;</span><span class="p">,</span> <span class="s1">&#39;experiences&#39;</span><span class="p">,</span> <span class="s1">&#39;misc&#39;</span><span class="p">]</span>
+        
+        <span class="c1"># Getting the alternative name of the paramaters for each parameter.</span>
+        <span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyword_parameters</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="n">parameter</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;parameters&#39;</span><span class="p">,</span> <span class="n">parameter</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="n">parameter</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="n">parameter</span><span class="p">]]</span>
+
+        <span class="c1"># symbols that we want to omit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">symbols_to_omit</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;symbols_to_omit&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="Parameters.get_core_parameters"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.parameters.Parameters.get_core_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">get_core_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets out the core parameters from the HTML document of the job advertisement. Extracts out both single word, multi word and paragraph values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Discover parameters by iterating through each leaf node inside the job block tree.</span>
+        <span class="n">parameters_discovered</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameters_from_node</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">job_block_root</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">parameters_discovered</span><span class="p">:</span>
+            <span class="c1"># If not enough parameters discovered, then, use the root of the node to search the whole document.</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parameters_discovered</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters_xpath_dict</span><span class="p">[</span><span class="s1">&#39;description_xpath&#39;</span><span class="p">]:</span>
+                <span class="n">parameters_discovered</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameters_from_node</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">job_block_tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">())</span>
+        
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Core parameters discovered: </span><span class="si">{parameters_discovered}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Xpaths are also assigned while in discovery of parameters. We get the values from the xpaths now</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values_from_xpaths</span><span class="p">()</span>
+
+        <span class="c1"># Values from xpaths cannot extract paragraph values. So, extraction of paragraph base values like description, misc etc.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_paragraph_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;misc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_paragraph_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="s1">&#39;misc&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Parameters.get_parameters_from_node"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.parameters.Parameters.get_parameters_from_node">[docs]</a>    <span class="k">def</span> <span class="nf">get_parameters_from_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the parameters discovered from the HTML document and assigns its xpaths into the self.parameters_xpath_dict. Applies some special techniques for company name and company email.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        root: lxml.HtmlElement</span>
+<span class="sd">            root node to iterate in the child (leaf) nodes on</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        set</span>
+<span class="sd">            set of parameters discovered under the root node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get adjacent or sibling root nodes</span>
+        <span class="n">check_root</span> <span class="o">=</span> <span class="n">try_and_pass</span><span class="p">(</span><span class="k">lambda</span> <span class="n">root</span><span class="p">:</span> <span class="n">root</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">getchildren</span><span class="p">())</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">check_root</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="ow">or</span> <span class="n">root</span>
+
+        <span class="nd">@for_existing_leaf_nodes</span>
+        <span class="k">def</span> <span class="nf">get_parameters</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">node_text</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;node_text&#39;</span><span class="p">)</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;obj&#39;</span><span class="p">)</span>
+            <span class="n">parameters_discovered</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;parameters_discovered&#39;</span><span class="p">]</span>
+            <span class="n">company_name</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;company_name&#39;</span><span class="p">]</span>
+            <span class="n">company_email</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;company_email&#39;</span><span class="p">]</span>
+
+            <span class="nd">@try_and_pass</span>
+            <span class="k">def</span> <span class="nf">try_extracting</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">node_text</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbols_to_omit</span> <span class="ow">and</span> \
+                    <span class="n">node_text</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interested_parameters</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> \
+                        <span class="bp">self</span><span class="o">.</span><span class="n">job_block_tree</span><span class="o">.</span><span class="n">getpath</span><span class="p">(</span><span class="n">node</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_block_tree</span><span class="o">.</span><span class="n">getpath</span><span class="p">(</span><span class="n">node</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> \
+                            <span class="o">==</span> <span class="s1">&#39;/a&#39;</span><span class="p">:</span>  <span class="c1">#ignore a tags.</span>
+                            <span class="n">parameters_discovered</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">node_text</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">detect_and_assign_xpath</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">node_text</span><span class="p">)</span>
+
+                            <span class="c1"># Search word in the tag. i.e. Nested inside the tag.</span>
+                            <span class="n">nested_parameter</span><span class="p">,</span> <span class="n">nested_parameter_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_word_in_tag</span><span class="p">(</span><span class="n">node_text</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">nested_parameter_value</span><span class="p">:</span> <span class="n">parameters_discovered</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">nested_parameter</span><span class="p">)</span>
+
+            <span class="c1"># Try to get out company name and company email</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">company_email</span><span class="p">:</span> <span class="n">company_email</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">match_company_email</span><span class="p">(</span><span class="n">node_text</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">company_name</span><span class="p">:</span> <span class="n">company_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">match_company_name</span><span class="p">(</span><span class="n">node_text</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+
+            <span class="n">try_extracting</span><span class="p">()</span>
+            
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;parameters_discovered&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameters_discovered</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;company_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">company_name</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;company_email&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">company_email</span>
+            
+            <span class="k">return</span> <span class="n">parameters_discovered</span><span class="p">,</span> <span class="n">company_name</span><span class="p">,</span> <span class="n">company_email</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;parameters_discovered&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">(),</span>
+            <span class="s1">&#39;company_name&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;company_email&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+        <span class="p">}</span>
+        <span class="n">get_parameters</span><span class="p">(</span>
+            <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
+            <span class="n">obj</span><span class="o">=</span><span class="n">obj</span>
+        <span class="p">)</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;company_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;company_name&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;company_email&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;company_email&#39;</span><span class="p">]</span>
+        <span class="c1"># self.find_company_info(company_name)</span>
+        
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;company name and email found: </span><span class="si">{obj[&#39;company_name&#39;]}</span><span class="s2"> and </span><span class="si">{obj[&#39;company_email&#39;]}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;parameters_discovered&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Parameters.detect_and_assign_xpath"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.parameters.Parameters.detect_and_assign_xpath">[docs]</a>    <span class="k">def</span> <span class="nf">detect_and_assign_xpath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">node_text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Detects the xpath of the parameter and assign its xpath inside the self.parameters_xpath_dict.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node: lxml.HtmlElement</span>
+<span class="sd">            node to find xpath of</span>
+<span class="sd">        node_text: str</span>
+<span class="sd">            node text of the node to find xpath of</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyword_parameters</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_xpath</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">node_text</span><span class="p">,</span> <span class="n">parameter</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">path</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters_xpath_dict</span><span class="p">[</span><span class="n">parameter</span> <span class="o">+</span> <span class="s1">&#39;_xpath&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span></div>
+
+<div class="viewcode-block" id="Parameters.values_from_xpaths"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.parameters.Parameters.values_from_xpaths">[docs]</a>    <span class="k">def</span> <span class="nf">values_from_xpaths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts and assign single word and multi word (not paragraph values) from the parameters xpaths already obtained.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters_xpath_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+                <span class="nd">@try_and_pass</span>
+                <span class="k">def</span> <span class="nf">get_next_value</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+                    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    Gets next node value of the parameter node</span>
+<span class="sd">                    &quot;&quot;&quot;</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_block_tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="c1"># If there is no next node</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">node</span><span class="o">.</span><span class="n">getnext</span><span class="p">():</span>
+                        <span class="c1"># Get the parent text of the ndoe</span>
+                        <span class="n">parent_text</span> <span class="o">=</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">text_content</span><span class="p">())</span>
+                        
+                        <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_xpath&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                        <span class="c1"># Check if the parameter name or alternative name is present in the parent node text, if present. This is the nested form of the parameter value like</span>
+                        <span class="c1"># &lt;span&gt;Location: Kathmandu&lt;/span&gt;</span>
+                        <span class="c1"># Replace alternative_name, like Replace Location above and get Kathmandu</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">parent_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">alternative_name</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">alternative_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">if</span> <span class="n">alternative_name</span> <span class="ow">in</span> <span class="n">parent_text</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                                
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># There is next node</span>
+                        <span class="k">while</span> <span class="n">node</span><span class="o">.</span><span class="n">getnext</span><span class="p">()</span><span class="o">.</span><span class="n">text_content</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbols_to_omit</span><span class="p">:</span>
+                            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">getnext</span><span class="p">()</span>
+                        <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_xpath&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                        <span class="c1"># Get the text of the next node</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clean_text</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">getnext</span><span class="p">()</span><span class="o">.</span><span class="n">text_content</span><span class="p">())</span>
+                <span class="n">get_next_value</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Values are got from xpath&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Assign the miscellaneous parameters that are discovered</span>
+        <span class="nd">@for_existing_leaf_nodes</span>
+        <span class="k">def</span> <span class="nf">assign_misc_parameters</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">node_text</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;node_text&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">node_text</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbols_to_omit</span> <span class="ow">and</span> \
+            <span class="n">node_text</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interested_parameters</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assign_misc_parameters_value</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">node_text</span><span class="p">)</span>
+        
+        <span class="n">assign_misc_parameters</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">job_block_root</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="Parameters.get_paragraph_values"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.parameters.Parameters.get_paragraph_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_paragraph_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keywords</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the paragraph values of the nodes with keywords inside the text.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        keywords</span>
+<span class="sd">            keywords of which to extract paragraph values of</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            string of the paragraph values thus extracted</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Keywords except the keywords mentioned in the parameter passed in the keyword</span>
+        <span class="n">other_keywords</span> <span class="o">=</span> <span class="p">(</span><span class="n">keyword</span> <span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyword_parameters</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="n">parameter</span><span class="p">]</span> <span class="k">if</span> <span class="n">keyword</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">)</span>
+
+        <span class="nd">@for_existing_leaf_nodes</span>
+        <span class="k">def</span> <span class="nf">check_paragraph</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">node_text</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;node_text&#39;</span><span class="p">)</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;obj&#39;</span><span class="p">)</span>
+            <span class="n">found_title</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;found_title&#39;</span><span class="p">]</span>
+            <span class="n">repeat_keywords</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;repeat_keywords&#39;</span><span class="p">]</span>
+            <span class="n">paragraph</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;paragraph&#39;</span><span class="p">]</span>
+            <span class="n">common_parent</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;common_parent&#39;</span><span class="p">]</span>
+
+            <span class="c1"># If title is found</span>
+            <span class="k">if</span> <span class="n">found_title</span> \
+            <span class="ow">and</span> <span class="n">node_text</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">other_keywords</span><span class="p">:</span>
+                <span class="c1"># Same parent is not found</span>
+                <span class="k">if</span> <span class="n">common_parent</span> \
+                <span class="ow">and</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_parent</span><span class="p">(</span><span class="n">node</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">id</span><span class="p">(</span><span class="n">common_parent</span><span class="p">):</span>
+                    <span class="c1"># Stop the collection when parents don&#39;t match</span>
+                    <span class="n">found_title</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+                <span class="n">paragraph</span> <span class="o">+=</span> <span class="n">node_text</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            
+            <span class="c1"># Stop the paragraph collection</span>
+            <span class="k">elif</span> <span class="n">node_text</span> <span class="ow">in</span> <span class="n">other_keywords</span><span class="p">:</span>
+                <span class="n">found_title</span> <span class="o">=</span> <span class="kc">False</span>
+            
+            <span class="k">if</span> <span class="n">node_text</span> <span class="ow">in</span> <span class="n">keywords</span> <span class="ow">and</span> <span class="n">node_text</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">repeat_keywords</span><span class="p">:</span>  <span class="c1"># Exclude repeated keywrods</span>
+                <span class="n">found_title</span> <span class="o">=</span> <span class="kc">True</span>
+                
+                <span class="n">paragraph</span> <span class="o">+=</span> <span class="n">node_text</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">node_text</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="s1">&#39;misc&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+
+                <span class="n">repeat_keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_text</span><span class="p">)</span>
+                
+                <span class="c1"># Getting of the common parent</span>
+                <span class="n">get_common_parent</span> <span class="o">=</span> <span class="n">try_and_pass</span><span class="p">(</span><span class="k">lambda</span> <span class="n">node</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parent</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="n">getnext</span><span class="p">()</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_parent</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="n">getchildren</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parent</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
+                <span class="n">get_common_parent</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;found_title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">found_title</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;repeat_keywords&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">repeat_keywords</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;paragraph&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">paragraph</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;common_parent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">common_parent</span>
+
+            <span class="k">return</span> <span class="n">paragraph</span>
+
+        <span class="n">obj</span> <span class="o">=</span>  <span class="p">{</span>
+            <span class="s1">&#39;found_title&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> 
+            <span class="s1">&#39;repeat_keywords&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;paragraph&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;common_parent&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+        <span class="p">}</span>          
+        <span class="n">check_paragraph</span><span class="p">(</span>
+            <span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">job_block_root</span><span class="p">,</span>
+            <span class="n">obj</span><span class="o">=</span><span class="n">obj</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{obj[&quot;paragraph&quot;]}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+        <span class="k">return</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;paragraph&#39;</span><span class="p">]</span></div>
+
+    <span class="c1"># Utilities</span>
+<div class="viewcode-block" id="Parameters.match_company_email"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.parameters.Parameters.match_company_email">[docs]</a>    <span class="k">def</span> <span class="nf">match_company_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to match the company email if the company email is in the text.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        text: str</span>
+<span class="sd">            text to match company email on</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str or None</span>
+<span class="sd">            str of the email if found else None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">email_regex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;email_regex&#39;</span><span class="p">)</span>
+        <span class="c1"># Match with the email regex</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">email_regex</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span> 
+            <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Parameters.match_company_name"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.parameters.Parameters.match_company_name">[docs]</a>    <span class="k">def</span> <span class="nf">match_company_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tries to match the company name if the company name is in the text.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        text: str</span>
+<span class="sd">            text to match company name on</span>
+<span class="sd">        node: lxml.HtmlElement</span>
+<span class="sd">            node to check for if it is not a title, to exclude &lt;title&gt;</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str or None</span>
+<span class="sd">            str of the name if found else None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">node</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span>
+            <span class="n">company_name_regex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;company_name_regex&#39;</span><span class="p">)</span>
+            <span class="n">nlp_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+            <span class="c1"># Try to use spacy to find company name</span>
+            <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">nlp_res</span><span class="o">.</span><span class="n">ents</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ent</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="s1">&#39;ORG&#39;</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Company name is matched from spacy&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">ent</span><span class="o">.</span><span class="n">text</span>
+            
+            <span class="c1"># If not found, try to match the company name regex</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">company_name_regex</span><span class="p">,</span> <span class="n">string</span><span class="o">.</span><span class="n">capwords</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Company name is matched from regex&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">company_name_regex</span><span class="p">,</span> <span class="n">string</span><span class="o">.</span><span class="n">capwords</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Parameters.search_word_in_tag"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.parameters.Parameters.search_word_in_tag">[docs]</a>    <span class="k">def</span> <span class="nf">search_word_in_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">words</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of words in tag and returns the word and last index value of the word list, if the word is present in the tag.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        words: list</span>
+<span class="sd">            list of words to search the parameters on</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple</span>
+<span class="sd">            word and it&#39;s value (last index of the words list) if word present else None, None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">words_list</span> <span class="o">=</span> <span class="n">words</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words_list</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">interested_parameters</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">word</span><span class="p">:</span> <span class="k">return</span> <span class="n">word</span><span class="p">,</span> <span class="n">words_list</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">words_list</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>  </div>
+
+<div class="viewcode-block" id="Parameters.get_xpath"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.parameters.Parameters.get_xpath">[docs]</a>    <span class="k">def</span> <span class="nf">get_xpath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">node_text</span><span class="p">,</span> <span class="n">parameter</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the xpath of node by checking the node_text if it is inside the alternative keywords.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node</span>
+<span class="sd">            node to get xpath of</span>
+<span class="sd">        node_text</span>
+<span class="sd">            node text to get xpath of</span>
+<span class="sd">        parameter</span>
+<span class="sd">            parameter to get alternative text and consecutively get xpath of</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            xpath of the node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">node_text</span> <span class="o">==</span> <span class="n">parameter</span> <span class="ow">or</span> <span class="n">node_text</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="n">parameter</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_block_tree</span><span class="o">.</span><span class="n">getpath</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+    <span class="c1"># def find_company_info(self, company_name, company_name_xpath):</span>
+    <span class="c1">#     tokenizer = RegexpTokenizer(r&#39;\w+&#39;)</span>
+    <span class="c1">#     tokenized = tokenizer.tokenize(company_name)</span>
+
+    <span class="c1">#     tags_interested_in = [&#39;a&#39;, &#39;span&#39;, &#39;p&#39;, &#39;h1&#39;, &#39;h2&#39;, &#39;h3&#39;, &#39;h4&#39;, &#39;h5&#39;, &#39;h6&#39;, &#39;div&#39;]</span>
+    <span class="c1">#     all_nodes_with_token = set()</span>
+    <span class="c1">#     for token in tokenized:</span>
+    <span class="c1">#         nodes_matched = self.job_block_tree.xpath(f&quot;//*[contains(text(),&#39;{token}&#39;)]&quot;)</span>
+    <span class="c1">#         for node in nodes_matched:</span>
+    <span class="c1">#             if node.tag in tags_interested_in:</span>
+    <span class="c1">#                 all_nodes_with_token.add(node)</span>
+    <span class="c1">#     all_text_content = set()</span>
+    <span class="c1">#     for node in all_nodes_with_token:</span>
+    <span class="c1">#         all_text_content.add(node.text_content())</span>
+    <span class="c1">#     all_text_content = list(sorted(all_text_content, key = len))</span>
+    <span class="c1">#     try:</span>
+    <span class="c1">#         print(self.job_block_tree.xpath(f&quot;//*[contains(text(),&#39;{all_text_content[0]}&#39;)]&quot;))</span>
+    <span class="c1">#         # self.parameters_xpath_dict[&#39;company_info_x&#39;]</span>
+    <span class="c1">#         self.parameters_xpath_dict[&#39;company_info_xpath&#39;] = self.job_block_tree.getpath(</span>
+    <span class="c1">#             self.job_block_tree.xpath(f&quot;//*[contains(text(),&#39;{all_text_content[1]}&#39;)]&quot;)[0]</span>
+    <span class="c1">#         )</span>
+    <span class="c1">#         self.parameters_dict[&#39;company_info&#39;] += clean_text(all_text_content[1])</span>
+    <span class="c1">#     except: pass</span>
+
+    <span class="c1">#     try:</span>
+    <span class="c1">#         for node in self.job_block_tree.getpath(self.parameters_xpath_dict[&#39;company_info_xpath&#39;]).getparent()[0].iter(tag=etree.Element):</span>
+    <span class="c1">#             self.parameters_dict[&#39;company_info&#39;] += clean_text(node.text_content())</span>
+    <span class="c1">#     except: pass</span>
+
+<div class="viewcode-block" id="Parameters.assign_misc_parameters_value"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.parameters.Parameters.assign_misc_parameters_value">[docs]</a>    <span class="k">def</span> <span class="nf">assign_misc_parameters_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">node_text</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assigns the value of the misc parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node: lxml.HtmlElement</span>
+<span class="sd">            node to assign misc parameters values from</span>
+<span class="sd">        node_text: str</span>
+<span class="sd">            node text of the node to assign misc parameters values from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">node_text</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keywords</span><span class="p">[</span><span class="s1">&#39;misc&#39;</span><span class="p">]:</span>
+            <span class="c1"># Append like something: value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;misc&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">node_text</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span>
+            <span class="c1"># Append values</span>
+            <span class="k">try</span><span class="p">:</span> 
+                <span class="k">while</span> <span class="n">node</span><span class="o">.</span><span class="n">getnext</span><span class="p">()</span><span class="o">.</span><span class="n">text_content</span><span class="p">()</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">symbols_to_omit</span><span class="p">:</span>
+                    <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">getnext</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters_dict</span><span class="p">[</span><span class="s1">&#39;misc&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">getnext</span><span class="p">()</span><span class="o">.</span><span class="n">text_content</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="k">except</span><span class="p">:</span> <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Parameters.get_parent"><a class="viewcode-back" href="../../jobdetailsextractor.html#jobdetailsextractor.parameters.Parameters.get_parent">[docs]</a>    <span class="k">def</span> <span class="nf">get_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns parent of a node.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node: lxml.HtmlElement</span>
+<span class="sd">            node to get parent of</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        lxml.HtmlElement</span>
+<span class="sd">            parent of the node.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
+        <span class="c1"># We are interested in &lt;div&gt; parent.</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">parent</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;div&#39;</span><span class="p">:</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">parent</span></div></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">jobdetailsextractor.parameters</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

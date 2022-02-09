@@ -1,0 +1,512 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>interactor.titleextractor &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor.titleextractor</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for interactor.titleextractor</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This submodule consists of the required classes and it&#39;s methods in order to abstract the requirements of the title xpath extraction and extraction of the jobs from that xpath.</span>
+
+<span class="sd">Decorators</span>
+<span class="sd">----------</span>
+<span class="sd">call_if_non_ajax_based()</span>
+<span class="sd">Calls any function wrapped by the decorator if it is Non AJAX based, for now, it is assumed that every website is non AJAX based.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">-------</span>
+<span class="sd">TitleExtractor()</span>
+<span class="sd">Responsible for extraction of the title xpath and jobs from that title xpath.</span>
+<span class="sd">MockResponse()</span>
+<span class="sd">Use of scrapy&#39;s link extractor requires a scrapy.Response. So, this is our mock (fake) scrapy response to fool scrapy in believing that it has received it&#39;s own Response.</span>
+<span class="sd">MockSelector()</span>
+<span class="sd">One of the elements or properties of the MockResponse object.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">codecs</span>
+
+<span class="kn">from</span> <span class="nn">scrapy.linkextractors</span> <span class="k">import</span> <span class="n">LinkExtractor</span>
+
+<span class="kn">from</span> <span class="nn">checkers.models</span> <span class="k">import</span> <span class="n">JobWebsite</span>
+<span class="kn">from</span> <span class="nn">jobdetailsextractor.models</span> <span class="k">import</span> <span class="n">Job</span>
+
+<span class="kn">from</span> <span class="nn">backend.misc</span> <span class="k">import</span> <span class="n">log</span>
+
+<span class="kn">from</span> <span class="nn">.site</span> <span class="k">import</span> <span class="n">Site</span><span class="p">,</span> <span class="n">NonAJAX</span>
+
+
+<div class="viewcode-block" id="call_if_non_ajax_based"><a class="viewcode-back" href="../../interactor.html#interactor.titleextractor.call_if_non_ajax_based">[docs]</a><span class="k">def</span> <span class="nf">call_if_non_ajax_based</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This decorator calls a function only if it is non AJAX based.</span>
+
+<span class="sd">    This accepts following keyworded arguments:</span>
+<span class="sd">    * na_website: NonAJAX</span>
+<span class="sd">        NonAJAX object.</span>
+<span class="sd">    * links_in_page: list of scrapy.Links</span>
+<span class="sd">        List of links in page</span>
+<span class="sd">    * pages: boolean</span>
+<span class="sd">        Specifies if the page is already checked and is paginated.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">is_non_ajax_based</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">na_website</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;na_website&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">links_in_page</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;links_in_page&quot;</span><span class="p">)</span>
+        <span class="n">job_titles</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;job_titles&quot;</span><span class="p">)</span>
+        <span class="n">pages</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pages&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Check if Non AJAX based paginated website</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_website</span> <span class="ow">and</span> <span class="p">(</span><span class="n">pages</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_site</span><span class="o">.</span><span class="n">pages</span><span class="o">.</span><span class="n">has_pages</span><span class="p">(</span><span class="n">links_in_page</span><span class="p">)):</span>
+            <span class="c1"># Create a non-ajax object out of the site.</span>
+            <span class="c1"># pag_na_website refers to paginated non ajax variable.</span>
+            <span class="n">pag_na_website</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">NonAJAX</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="p">,</span> <span class="n">links_in_page</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_site</span><span class="p">,</span> <span class="n">job_titles</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">na_website</span>
+                <span class="k">else</span> <span class="n">na_website</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Determine if the site is crawlable.</span>
+            <span class="k">if</span> <span class="n">pages</span> <span class="ow">or</span> <span class="n">pag_na_website</span><span class="o">.</span><span class="n">is_crawlable</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">na_website</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">na_website</span><span class="o">=</span><span class="n">pag_na_website</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># For non ajax based non paginated website</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_website</span><span class="p">:</span>
+            <span class="n">na_website</span> <span class="o">=</span> <span class="n">NonAJAX</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="p">,</span> <span class="n">links_in_page</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_site</span><span class="p">,</span> <span class="n">job_titles</span><span class="p">,</span> <span class="n">paginated</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+        <span class="c1"># If title xpath is not necessary to check, we already know it is non-ajax website.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">paginated</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_site</span><span class="o">.</span><span class="n">pages</span><span class="o">.</span><span class="n">has_pages</span><span class="p">(</span><span class="n">links_in_page</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
+            <span class="n">na_website</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">NonAJAX</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="p">,</span>
+                    <span class="n">links_in_page</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_site</span><span class="p">,</span>
+                    <span class="n">job_titles</span><span class="p">,</span>
+                    <span class="n">paginated</span><span class="o">=</span><span class="n">paginated</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">na_website</span>
+                <span class="k">else</span> <span class="n">na_website</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">na_website</span><span class="o">=</span><span class="n">na_website</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">is_non_ajax_based</span></div>
+
+
+<div class="viewcode-block" id="TitleExtractor"><a class="viewcode-back" href="../../interactor.html#interactor.titleextractor.TitleExtractor">[docs]</a><span class="k">class</span> <span class="nc">TitleExtractor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A link extractor and site object is initialized with search page url</span>
+<span class="sd">    coming from kwargs.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    extract_title_xpath()</span>
+<span class="sd">        Extracts the title xpath of the site and returns it.</span>
+<span class="sd">    extract_job_title_url_from_title_xpath(title_xpath)</span>
+<span class="sd">        Extracts jobs from title xpaths and places it in self._jobs().</span>
+<span class="sd">    store_into_database()</span>
+<span class="sd">        Stores the job titles and URLs extracted by the TitleExtractor into the database.</span>
+
+<span class="sd">    Static Methods</span>
+<span class="sd">    --------------</span>
+<span class="sd">    mock_scrapy_response(search_url)</span>
+<span class="sd">        Returns the Response object which is the mock of the scrapy response in order to use scrapy.LinkExtractor object.</span>
+<span class="sd">    check_or_make_url_complete(url, homepage)</span>
+<span class="sd">        Checks or makes the URL complete. i.e. populates the URL with the homepage if it&#39;s relative URL. For eg.: if /job-detail-296, homepage is goodjobs.com.np, then goodjobs.com.np/job-detail-296.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_url</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        search_page_url: str</span>
+<span class="sd">            Search page url of the site to perform scraping on</span>
+<span class="sd">        website: JobWebsite, optional</span>
+<span class="sd">            JobWebsite object of the website to create TitleExtractor object of. Only set after we have the information about the website.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        SearchURLNotFound</span>
+<span class="sd">            The search URL is not found during object initialization</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_website</span> <span class="o">=</span> <span class="n">website</span>
+        <span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">SearchURLNotFound</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">search_url</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SearchURLNotFound</span><span class="p">(</span><span class="s2">&quot;No URL&quot;</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Title Extraction object created for </span><span class="si">{search_url}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Title Extraction object created for </span><span class="si">{search_url}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Scrapy&#39;s link extractor object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_link_extractor</span> <span class="o">=</span> <span class="n">LinkExtractor</span><span class="p">()</span>
+
+        <span class="c1"># This is a master site object that remains in the JobURL object.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_site</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">search_page_url</span><span class="o">=</span><span class="n">search_url</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;Site, Xpather object created&quot;</span><span class="p">)</span>
+
+        <span class="c1"># We mock the scrapy response in order to use it with scrapy.link_extractor().</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">TitleExtractor</span><span class="o">.</span><span class="n">mock_scrapy_response</span><span class="p">(</span><span class="n">search_url</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Mocked Scrapy Response: </span><span class="si">{self.response}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="TitleExtractor.extract_title_xpath"><a class="viewcode-back" href="../../interactor.html#interactor.titleextractor.TitleExtractor.extract_title_xpath">[docs]</a>    <span class="k">def</span> <span class="nf">extract_title_xpath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts title xpath and returns it.</span>
+
+<span class="sd">        Title xpath is the xpath of the job title inside a search page.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            title_xpath: title xpath thus extracted.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We extract links in page using the scrapy&#39;s link extractor function.</span>
+        <span class="n">links_in_page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_link_extractor</span><span class="o">.</span><span class="n">extract_links</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="p">)</span>
+
+        <span class="n">job_titles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;Reading 70,000 titles.&quot;</span><span class="p">)</span>
+        <span class="c1"># titles_combined.txt: 70,000 titles to match xpaths from.</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;interactor/reqs/titles_combined.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">titles</span><span class="p">:</span>
+            <span class="n">job_titles</span> <span class="o">=</span> <span class="p">[</span><span class="n">title</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">titles</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
+
+        <span class="n">title_xpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_title_xpath</span><span class="p">(</span>
+            <span class="n">links_in_page</span><span class="o">=</span><span class="n">links_in_page</span><span class="p">,</span> <span class="n">job_titles</span><span class="o">=</span><span class="n">job_titles</span>
+        <span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Got title xpath: </span><span class="si">{title_xpath}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">title_xpath</span></div>
+
+    <span class="nd">@call_if_non_ajax_based</span>
+    <span class="k">def</span> <span class="nf">_get_title_xpath</span><span class="p">(</span><span class="n">na_website</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The function is wrapped around call_if_non_ajax_based and gets called properly only if it is a non AJAX based website.</span>
+
+<span class="sd">        Title xpath is the xpath of the job title inside a search page.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            xpath: title xpath thus extracted.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xpath</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">na_website</span><span class="o">.</span><span class="n">title_xpath</span><span class="p">:</span>
+            <span class="n">links_in_page</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;links_in_page&quot;</span><span class="p">)</span>
+            <span class="n">xpath</span> <span class="o">=</span> <span class="n">na_website</span><span class="o">.</span><span class="n">xpaths</span><span class="o">.</span><span class="n">get_xpath</span><span class="p">(</span><span class="n">links_in_page</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">xpath</span> <span class="o">=</span> <span class="n">na_website</span><span class="o">.</span><span class="n">title_xpath</span>
+
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Title Xpath: </span><span class="si">{xpath}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">xpath</span>
+
+<div class="viewcode-block" id="TitleExtractor.extract_job_title_url_from_title_xpath"><a class="viewcode-back" href="../../interactor.html#interactor.titleextractor.TitleExtractor.extract_job_title_url_from_title_xpath">[docs]</a>    <span class="k">def</span> <span class="nf">extract_job_title_url_from_title_xpath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title_xpath</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts job in the page if only one page and in all pages if a paginated website.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        title_xpath: str</span>
+<span class="sd">            The template title_xpath from which to extract jobs from.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        JobTitleXpathNotFound</span>
+<span class="sd">            If Job title xpath is not supplied in.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">jobdetailsextractor.exceptions</span> <span class="k">import</span> <span class="n">JobTitleXpathNotFound</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">title_xpath</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JobTitleXpathNotFound</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_site</span><span class="o">.</span><span class="n">search_page_url</span><span class="p">)</span>
+
+        <span class="c1"># Extract links in page</span>
+        <span class="n">links_in_page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_link_extractor</span><span class="o">.</span><span class="n">extract_links</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="p">)</span>
+        <span class="n">job_titles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;Reading 70,000 titles.&quot;</span><span class="p">)</span>
+        <span class="c1"># titles_combined.txt: 70,000 titles to match xpaths from.</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;interactor/reqs/titles_combined.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">titles</span><span class="p">:</span>
+            <span class="n">job_titles</span> <span class="o">=</span> <span class="p">[</span><span class="n">title</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">titles</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scrape_job_urls</span><span class="p">(</span>
+            <span class="n">response</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="p">,</span>
+            <span class="n">title_xpath</span><span class="o">=</span><span class="n">title_xpath</span><span class="p">,</span>
+            <span class="n">links_in_page</span><span class="o">=</span><span class="n">links_in_page</span><span class="p">,</span>
+            <span class="n">job_titles</span><span class="o">=</span><span class="n">job_titles</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;got jobs for </span><span class="si">{self._site.search_page_url}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="nd">@call_if_non_ajax_based</span>
+    <span class="k">def</span> <span class="nf">_scrape_job_urls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Scrape job urls does as specified by the name. It scrapes out the job urls on the basis</span>
+<span class="sd">        of xpaths that are provided to it.</span>
+
+<span class="sd">        In case of paginated non ajax based websites, it also traverses to next page and also</span>
+<span class="sd">        yields the request. This is also a callback function in case of such situation.</span>
+
+<span class="sd">        This function acts as a wrapper for extracting the jobs. This handles the request and</span>
+<span class="sd">        paginated traversal.</span>
+
+<span class="sd">        Keyworded Arguments</span>
+<span class="sd">        -------------------</span>
+<span class="sd">        na_website: NonAJAX object</span>
+<span class="sd">            the instance of non ajax object to scrape out job urls from</span>
+<span class="sd">        title_xpath: str</span>
+<span class="sd">            title_xpath to scrape out job URLs from</span>
+<span class="sd">        response: MockResponse</span>
+<span class="sd">            our mock (fake) scrapy response object</span>
+<span class="sd">        obj: NonAJAX</span>
+<span class="sd">            our Non AJAX object of the site.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">na_website</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;na_website&quot;</span><span class="p">)</span>
+        <span class="n">title_xpath</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title_xpath&quot;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;response&quot;</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;obj&quot;</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="p">(</span>
+            <span class="s2">&quot;interactor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+            <span class="n">f</span><span class="s2">&quot;Scraping jobs in page: </span><span class="si">{na_website.site.pages.page_url}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Scraping jobs in page: </span><span class="si">{na_website.site.pages.curr_page}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># if this is true, this means that the site has pages.</span>
+        <span class="k">if</span> <span class="n">na_website</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">pages</span><span class="o">.</span><span class="n">last_page</span><span class="p">:</span>
+            <span class="c1"># Until last page is not reached, keep on getting jobs.</span>
+            <span class="c1"># On reaching the last page, move_to_next_page() returns</span>
+            <span class="c1"># false.</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Checking if further pages left.&quot;</span><span class="p">)</span>
+            <span class="c1"># Moves our current site.pages to next page.</span>
+            <span class="n">pages_left</span> <span class="o">=</span> <span class="n">na_website</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">pages</span><span class="o">.</span><span class="n">move_to_next_page</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">pages_left</span><span class="p">:</span>
+                <span class="c1"># Jobs are actually scraped out using this.</span>
+                <span class="n">na_website</span><span class="o">.</span><span class="n">get_jobs_for_page</span><span class="p">(</span><span class="n">title_xpath</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+
+                <span class="n">log</span><span class="p">(</span>
+                    <span class="s2">&quot;interactor&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+                    <span class="n">f</span><span class="s2">&quot;Moving to page </span><span class="si">{na_website.site.pages.curr_page}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="c1"># Create Mock Response for the page after.</span>
+                <span class="n">new_response</span> <span class="o">=</span> <span class="n">TitleExtractor</span><span class="o">.</span><span class="n">mock_scrapy_response</span><span class="p">(</span>
+                    <span class="n">na_website</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">pages</span><span class="o">.</span><span class="n">page_url</span>
+                <span class="p">)</span>
+                <span class="c1"># Recursive calling in order to scrape in consecutive pages until the last page.</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">_scrape_job_urls</span><span class="p">(</span>
+                    <span class="n">response</span><span class="o">=</span><span class="n">new_response</span><span class="p">,</span>
+                    <span class="n">na_website</span><span class="o">=</span><span class="n">na_website</span><span class="p">,</span>
+                    <span class="n">title_xpath</span><span class="o">=</span><span class="n">title_xpath</span><span class="p">,</span>
+                    <span class="n">pages</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># This is for non-paginated ajax based websites</span>
+
+            <span class="c1"># TODO: jobsdynamics type website: there are multiple job titles mentioned</span>
+            <span class="c1"># in the same ad, that contradicts with our architecture.</span>
+            <span class="c1"># - Alljobnepal where links is placed inside the company&#39;s name, WHAT???</span>
+            <span class="c1"># yes, they even do it!</span>
+            <span class="n">na_website</span><span class="o">.</span><span class="n">get_jobs_for_page</span><span class="p">(</span><span class="n">title_xpath</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+
+        <span class="n">obj</span><span class="o">.</span><span class="n">_jobs</span> <span class="o">=</span> <span class="n">na_website</span><span class="o">.</span><span class="n">jobs</span>
+
+<div class="viewcode-block" id="TitleExtractor.store_into_database"><a class="viewcode-back" href="../../interactor.html#interactor.titleextractor.TitleExtractor.store_into_database">[docs]</a>    <span class="k">def</span> <span class="nf">store_into_database</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This handles all the operations for storing the collected jobs in self._jobs and stores it properly inside the database.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Storing job titles and urls into database&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Storing job titles and urls into database&quot;</span><span class="p">)</span>
+        <span class="c1"># get the django models JobWebsite object from the database</span>
+        <span class="n">website</span> <span class="o">=</span> <span class="n">JobWebsite</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">search_url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_site</span><span class="o">.</span><span class="n">search_page_url</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">title</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Process the job URL so as to make situations like getting only the</span>
+            <span class="c1"># partial url without homepage like on in merojob.com can be avoided.</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">TitleExtractor</span><span class="o">.</span><span class="n">check_or_make_url_complete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">website</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+
+            <span class="c1"># to save job url into the database</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">(</span><span class="n">website</span><span class="o">=</span><span class="n">website</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TitleExtractor.mock_scrapy_response"><a class="viewcode-back" href="../../interactor.html#interactor.titleextractor.TitleExtractor.mock_scrapy_response">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">mock_scrapy_response</span><span class="p">(</span><span class="n">search_url</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mocks the scrapy response. Mocking means creating an object that matches scrapy&#39;s Response object. It is so as because scrapy&#39;s link_extractor only works for scrapy response.</span>
+
+<span class="sd">        Creates a mock (fake) scrapy response as:</span>
+<span class="sd">        Response:</span>
+<span class="sd">            - url</span>
+<span class="sd">            - encoding</span>
+<span class="sd">            - text</span>
+<span class="sd">            - Selector:</span>
+<span class="sd">                - root</span>
+<span class="sd">            - tree</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        search_url: str</span>
+<span class="sd">            search URL of URL from which Scrapy mock response to create</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        MockResponse</span>
+<span class="sd">            our custom mock (fake) Scrapy Response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">requestutils.request</span> <span class="k">import</span> <span class="n">Request</span>
+
+        <span class="n">request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">search_url</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">request_html</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>  <span class="c1"># local .html file received (used for testing)</span>
+            <span class="n">html_file</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">search_url</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">html_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">html</span> <span class="o">=</span> <span class="n">text</span>
+
+        <span class="n">request</span><span class="o">.</span><span class="n">filter_unnecessary_tags</span><span class="p">()</span>
+
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_html_tree</span><span class="p">()</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+        <span class="n">selector</span> <span class="o">=</span> <span class="n">MockSelector</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">MockResponse</span><span class="p">(</span><span class="n">search_url</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="n">tree</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TitleExtractor.check_or_make_url_complete"><a class="viewcode-back" href="../../interactor.html#interactor.titleextractor.TitleExtractor.check_or_make_url_complete">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">check_or_make_url_complete</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">homepage</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function checks the job url and makes the url complete or</span>
+<span class="sd">        with the homepage if it is not present in the homepage. The example</span>
+<span class="sd">        of this case is merojob.com.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        url: str</span>
+<span class="sd">            job url to check or make url complete</span>
+<span class="sd">        homepage: str</span>
+<span class="sd">            homepage url of that job url</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        url: str</span>
+<span class="sd">            homepage + url if the url doesn&#39;t contain homepage otherwise only the url</span>
+<span class="sd">            itself.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">homepage</span> <span class="ow">in</span> <span class="n">url</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">url</span>
+
+        <span class="c1"># If url is like this /homepage-manager/ , make it homepage-manager/</span>
+        <span class="k">if</span> <span class="n">url</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+        <span class="k">return</span> <span class="n">homepage</span> <span class="o">+</span> <span class="n">url</span></div></div>
+
+
+<div class="viewcode-block" id="MockResponse"><a class="viewcode-back" href="../../interactor.html#interactor.titleextractor.MockResponse">[docs]</a><span class="k">class</span> <span class="nc">MockResponse</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Mock Response (fake) Response of the scrapy.Response object in order to use scrapy.link_extractor(). This only consists of the response attributes required for the link_extractor. This maybe only a partial copy of the response. But it works!</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    url: str</span>
+<span class="sd">        URL of which response needed</span>
+<span class="sd">    encoding: str</span>
+<span class="sd">        encoding of the page whose response is in, default=&#39;utf-8&#39;</span>
+<span class="sd">    text: str</span>
+<span class="sd">        html response of the page</span>
+<span class="sd">    tree: lxml.etree</span>
+<span class="sd">        lxml etree of the html response</span>
+<span class="sd">    selector: MockSelector</span>
+<span class="sd">        Mock (fake) selector object of the scrapy</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">selector</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">encoding</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selector</span> <span class="o">=</span> <span class="n">selector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree</span> <span class="o">=</span> <span class="n">tree</span></div>
+
+
+<div class="viewcode-block" id="MockSelector"><a class="viewcode-back" href="../../interactor.html#interactor.titleextractor.MockSelector">[docs]</a><span class="k">class</span> <span class="nc">MockSelector</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fake (Mock) scrapy selector required by the MockResponse object. This is also only a partial copy of the scrapy.Selector object with only root parameter</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    root: lxml.HtmlElement</span>
+<span class="sd">        root lxml HtmlElement of the current lxml.etree of the html response strings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor.titleextractor</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1 @@
+for /r %%i in (*.log) do break > %%i

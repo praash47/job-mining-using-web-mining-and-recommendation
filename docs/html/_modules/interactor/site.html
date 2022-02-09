@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>interactor.site &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor.site</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for interactor.site</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This submodule consists of all the classes required to abstract a job website as a &#39;site&#39; and perform operations such as getting xpaths of the job title on search page and getting jobs from a page after supply of title xpath.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">-------</span>
+<span class="sd">Site()</span>
+<span class="sd">Our abstraction of any site (maybe non AJAX or AJAX based both, but non AJAX based as of now)</span>
+<span class="sd">NonAJAX()</span>
+<span class="sd">NonAJAX is the abstraction of the procedures to get the job URL and title from the nonAJAX based websites.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">lxml.html</span> <span class="k">import</span> <span class="n">HtmlElement</span>
+
+<span class="kn">from</span> <span class="nn">backend.misc</span> <span class="k">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">try_and_pass</span>
+
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">NoTwoMatchingTitles</span>
+<span class="kn">from</span> <span class="nn">.paginator</span> <span class="k">import</span> <span class="n">Paginator</span>
+<span class="kn">from</span> <span class="nn">.xpather</span> <span class="k">import</span> <span class="n">Xpather</span>
+
+
+<div class="viewcode-block" id="Site"><a class="viewcode-back" href="../../interactor.html#interactor.site.Site">[docs]</a><span class="k">class</span> <span class="nc">Site</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A site object for storing top level crawling site related info. The top level</span>
+<span class="sd">    crawling site related info here stands for the search page url of the site and</span>
+<span class="sd">    the paginator object responsible for handling the pagination of the site.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_page_url</span><span class="p">):</span>
+        <span class="c1"># Search Page Initializations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_page_url</span> <span class="o">=</span> <span class="n">search_page_url</span>
+
+        <span class="c1"># Paginator Initialization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pages</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NonAJAX"><a class="viewcode-back" href="../../interactor.html#interactor.site.NonAJAX">[docs]</a><span class="k">class</span> <span class="nc">NonAJAX</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A representation of a Non-AJAX website. This object is designed to perform</span>
+<span class="sd">    job scraping for specifically non ajax based scenarios.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    is_crawlable()</span>
+<span class="sd">        Determines whether the site is crawlable or not on the basis of it&#39;s xpaths</span>
+<span class="sd">    get_jobs_from_xpaths(xpath, response)</span>
+<span class="sd">        Populates the self.jobs object using the title xpath and response with the job title and URL.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">links</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">job_titles</span><span class="p">,</span> <span class="n">paginated</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        response: str</span>
+<span class="sd">            response html of the non ajax page</span>
+<span class="sd">        links: LinkExtractor</span>
+<span class="sd">            scrapy link extractor object</span>
+<span class="sd">        site: Site</span>
+<span class="sd">            site object of the site that holds the search page url</span>
+<span class="sd">        job_titles: list</span>
+<span class="sd">            our list of job titles to match title from</span>
+<span class="sd">        paginated: boolean, default=True</span>
+<span class="sd">            specifies whether the NonAJAX</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">response</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">links</span> <span class="o">=</span> <span class="n">links</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">site</span> <span class="o">=</span> <span class="n">site</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">paginated</span> <span class="o">=</span> <span class="n">paginated</span>
+
+        <span class="c1"># This estimates the number of jobs per page. This is</span>
+        <span class="c1"># just an arbitrary number and maynot be also not enough</span>
+        <span class="c1"># in certain scenarios.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ESTD_JOBS_IN_PAGE</span> <span class="o">=</span> <span class="mi">150</span>
+
+        <span class="c1"># xpath initialization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xpaths</span> <span class="o">=</span> <span class="n">Xpather</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">site</span><span class="p">,</span> <span class="n">paginated</span><span class="p">,</span> <span class="n">job_titles</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title_xpath</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">jobs</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="NonAJAX.is_crawlable"><a class="viewcode-back" href="../../interactor.html#interactor.site.NonAJAX.is_crawlable">[docs]</a>    <span class="k">def</span> <span class="nf">is_crawlable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns true if xpaths can be got from the links of the first page.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        boolean</span>
+<span class="sd">            True if crawlable else raises Exceptions</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        NoTwoMatchingTitles</span>
+<span class="sd">            No two matching titles found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Try to get xpath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title_xpath</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xpaths</span><span class="o">.</span><span class="n">get_xpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">title_xpath</span>
+            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">title_xpath</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">title_xpath</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Xpath got in </span><span class="si">{self.site.search_page_url}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># If getting xpath is succesful, then it is crawlable.</span>
+
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;Xpath not got in </span><span class="si">{self.site.search_page_url}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="n">NoTwoMatchingTitles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">search_page_url</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NonAJAX.get_jobs_for_page"><a class="viewcode-back" href="../../interactor.html#interactor.site.NonAJAX.get_jobs_for_page">[docs]</a>    <span class="k">def</span> <span class="nf">get_jobs_for_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xpath</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function extracts jobs on the basis of xpaths by finding the variable div. It</span>
+<span class="sd">        works on the basis of principle that there is a varying same structured div in the</span>
+<span class="sd">        page that has the same structure as others that holds the job related information</span>
+<span class="sd">        and job url.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xpaths: list of str</span>
+<span class="sd">            list of xpaths of the two jobs in the page</span>
+<span class="sd">        response: str</span>
+<span class="sd">            html response of the site</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="p">(</span><span class="s2">&quot;interactor&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;Getting jobs for the page&quot;</span><span class="p">)</span>
+        <span class="n">xpath_init</span><span class="p">,</span> <span class="n">xpath_end</span> <span class="o">=</span> <span class="n">xpath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xpath</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="nd">@try_and_pass</span>
+        <span class="k">def</span> <span class="nf">assign_job</span><span class="p">(</span><span class="n">xpath_init</span><span class="p">,</span> <span class="n">xpath_end</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+            <span class="n">xpath</span> <span class="o">=</span> <span class="n">xpath_init</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">xpath_end</span>
+            <span class="n">element</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="n">xpath</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">HtmlElement</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="c1"># Get the text and href i.e. url and save into the self.jobs</span>
+            <span class="n">element_text</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">text_content</span><span class="p">()</span>
+            <span class="n">element_href</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">element_text</span> <span class="ow">and</span> <span class="n">element_href</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_if_job_already_in_database</span><span class="p">(</span><span class="n">element_href</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">jobs</span><span class="p">[</span><span class="n">element_text</span><span class="p">]</span> <span class="o">=</span> <span class="n">element_href</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ESTD_JOBS_IN_PAGE</span><span class="p">):</span>
+            <span class="n">assign_job</span><span class="p">(</span><span class="n">xpath_init</span><span class="p">,</span> <span class="n">xpath_end</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_check_if_job_already_in_database</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if the job that is extracted is already stored in the database. This function is so as to not double create job advertisements. It also facilitates new job URLs posted in the website.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        url: str</span>
+<span class="sd">            url of the job to check in the database</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        boolean</span>
+<span class="sd">            True if job exists else False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">jobdetailsextractor.models</span> <span class="k">import</span> <span class="n">Job</span>
+        <span class="kn">from</span> <span class="nn">.titleextractor</span> <span class="k">import</span> <span class="n">TitleExtractor</span>
+        <span class="kn">from</span> <span class="nn">requestutils.request</span> <span class="k">import</span> <span class="n">Request</span>
+
+        <span class="n">req</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">search_page_url</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">TitleExtractor</span><span class="o">.</span><span class="n">check_or_make_url_complete</span><span class="p">(</span>
+            <span class="n">url</span><span class="p">,</span> <span class="n">req</span><span class="o">.</span><span class="n">get_only_homepage_based</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">interactor.site</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>

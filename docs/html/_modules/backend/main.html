@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>backend.main &#8212; Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">backend.main</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for backend.main</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file contains the main tasks of the backend server.</span>
+
+<span class="sd">There are three main functions here:</span>
+<span class="sd">1. check_deadline_existing_job()</span>
+<span class="sd">2. check_for_new_job_website_urls()</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="k">import</span> <span class="n">timezone</span>
+
+<span class="kn">from</span> <span class="nn">interactor.titleextractor</span> <span class="k">import</span> <span class="n">TitleExtractor</span>
+
+<span class="kn">from</span> <span class="nn">checkers.models</span> <span class="k">import</span> <span class="n">JobWebsite</span>
+<span class="kn">from</span> <span class="nn">jobdetailsextractor.models</span> <span class="k">import</span> <span class="n">Job</span>
+
+<span class="kn">from</span> <span class="nn">.misc</span> <span class="k">import</span> <span class="n">log</span>
+
+
+<div class="viewcode-block" id="check_deadline_existing_job"><a class="viewcode-back" href="../../backend.html#backend.main.check_deadline_existing_job">[docs]</a><span class="k">def</span> <span class="nf">check_deadline_existing_job</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks for deadline in existing job websites. Deletes the</span>
+<span class="sd">    job website from database upon expired deadline.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;Filtering out deadline crossed jobs.&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">Job</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">deadline</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">deadline</span> <span class="o">&lt;</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">():</span>
+                <span class="n">job</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="check_for_new_job_website_urls"><a class="viewcode-back" href="../../backend.html#backend.main.check_for_new_job_website_urls">[docs]</a><span class="k">def</span> <span class="nf">check_for_new_job_website_urls</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function checks for job URLs in new job websites as well as in</span>
+<span class="sd">    new job URLs in existing job websites.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;Checking for new job websites.&quot;</span><span class="p">)</span>
+    <span class="c1"># Get 100 URLs from Google</span>
+    <span class="kn">from</span> <span class="nn">requestutils.requestgooglemodule.requestgoogle</span> <span class="k">import</span> <span class="n">RequestGoogle</span>
+
+    <span class="n">rg</span> <span class="o">=</span> <span class="n">RequestGoogle</span><span class="p">()</span>
+    <span class="n">urls</span> <span class="o">=</span> <span class="n">rg</span><span class="o">.</span><span class="n">get_100_urls</span><span class="p">()</span>
+
+    <span class="c1"># Check for the job websites</span>
+    <span class="kn">from</span> <span class="nn">checkers.checkjobwebsite</span> <span class="k">import</span> <span class="n">CheckJobWebsite</span>
+
+    <span class="n">checker</span> <span class="o">=</span> <span class="n">CheckJobWebsite</span><span class="p">(</span><span class="n">urls</span><span class="o">=</span><span class="n">urls</span><span class="p">)</span>
+    <span class="n">job_websites</span> <span class="o">=</span> <span class="n">checker</span><span class="o">.</span><span class="n">check_urls</span><span class="p">()</span>
+
+    <span class="c1"># Create a searcher object</span>
+    <span class="kn">from</span> <span class="nn">interactor.searcher</span> <span class="k">import</span> <span class="n">Search</span>
+
+    <span class="n">searcher</span> <span class="o">=</span> <span class="n">Search</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">job_website</span> <span class="ow">in</span> <span class="n">job_websites</span><span class="p">:</span>
+        <span class="n">job_website_obj</span> <span class="o">=</span> <span class="n">JobWebsite</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">job_website</span><span class="p">)</span>
+        <span class="n">search_url</span><span class="p">,</span> <span class="n">title_xpath</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">titleextractor</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Run searcher and obtain search URL.</span>
+            <span class="n">search_url</span> <span class="o">=</span> <span class="n">searcher</span><span class="o">.</span><span class="n">get_search_url</span><span class="p">(</span><span class="n">job_website</span><span class="p">)</span>
+
+            <span class="c1"># Find job title in the search page and it&#39;s xpath.</span>
+            <span class="n">titleextractor</span> <span class="o">=</span> <span class="n">TitleExtractor</span><span class="p">(</span><span class="n">search_url</span><span class="p">)</span>
+            <span class="n">title_xpath</span> <span class="o">=</span> <span class="n">titleextractor</span><span class="o">.</span><span class="n">extract_title_xpath</span><span class="p">()</span>
+
+            <span class="c1"># Extract further jobs from the extracted title xpath.</span>
+            <span class="n">titleextractor</span><span class="o">.</span><span class="n">extract_job_title_url_from_title_xpath</span><span class="p">(</span><span class="n">title_xpath</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{e}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># save search URLs and job title xpaths for later</span>
+            <span class="n">job_website_obj</span><span class="o">.</span><span class="n">search_url</span> <span class="o">=</span> <span class="n">search_url</span>
+            <span class="n">job_website_obj</span><span class="o">.</span><span class="n">job_title_xpath</span> <span class="o">=</span> <span class="n">title_xpath</span>
+            <span class="n">job_website_obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="c1"># save jobs into the database</span>
+            <span class="k">if</span> <span class="n">titleextractor</span><span class="p">:</span>
+                <span class="n">titleextractor</span><span class="o">.</span><span class="n">store_into_database</span><span class="p">()</span>
+
+    <span class="n">check_new_job_urls_in_existing_websites</span><span class="p">(</span><span class="n">job_websites</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_new_job_urls_in_existing_websites"><a class="viewcode-back" href="../../backend.html#backend.main.check_new_job_urls_in_existing_websites">[docs]</a><span class="k">def</span> <span class="nf">check_new_job_urls_in_existing_websites</span><span class="p">(</span><span class="n">job_websites</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks for new job URLs in existing job websites.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    job_websites: list of new job website URLs</span>
+<span class="sd">        new job websites obtained in this iteration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;Checking for new Job URLs in existing job websites.&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">job_website</span> <span class="ow">in</span> <span class="n">JobWebsite</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+        <span class="c1"># If this is not new job website</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">job_website</span><span class="o">.</span><span class="n">url</span> <span class="ow">in</span> <span class="n">job_websites</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">titleextractor</span> <span class="o">=</span> <span class="n">TitleExtractor</span><span class="p">(</span>
+                    <span class="n">job_website</span><span class="o">.</span><span class="n">search_url</span><span class="p">,</span> <span class="n">website</span><span class="o">=</span><span class="n">job_website</span>
+                <span class="p">)</span>
+                <span class="n">titleextractor</span><span class="o">.</span><span class="n">extract_job_title_url_from_title_xpath</span><span class="p">(</span>
+                    <span class="n">job_website</span><span class="o">.</span><span class="n">job_title_xpath</span>
+                <span class="p">)</span>
+                <span class="n">titleextractor</span><span class="o">.</span><span class="n">store_into_database</span><span class="p">()</span>
+                <span class="n">log</span><span class="p">(</span>
+                    <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;info&quot;</span><span class="p">,</span>
+                    <span class="n">f</span><span class="s2">&quot;New Jobs for today for </span><span class="si">{job_website.name}</span><span class="s2">: </span><span class="si">{titleextractor._jobs}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{e}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Job Mining in Nepali Websites using Web Mining and Recommending Users 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">backend.main</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Aashish Tamrakar (NCE074BCT001), Asim Aryal (NCE074BCT004), Niroj Bajracharya (NCE074BCT023), Sudip Gyawali (NCE074BCT042).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
+    </div>
+  </body>
+</html>
