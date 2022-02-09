@@ -35,7 +35,7 @@ export default defineComponent({
       formData.append('username', this.username);
       axios({
         method: 'POST',
-        url: 'http://192.168.1.82:8000/upload_cv',
+        url: 'http://localhost:8000/upload_cv',
         headers: {
           'Content-Type': 'multipart/form-data',
         },

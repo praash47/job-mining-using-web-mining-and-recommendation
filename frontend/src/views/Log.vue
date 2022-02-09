@@ -80,7 +80,7 @@ export default defineComponent({
       this.loading = true;
       this.messages = [];
       axios({
-        url: `http://192.168.1.82:8000/logs/${this.source}/`,
+        url: `http://localhost:8000/logs/${this.source}/`,
         method: 'POST',
         data: {
           clear: this.clear,
@@ -106,7 +106,7 @@ export default defineComponent({
           this.loading = false;
           this.clear = false;
         });
-      this.eventSource = new EventSource(`http://192.168.1.82:8000/events/${this.source}/`);
+      this.eventSource = new EventSource(`http://localhost:8000/events/${this.source}/`);
       this.eventSource.onmessage = (e) => {
         const data = JSON.parse(e.data);
         this.current_message = data.message;

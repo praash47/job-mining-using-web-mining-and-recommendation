@@ -93,6 +93,11 @@
           <td><input type="text" class="value-evl"
           v-model="filter_experience"></td>
         </tr>
+        <tr>
+          <td><div class="company-name">Level</div></td>
+          <td><input type="text" class="value-evl"
+          v-model="filter_level"></td>
+        </tr>
       </table>
     </div>
   </div>
@@ -189,7 +194,7 @@ export default defineComponent({
     this.isAdmin = this.$store.getters.getIsAdmin;
     axios({
       method: 'POST',
-      url: 'http://192.168.1.82:8000/skills',
+      url: 'http://localhost:8000/skills',
       data: {
         username: this.username,
       },
@@ -199,7 +204,7 @@ export default defineComponent({
         this.added_skills = response.data.skills;
         axios({
           method: 'POST',
-          url: 'http://192.168.1.82:8000/skills',
+          url: 'http://localhost:8000/skills',
         }).then((allskillsresponse) => {
           if (allskillsresponse.data.skills) {
             this.loading_all_skills = false;
@@ -293,7 +298,7 @@ export default defineComponent({
       this.loading_jobs = true;
       axios({
         method: 'POST',
-        url: 'http://192.168.1.82:8000/recommend',
+        url: 'http://localhost:8000/recommend',
         data: {
           skills: this.added_skills,
           username: this.username,
@@ -303,6 +308,7 @@ export default defineComponent({
             location: this.filter_location,
             qualification: this.filter_qualification,
             experience: this.filter_experience,
+            level: this.filter_level,
             salary: {
               lower: this.filter_salary.lower,
               upper: this.filter_salary.upper,
@@ -327,7 +333,7 @@ export default defineComponent({
     },
     logOut() {
       axios({
-        url: 'http://192.168.1.82:8000/logout',
+        url: 'http://localhost:8000/logout',
         method: 'POST',
       })
         .then((response) => {
@@ -369,7 +375,7 @@ export default defineComponent({
       } else {
         axios({
           method: 'POST',
-          url: 'http://192.168.1.82:8000/register',
+          url: 'http://localhost:8000/register',
           data: {
             username: this.$store.getters.getUsername,
             skills: this.added_skills,
@@ -497,6 +503,7 @@ export default defineComponent({
       filter_name: '',
       filter_qualification: '',
       filter_experience: '',
+      filter_level: '',
       filter_salary: {
         lower: '',
         upper: '',
