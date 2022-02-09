@@ -92,7 +92,7 @@ def check_new_job_urls_in_existing_websites(job_websites):
     log("main", "info", "Checking for new Job URLs in existing job websites.")
     for job_website in JobWebsite.objects.all():
         # If this is not new job website
-        if not job_website.url in job_websites:
+        if not job_website.url in job_websites and job_website.job_title_xpath:
             try:
                 titleextractor = TitleExtractor(
                     job_website.search_url, website=job_website

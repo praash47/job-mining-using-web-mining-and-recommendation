@@ -52,7 +52,7 @@ class Search:
             path = os.getcwd() + "/interactor/reqs/chromedriver"
             # if windows
             if sys.platform.startswith("win32"):
-                path += "_win.exe"
+                path += ".exe"
             self._driver = webdriver.Chrome(
                 executable_path=path, options=chrome_options
             )

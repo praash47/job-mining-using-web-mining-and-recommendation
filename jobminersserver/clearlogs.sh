@@ -1,6 +1,6 @@
 logsdir=$PWD
 
-for entry in $(find "$logsdir" -maxdepth 5 -iname "*.log") 
+for entry in $(find "$logsdir" -maxdepth 5 -iname "*.log")
 do
-  echo "" > $entry
+  echo > $entry
 done

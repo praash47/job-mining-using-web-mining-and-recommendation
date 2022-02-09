@@ -68,18 +68,24 @@ def call_if_non_ajax_based(func):
             )
         # If title xpath is not necessary to check, we already know it is non-ajax website.
         else:
-            paginated = True if self._site.pages.has_pages(links_in_page) else False
-            na_website = (
-                NonAJAX(
-                    self.response,
-                    links_in_page,
-                    self._site,
-                    job_titles,
-                    paginated=paginated,
+            paginated = None
+            if not na_website:
+                paginated = True if self._site.pages.has_pages(links_in_page) else False
+                if paginated:
+                    self._site.pages.get_last_page(links_in_page)
+                    self._site.pages.check_search_step(self._site, links_in_page)
+                na_website = (
+                    NonAJAX(
+                        self.response,
+                        links_in_page,
+                        self._site,
+                        job_titles,
+                        paginated=paginated,
+                    )
                 )
-                if not na_website
-                else na_website
-            )
+                return func(na_website=na_website, obj=self, **kwargs)
+            else:
+                return func(obj=self, **kwargs)
 
         return func(na_website=na_website, obj=self, **kwargs)
 

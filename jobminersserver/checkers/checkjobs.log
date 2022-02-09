@@ -1,4 +1,0 @@
-2022-02-08 09:24:43,041 | INFO: CheckJobWebsite object created
-2022-02-08 09:24:43,041 | INFO: Checking Homepage based websites
-2022-02-08 09:24:43,043 | INFO: Only Homepage based websites: ['https://www.jobsnepal.com/', 'https://merojob.com/', 'https://www.ramrojob.com/', 'https://www.merorojgari.com/', 'https://www.kumarijob.com/', 'https://www.jobejee.com/', 'https://www.allnepaljob.com/', 'https://jobs.unops.org/', 'https://www.cmsjob.com/', 'https://goodjobs.com.np/', 'https://www.globaljob.com.np/', 'https://jobsdynamics.com/', 'https://kantipurjob.com/']
-2022-02-08 09:24:43,055 | INFO: https://jobs.unops.org/ failed the jobs. test

@@ -179,7 +179,6 @@ def recommender(request):
     cache_expired = False
     if body["offset"] != 0:
         try:
-            print("getting from cache")
             similarity_dict = json.loads(cache.get(f"{user}_similarity"))
             matching_skills_dict = json.loads(cache.get(f"{user}_matching_skills"))
             if not similarity_dict and not matching_skills_dict:
@@ -193,6 +192,7 @@ def recommender(request):
             location__icontains=filter_dict["location"],
             qualifications__icontains=filter_dict["qualification"],
             experiences__icontains=filter_dict["experience"],
+            level__icontains=filter_dict["level"],
         ):
             # Salary based filtering
             if not lies_in_salary_range(job.salary, filter_dict["salary"]):
@@ -317,8 +317,15 @@ def logs(request, source):
     if body["clear"]:
         if body["clear"] == "all":
             import os
+            import sys
 
-            os.system("./clearlogs.sh")
+            command = "clearlogs"
+
+            # if not windows
+            if not sys.platform.startswith("win32"):
+                command = f"./{command}.sh"
+
+            os.system(command)
             return JsonResponse({})
         f = open(file, "w")
         f.close()
