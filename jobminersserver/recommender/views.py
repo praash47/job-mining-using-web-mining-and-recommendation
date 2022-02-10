@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.files.storage import FileSystemStorage
 from django.http.response import JsonResponse
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from backend.misc import try_and_pass
@@ -137,114 +138,118 @@ def log_out_user(request):
 
 @csrf_exempt
 def skills(request):
-    try:
-        body = decode_utf(request.body)
-        username = body["username"]
+    if request.method == 'POST':
+        try:
+            body = decode_utf(request.body)
+            username = body["username"]
 
-        job_seeker = JobSeeker.objects.get(user=User.objects.get(username=username))
-        skills_list = get_skills_from_string(
-            skills_string=job_seeker.skill_set, brackets=("[", "]")
-        )
+            job_seeker = JobSeeker.objects.get(user=User.objects.get(username=username))
+            skills_list = get_skills_from_string(
+                skills_string=job_seeker.skill_set, brackets=("[", "]")
+            )
 
-        return JsonResponse({"skills": skills_list})
-    except Exception:
-        skills = set()
-        for job in Job.objects.all():
-            if job.job_skills:
-                skills_list = get_skills_from_string(
-                    skills_string=job.job_skills, brackets=("{", "}")
-                )
-                skills = skills.union(set(skills_list))
+            return JsonResponse({"skills": skills_list})
+        except Exception:
+            skills = set()
+            for job in Job.objects.all():
+                if job.job_skills:
+                    skills_list = get_skills_from_string(
+                        skills_string=job.job_skills, brackets=("{", "}")
+                    )
+                    skills = skills.union(set(skills_list))
 
-        return JsonResponse({"skills": list(skills)})
+            return JsonResponse({"skills": list(skills)})
+    return render(request, 'index.html')
 
 
 @csrf_exempt
 def recommender(request):
-    body = decode_utf(request.body)
+    if request.method == 'POST':
+        body = decode_utf(request.body)
 
-    similarity_dict = dict()
-    matching_skills_dict = dict()
+        similarity_dict = dict()
+        matching_skills_dict = dict()
 
-    skills_list = body["skills"]
-    user_skills = set(skills_list)
+        skills_list = body["skills"]
+        user_skills = set(skills_list)
 
-    user = body["username"]
-    filter_dict = body["filter"]
+        user = body["username"]
+        filter_dict = body["filter"]
 
-    offset = int(body["offset"])
-    n_results = 10
+        offset = int(body["offset"])
+        n_results = 10
 
-    # try to get from cache
-    cache_expired = False
-    if body["offset"] != 0:
-        try:
-            similarity_dict = json.loads(cache.get(f"{user}_similarity"))
-            matching_skills_dict = json.loads(cache.get(f"{user}_matching_skills"))
-            if not similarity_dict and not matching_skills_dict:
-                raise Exception
-        except:
-            cache_expired = True
-            cache.clear()
-    if body["offset"] == 0 or cache_expired:
-        for job in Job.objects.filter(
-            title__icontains=filter_dict["name"],
-            location__icontains=filter_dict["location"],
-            qualifications__icontains=filter_dict["qualification"],
-            experiences__icontains=filter_dict["experience"],
-            level__icontains=filter_dict["level"],
-        ):
-            # Salary based filtering
-            if not lies_in_salary_range(job.salary, filter_dict["salary"]):
-                continue
-            # Deadline based filtering
-            if not deadline_left(job.deadline, filter_dict["deadline"]):
-                continue
-            if job.job_skills:
-                skills_list = get_skills_from_string(
-                    skills_string=job.job_skills, brackets=("{", "}")
-                )
-                job_skills = set(skills_list)
-                (
-                    similarity_dict[job.title],
-                    matching_skills_dict[job.title],
-                ) = jaccard_similarity(job_skills, user_skills)
+        # try to get from cache
+        cache_expired = False
+        if body["offset"] != 0:
+            try:
+                similarity_dict = json.loads(cache.get(f"{user}_similarity"))
+                matching_skills_dict = json.loads(cache.get(f"{user}_matching_skills"))
+                if not similarity_dict and not matching_skills_dict:
+                    raise Exception
+            except:
+                cache_expired = True
+                cache.clear()
+        if body["offset"] == 0 or cache_expired:
+            for job in Job.objects.filter(
+                title__icontains=filter_dict["name"],
+                location__icontains=filter_dict["location"],
+                qualifications__icontains=filter_dict["qualification"],
+                experiences__icontains=filter_dict["experience"],
+                level__icontains=filter_dict["level"],
+            ):
+                # Salary based filtering
+                if not lies_in_salary_range(job.salary, filter_dict["salary"]):
+                    continue
+                # Deadline based filtering
+                if not deadline_left(job.deadline, filter_dict["deadline"]):
+                    continue
+                if job.job_skills:
+                    skills_list = get_skills_from_string(
+                        skills_string=job.job_skills, brackets=("{", "}")
+                    )
+                    job_skills = set(skills_list)
+                    (
+                        similarity_dict[job.title],
+                        matching_skills_dict[job.title],
+                    ) = jaccard_similarity(job_skills, user_skills)
 
-        similarity_dict = dict(
-            sorted(similarity_dict.items(), key=lambda item: item[1], reverse=True)
-        )
+            similarity_dict = dict(
+                sorted(similarity_dict.items(), key=lambda item: item[1], reverse=True)
+            )
 
-        cache.set(f"{user}_similarity", json.dumps(similarity_dict), 600)
-        cache.set(f"{user}_matching_skills", json.dumps(similarity_dict), 600)
+            cache.set(f"{user}_similarity", json.dumps(similarity_dict), 600)
+            cache.set(f"{user}_matching_skills", json.dumps(similarity_dict), 600)
 
-    cache.close()
+        cache.close()
+        
+        @try_and_pass
+        def to_send_preparation(i):
+            to_sent_dict = dict()
+            job = Job.objects.get(title=list(similarity_dict.keys())[i + offset])
+            to_sent_dict["title"] = job.title
+            to_sent_dict["id"] = job.id
+            to_sent_dict["deadline"] = str(job.deadline)
+            to_sent_dict["skills"] = job.job_skills
+            to_sent_dict["qualification"] = job.qualifications
+            to_sent_dict["experience"] = job.experiences
+            to_sent_dict["description"] = job.description
+            to_sent_dict["salary"] = job.salary
+            to_sent_dict["location"] = job.location
+            to_sent_dict["level"] = job.level
+            to_sent_dict["matching_skills"] = matching_skills_dict[job.title]
+            return to_sent_dict
 
-    @try_and_pass
-    def to_send_preparation(i):
-        to_sent_dict = dict()
-        job = Job.objects.get(title=list(similarity_dict.keys())[i + offset])
-        to_sent_dict["title"] = job.title
-        to_sent_dict["id"] = job.id
-        to_sent_dict["deadline"] = str(job.deadline)
-        to_sent_dict["skills"] = job.job_skills
-        to_sent_dict["qualification"] = job.qualifications
-        to_sent_dict["experience"] = job.experiences
-        to_sent_dict["description"] = job.description
-        to_sent_dict["salary"] = job.salary
-        to_sent_dict["location"] = job.location
-        to_sent_dict["level"] = job.level
-        to_sent_dict["matching_skills"] = matching_skills_dict[job.title]
-        return to_sent_dict
+        if similarity_dict.keys():
+            result = []
+            for i in range(n_results):
+                to_sent_dict = to_send_preparation(i)
+                if to_sent_dict:
+                    result.append(json.dumps(to_sent_dict))
 
-    if similarity_dict.keys():
-        result = []
-        for i in range(n_results):
-            to_sent_dict = to_send_preparation(i)
-            if to_sent_dict:
-                result.append(json.dumps(to_sent_dict))
-
-        return JsonResponse({"jobs": result})
-    return JsonResponse({"jobs": []})
+            return JsonResponse({"jobs": result})
+        return JsonResponse({"jobs": []})
+    return render(request, 'index.html')
 
 
 @csrf_exempt
