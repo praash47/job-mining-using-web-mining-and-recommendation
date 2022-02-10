@@ -80,7 +80,7 @@ export default defineComponent({
       this.loading = true;
       this.messages = [];
       axios({
-        url: `http://localhost:8000/logs/${this.source}/`,
+        url: `https://job-mining.herokuapp.com:8000/logs/${this.source}/`,
         method: 'POST',
         data: {
           clear: this.clear,
@@ -106,7 +106,7 @@ export default defineComponent({
           this.loading = false;
           this.clear = false;
         });
-      this.eventSource = new EventSource(`http://localhost:8000/events/${this.source}/`);
+      this.eventSource = new EventSource(`https://job-mining.herokuapp.com:8000/events/${this.source}/`);
       this.eventSource.onmessage = (e) => {
         const data = JSON.parse(e.data);
         this.current_message = data.message;
@@ -261,7 +261,7 @@ select {
     font-size: 50px;
 }
 .container {
-  position: absolute; 
+  position: absolute;
   top: 200px;
   height:400px;
 }

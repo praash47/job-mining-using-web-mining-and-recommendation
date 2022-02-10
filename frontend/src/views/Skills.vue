@@ -61,7 +61,7 @@ export default defineComponent({
   created() {
     axios({
       method: 'POST',
-      url: 'http://localhost:8000/skills',
+      url: 'https://job-mining.herokuapp.com:8000/skills',
     }).then((response) => {
       this.loading = false;
       this.skills = response.data.skills;
@@ -99,7 +99,7 @@ export default defineComponent({
       } else {
         axios({
           method: 'POST',
-          url: 'http://localhost:8000/register',
+          url: 'https://job-mining.herokuapp.com:8000/register',
           data: {
             username: this.$store.getters.getUsername,
             skills: this.selected_skills,

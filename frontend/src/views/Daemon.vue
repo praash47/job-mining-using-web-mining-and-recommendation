@@ -44,7 +44,7 @@ export default defineComponent({
   created() {
     this.isAdmin = this.$store.getters.getIsAdmin;
     this.setIdle();
-    const es = new EventSource('http://localhost:8000/events/backend_daemon/');
+    const es = new EventSource('https://job-mining.herokuapp.com:8000/events/backend_daemon/');
     es.onmessage = (e) => {
       const data = JSON.parse(e.data);
       this.current_message = data.currentMessage;

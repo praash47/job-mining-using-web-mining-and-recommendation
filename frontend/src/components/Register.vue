@@ -41,7 +41,7 @@ export default defineComponent({
       } else {
         axios({
           method: 'POST',
-          url: 'http://localhost:8000/register',
+          url: 'https://job-mining.herokuapp.com:8000/register',
           headers: { 'X-CSRFToken': this.csrftoken },
           data: {
             csrfmiddlewaretoken: this.csrftoken,
@@ -70,7 +70,7 @@ export default defineComponent({
       if (!(inputbox.style.backgroundColor === 'red')) {
         axios({
           method: 'POST',
-          url: 'http://localhost:8000/register',
+          url: 'https://job-mining.herokuapp.com:8000/register',
           data: {
             username: this.username,
             email: this.email,

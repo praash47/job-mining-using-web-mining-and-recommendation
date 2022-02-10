@@ -35,7 +35,7 @@ export default defineComponent({
       formData.append('username', this.username);
       axios({
         method: 'POST',
-        url: 'http://localhost:8000/upload_cv',
+        url: 'https://job-mining.herokuapp.com:8000/upload_cv',
         headers: {
           'Content-Type': 'multipart/form-data',
         },

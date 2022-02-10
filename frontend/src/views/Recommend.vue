@@ -116,7 +116,7 @@
         <table class="first-table">
           <tr>
             <td><div class="matching-skills"><strong>Matching Skills:</strong></div></td>
-            <td class="matching-skills-chips">
+            <td class="matching-skills-chips" v-if="job.matching_skills.length">
               <span class="matching-skill" v-for="skill in job.matching_skills" :key="skill">
                 {{ skill }}
               </span>
@@ -194,7 +194,7 @@ export default defineComponent({
     this.isAdmin = this.$store.getters.getIsAdmin;
     axios({
       method: 'POST',
-      url: 'http://localhost:8000/skills',
+      url: 'https://job-mining.herokuapp.com:8000/skills',
       data: {
         username: this.username,
       },
@@ -204,7 +204,7 @@ export default defineComponent({
         this.added_skills = response.data.skills;
         axios({
           method: 'POST',
-          url: 'http://localhost:8000/skills',
+          url: 'https://job-mining.herokuapp.com:8000/skills',
         }).then((allskillsresponse) => {
           if (allskillsresponse.data.skills) {
             this.loading_all_skills = false;
@@ -240,6 +240,13 @@ export default defineComponent({
       }, 1);
     },
     filter_experience() {
+      this.offset = 0;
+      this.filterJobs();
+      setTimeout(() => {
+        document.querySelector('.right').scrollTop = 0;
+      }, 1);
+    },
+    filter_level() {
       this.offset = 0;
       this.filterJobs();
       setTimeout(() => {
@@ -298,7 +305,7 @@ export default defineComponent({
       this.loading_jobs = true;
       axios({
         method: 'POST',
-        url: 'http://localhost:8000/recommend',
+        url: 'https://job-mining.herokuapp.com:8000/recommendations',
         data: {
           skills: this.added_skills,
           username: this.username,
@@ -329,11 +336,10 @@ export default defineComponent({
           if (!this.jobs.length) this.results_finished = true;
         }
       });
-      return this.jobs;
     },
     logOut() {
       axios({
-        url: 'http://localhost:8000/logout',
+        url: 'https://job-mining.herokuapp.com:8000/logout',
         method: 'POST',
       })
         .then((response) => {
@@ -375,7 +381,7 @@ export default defineComponent({
       } else {
         axios({
           method: 'POST',
-          url: 'http://localhost:8000/register',
+          url: 'https://job-mining.herokuapp.com:8000/register',
           data: {
             username: this.$store.getters.getUsername,
             skills: this.added_skills,

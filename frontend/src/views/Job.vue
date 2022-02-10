@@ -143,7 +143,7 @@ export default defineComponent({
     this.isAdmin = this.$store.getters.getIsAdmin;
     axios({
       method: 'POST',
-      url: 'http://localhost:8000/job',
+      url: 'https://job-mining.herokuapp.com:8000/job',
       data: {
         id: this.$route.params.id,
       },
@@ -157,7 +157,7 @@ export default defineComponent({
       this.loading_job = true;
       axios({
         method: 'POST',
-        url: 'http://localhost:8000/job',
+        url: 'https://job-mining.herokuapp.com:8000/job',
         data: {
           id: this.$route.params.id,
         },
