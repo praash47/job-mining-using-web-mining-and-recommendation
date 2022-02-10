@@ -38,6 +38,12 @@ The installation of this project is a bit long and tedious. But, you can stick a
 11. Go into `jobminersserver/jobdetailsextractor/apps.py` and remove comment from `def ready():` to end of file. This enables our `timers` module which is responsible for our jobs extraction.
 12. Open command prompt/shell in `jobminersserver` folder and run:
 ```
+source .env/bin/activate # linux
+# windows
+cd .env/Scripts/
+activate
+cd ../../
+# then:
 python manage.py runserver --noreload
 ```
 13. Go into http://localhost:8000 and register an account and enjoy the job recommendations and you can also see the server mining in `Backend Daemon` of the website.
