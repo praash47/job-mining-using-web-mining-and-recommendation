@@ -43,6 +43,7 @@ source .env/bin/activate # linux
 cd .env/Scripts/
 activate
 cd ../../
+# then:
 python manage.py runserver --noreload
 ```
 13. Go into http://localhost:8000 and register an account and enjoy the job recommendations and you can also see the server mining in `Backend Daemon` of the website.
