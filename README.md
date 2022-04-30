@@ -22,7 +22,7 @@ The installation of this project is a bit long and tedious. But, you can stick a
 1. Install Chrome on your machine from [here](https://www.google.com/chrome/). (Required for `selenium`)
 2. Download `Python 3.8.10` from [here](https://www.python.org/downloads/release/python-3810/) (Tested in `python 3.8.10`). Be sure that you are using `python 3.8.10` the whole time.
 3. Download `Postgresql` from [here](https://www.postgresql.org/download/windows/).
-4. Download your appropriate version of `Chromedriver` from [here](https://chromedriver.chromium.org/) and place it inside `jobminersserver/searcher/Yoqs/` and name it `chromedriver`. You can find the appropriate version number inside about section of Chrome.
+4. Download your appropriate version of `Chromedriver` from [here](https://chromedriver.chromium.org/) and place it inside `jobminersserver/interactor/reqs/` and name it `chromedriver`. You can find the appropriate version number inside about section of Chrome.
 
 #### Database Setup
 5. Open `Pgadmin 4`, Choose a master password and make sure you remember the password.
