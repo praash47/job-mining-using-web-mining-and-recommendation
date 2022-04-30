@@ -22,21 +22,22 @@ The installation of this project is a bit long and tedious. But, you can stick a
 1. Install Chrome on your machine from [here](https://www.google.com/chrome/). (Required for `selenium`)
 2. Download `Python 3.8.10` from [here](https://www.python.org/downloads/release/python-3810/) (Tested in `python 3.8.10`). Be sure that you are using `python 3.8.10` the whole time.
 3. Download `Postgresql` from [here](https://www.postgresql.org/download/windows/).
+4. Download your appropriate version of `Chromedriver` from [here](https://chromedriver.chromium.org/) and place it inside `jobminersserver/searcher/Yoqs/` and name it `chromedriver`. You can find the appropriate version number inside about section of Chrome.
 
 #### Database Setup
-4. Open `Pgadmin 4`, Choose a master password and make sure you remember the password.
-5. **Creation of Admin and Assigning Privileges:** Under Server open `PostgreSQL <version_num>` > Login/Group Roles, Add username `jobminer` and password `jobminer`. Go into properties of user `jobminer`, then check all the boxes under Privileges tab.
-6. Create a server named `jobminer`, Type localhost in Host name/address, supply master password in password.
-7. Under Databases of `jobminer`, create a database named `jobminers` (notice **s**), set Owner to `jobminer`.
+5. Open `Pgadmin 4`, Choose a master password and make sure you remember the password.
+6. **Creation of Admin and Assigning Privileges:** Under Server open `PostgreSQL <version_num>` > Login/Group Roles, Add username `jobminer` and password `jobminer`. Go into properties of user `jobminer`, then check all the boxes under Privileges tab.
+7. Create a server named `jobminer`, Type localhost in Host name/address, supply master password in password.
+8. Under Databases of `jobminer`, create a database named `jobminers` (notice **s**), set Owner to `jobminer`.
 
 #### Virtual Environment Creation and Python Dependencies Installation
-8. Go to jobminersserver folder in your files, Run `setup.bat` if you are in windows and `setup.sh` if you are in linux. This basically creates a virtual environment into `.env` and installs all the dependencies mentioned in `requirements.txt`.
-9. This prompt also creates tables in the database and prompt should ask username, email and password, enter `jobminer`, `jobminer@jobminer.com` and `jobminer`, then after that type `y` ignoring the warnings.
-10. `Stopwords`, `wordnet`, and `punkt` is also downloaded automatically which are libraries in python's Natural Language Processing Toolkit.
+9. Go to jobminersserver folder in your files, Run `setup.bat` if you are in windows and `setup.sh` if you are in linux. This basically creates a virtual environment into `.env` and installs all the dependencies mentioned in `requirements.txt`. If it is not able to do it automatically, then you have to run each line of code inside the `setup.bat`.
+10. This prompt also creates tables in the database and prompt should ask username, email and password, enter `jobminer`, `jobminer@jobminer.com` and `jobminer`, then after that type `y` ignoring the warnings.
+11. `Stopwords`, `wordnet`, and `punkt` is also downloaded automatically which are libraries in python's Natural Language Processing Toolkit.
 
 #### Running the server
-11. Go into `jobminersserver/jobdetailsextractor/apps.py` and remove comment from `def ready():` to end of file. This enables our `timers` module which is responsible for our jobs extraction.
-12. Open command prompt/shell in `jobminersserver` folder and run:
+12. Go into `jobminersserver/jobdetailsextractor/apps.py` and remove comment from `def ready():` to end of file. This enables our `timers` module which is responsible for our jobs extraction.
+13. Open command prompt/shell in `jobminersserver` folder and run:
 ```
 source .env/bin/activate # linux
 # windows
